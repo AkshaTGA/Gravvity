@@ -111,9 +111,10 @@ export default function AdminDashboard() {
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
-            {/* Form Section */}
+            {/* Left Column: Make whole stack sticky to avoid overlaps */}
             <div className="lg:col-span-1">
-              <div className="card-glow p-6 sticky top-24">
+              <div className="sticky top-24 space-y-6">
+                <div className="card-glow p-6">
                 <h2 className="text-xl font-bold mb-6">
                   {editingMember ? "Edit Member" : isAddingNew ? "Add New Member" : "Add Member"}
                 </h2>
@@ -136,10 +137,10 @@ export default function AdminDashboard() {
                     Add New Member
                   </button>
                 )}
-              </div>
+                </div>
 
-              {/* Events Form Section (sticky similar to Add Member) */}
-              <div className="card-glow p-6 mt-6 sticky top-[340px]">
+                {/* Events Form Section */}
+                <div className="card-glow p-6">
                 <h2 className="text-xl font-bold mb-6">
                   {editingEvent ? "Edit Event" : isAddingEvent ? "Add New Event" : "Add Event"}
                 </h2>
@@ -162,6 +163,7 @@ export default function AdminDashboard() {
                     Add New Event
                   </button>
                 )}
+                </div>
               </div>
             </div>
 
