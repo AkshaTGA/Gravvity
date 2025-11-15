@@ -66,19 +66,14 @@ export function HeroSection() {
           </Link>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 md:gap-8 pt-8 border-t border-border/30">
-          <div className="slide-in-up" style={{ animationDelay: "0.1s" }}>
-            <div className="text-3xl md:text-4xl font-bold gradient-text">7</div>
-            <div className="text-sm text-foreground/60 mt-1">Wings</div>
-          </div>
-          <div className="slide-in-up" style={{ animationDelay: "0.2s" }}>
-            <div className="text-3xl md:text-4xl font-bold gradient-text">100+</div>
-            <div className="text-sm text-foreground/60 mt-1">Members</div>
-          </div>
-          <div className="slide-in-up" style={{ animationDelay: "0.3s" }}>
-            <div className="text-3xl md:text-4xl font-bold gradient-text">50+</div>
-            <div className="text-sm text-foreground/60 mt-1">Projects</div>
+        {/* Gravity Logo Display (replaces stats) */}
+        <div className="pt-8 flex justify-center">
+          <div className="gravity-logo-rings relative w-56 h-56 flex items-center justify-center rounded-full overflow-hidden slide-in-up">
+            <img
+              src="/gravity-logo.svg"
+              alt="Gravity Logo"
+              className="w-32 h-32 object-contain drop-shadow-[0_0_12px_rgba(124,92,255,0.35)]"
+            />
           </div>
         </div>
       </div>

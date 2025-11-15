@@ -167,6 +167,17 @@
     transform: translateY(-4px);
   }
 
+  /* Concentric ring style for Gravity logo */
+  .gravity-logo-rings {
+    background:
+      radial-gradient(circle at center, rgba(124,92,255,0.35) 0%, transparent 55%),
+      radial-gradient(circle at center, rgba(124,92,255,0.15) 0%, transparent 70%),
+      radial-gradient(circle at center, rgba(85,185,231,0.25) 0%, transparent 85%),
+      linear-gradient(135deg, rgba(124,92,255,0.15), rgba(85,185,231,0.15));
+    border: 1px solid rgba(124,92,255,0.25);
+    backdrop-filter: blur(4px);
+  }
+
   .shimmer {
     background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
     background-size: 200% 100%;
