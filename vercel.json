@@ -1,7 +1,6 @@
 {
   "version": 2,
-  "rootDirectory": "my-app",
-  "framework": "nextjs",
-  "buildCommand": "npm run build",
-  "installCommand": "npm install"
+  "builds": [
+    { "src": "my-app/next.config.ts", "use": "@vercel/next" }
+  ]
 }
