@@ -283,3 +283,9 @@
     }
   }
 }
+
+*::selection{
+  background-color: #544b543f;
+  color:white;
+}
+
