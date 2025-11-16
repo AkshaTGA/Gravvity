@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { CheckCircle } from "lucide-react"
 import MagicButton from "@/components/magic-button"
 import { submitBlog } from "@/lib/blog-store"
 
@@ -20,6 +21,8 @@ export default function BlogSubmitModal({ open, onClose }: { open: boolean; onCl
   const [roll, setRoll] = useState("")
   const [link, setLink] = useState("")
   const [error, setError] = useState<string>("")
+  const [submitted, setSubmitted] = useState(false)
+  const [submittedMsg, setSubmittedMsg] = useState("")
 
   useEffect(() => {
     if (open) {
@@ -38,6 +41,15 @@ export default function BlogSubmitModal({ open, onClose }: { open: boolean; onCl
       <div className="relative z-10 w-full max-w-md card-glow p-6 rounded-2xl bg-card">
         <h3 className="text-xl font-bold mb-4">Submit Medium Blog</h3>
         {error && <div className="mb-3 text-sm text-red-400">{error}</div>}
+        {submitted ? (
+          <div className="flex items-center gap-3 p-4 rounded-md bg-green-900/70 border border-green-700">
+            <CheckCircle className="text-green-300" />
+            <div>
+              <div className="font-semibold text-green-100">{submittedMsg}</div>
+              <div className="text-sm text-green-200/80">Thanks — an admin will review your submission shortly.</div>
+            </div>
+          </div>
+        ) : (
         <form
           onSubmit={(e) => {
             e.preventDefault()
@@ -51,8 +63,13 @@ export default function BlogSubmitModal({ open, onClose }: { open: boolean; onCl
               return
             }
             submitBlog({ name, rollNumber: roll, mediumUrl: trimmed })
-            onClose()
-            alert("Submitted! Awaiting admin approval.")
+            // show a friendly success popup inside the modal, then close
+            setSubmitted(true)
+            setSubmittedMsg("Submitted — awaiting admin approval")
+            setTimeout(() => {
+              setSubmitted(false)
+              onClose()
+            }, 1400)
           }}
           className="space-y-4"
         >
@@ -88,6 +105,7 @@ export default function BlogSubmitModal({ open, onClose }: { open: boolean; onCl
             <button type="button" onClick={onClose} className="flex-1 px-4 py-2 rounded-lg bg-card border border-border hover:bg-card/80">Cancel</button>
           </div>
         </form>
+        )}
       </div>
     </div>
   )
