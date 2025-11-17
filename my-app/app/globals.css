@@ -132,6 +132,13 @@
   body {
     @apply bg-background text-foreground;
     color-scheme: dark;
+    /* Prevent horizontal scrolling caused by wide children */
+    overflow-x: clip;
+    max-width: 100vw;
+  }
+  html {
+    overflow-x: clip;
+    max-width: 100vw;
   }
 }
 
