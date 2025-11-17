@@ -106,6 +106,7 @@ app.get('/api/public/members', async (_req, res) => {
     const members = await Member.find().sort({ createdAt: -1 })
     res.json(members)
   } catch (_e) {
+    console.error('[Members] Public fetch error:', _e && _e.message)
     res.status(500).json({ error: 'Failed to load members' })
   }
 })
@@ -126,11 +127,6 @@ app.get('/api/public/projects', async (_req, res) => {
   } catch (_e) {
     res.status(500).json({ error: 'Failed to load projects' })
   }
-})
-
-// Catch-all 404 to surface the final URL Express received
-app.use((req, res) => {
-  res.status(404).json({ error: 'Not Found', url: req.url })
 })
 
 // Admin-protected CRUD
@@ -228,6 +224,11 @@ app.delete('/api/projects/:id', auth, async (req, res) => {
   } catch (e) {
     res.status(400).json({ error: e.message })
   }
+})
+
+// Final catch-all 404 AFTER all route definitions
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not Found', url: req.url })
 })
 
 module.exports = app
