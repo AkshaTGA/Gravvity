@@ -73,7 +73,12 @@ export default function AboutPage() {
               Whether you're a beginner just starting your tech journey or an experienced developer, Gravity welcomes
               you. Join us in building an amazing tech community!
             </p>
-            <MagicButton heightClass="h-11">
+            <MagicButton
+              heightClass="h-11"
+              onClick={() => {
+                window.open("https://www.linkedin.com/search/results/all/?fetchDeterministicClustersOnly=true&heroEntityKey=urn%3Ali%3Aorganization%3A88675450&keywords=gravity%2C%20iiit%20allahabad&origin=RICH_QUERY_TYPEAHEAD_HISTORY&position=0&searchId=04adaa89-2761-4ede-a90c-257cfa756ef4&sid=-Az&spellCorrectionEnabled=true", "_blank", "noopener,noreferrer")
+              }}
+            >
               Get Started Today
             </MagicButton>
           </div>
