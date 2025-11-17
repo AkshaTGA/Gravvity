@@ -5,7 +5,6 @@ import { Footer } from "@/components/footer"
 import { defaultBlogs } from "@/lib/data"
 import { useEffect, useMemo, useState } from "react"
 import BlogSubmitModal from "@/components/blog-submit-modal"
-import { getApprovedBlogs } from "@/lib/blog-store"
 import { Calendar, User, Tag, Search, X } from "lucide-react"
 import MagicButton from "@/components/magic-button"
 
@@ -18,16 +17,23 @@ export default function BlogsPage() {
   const [query, setQuery] = useState("")
 
   useEffect(() => {
-    // load approved blogs on client after mount and keep in sync with storage/focus
-    setApproved(getApprovedBlogs())
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === 'gravity.blogs') setApproved(getApprovedBlogs())
+    // Load approved blogs from server on mount and when window regains focus
+    let mounted = true
+    async function fetchApproved() {
+      try {
+        const res = await fetch('/api/public/blogs')
+        if (!res.ok) return
+        const data = await res.json()
+        if (mounted) setApproved(data)
+      } catch (e) {
+        console.error('Failed to fetch approved blogs', e)
+      }
     }
-    window.addEventListener('storage', onStorage)
-    const onFocus = () => setApproved(getApprovedBlogs())
+    fetchApproved()
+    const onFocus = () => fetchApproved()
     window.addEventListener('focus', onFocus)
     return () => {
-      window.removeEventListener('storage', onStorage)
+      mounted = false
       window.removeEventListener('focus', onFocus)
     }
   }, [])
@@ -224,7 +230,7 @@ export default function BlogsPage() {
           </div>
         </div>
       </main>
-      <BlogSubmitModal open={open} onClose={()=>{ setOpen(false); setApproved(getApprovedBlogs()) }} />
+      <BlogSubmitModal open={open} onClose={()=>{ setOpen(false); (async()=>{ try { const res = await fetch('/api/public/blogs'); if(res.ok){ setApproved(await res.json()) } } catch {} })() }} />
       <Footer />
     </>
   )
