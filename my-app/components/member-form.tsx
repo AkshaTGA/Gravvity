@@ -94,7 +94,11 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit({ ...member, ...formData })
+    const payload = { ...member, ...formData }
+    if (!payload.image) {
+      payload.image = '/gravity-logo.ico'
+    }
+    onSubmit(payload)
   }
 
   return (
