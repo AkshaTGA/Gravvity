@@ -7,9 +7,9 @@ import MagicBorderCard from "@/components/magic-border-card"
 
 export function WingsSection() {
   return (
-    <section id="wings" className="py-20 px-4 sm:px-6 lg:px-8">
+    <section id="wings" data-anchor="wings" className="py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text select-none">Our Seven Wings</h2>
+        <h2 id="wings-heading" className="text-4xl md:text-5xl font-bold mb-4 gradient-text select-none">Our Seven Wings</h2>
         <p className="text-foreground/60 mb-16 text-lg">Each wing specializes in different areas of technology</p>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

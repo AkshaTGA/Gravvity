@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useCallback, useMemo } from 'react';
 import './ProfileCard.css';
-import { Linkedin, Instagram, Facebook, MessageCircle } from 'lucide-react';
+import { Linkedin, Instagram, X } from 'lucide-react';
 
 interface ProfileCardProps {
   avatarUrl: string;
@@ -25,8 +25,9 @@ interface ProfileCardProps {
   socials?: {
     linkedin?: string;
     instagram?: string;
-    facebook?: string;
-    whatsapp?: string;
+    facebook?: string; // deprecated/unused
+    whatsapp?: string; // deprecated/unused
+    x?: string; // X (Twitter) profile URL
   };
 }
 
@@ -416,8 +417,8 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                   {(() => {
                     const linkedInHref = socials?.linkedin || '#';
                     const instaHref = socials?.instagram || '#';
-                    const waHref = socials?.whatsapp || '#';
-                    const fbHref = socials?.facebook || '#';
+                    const xHref = socials?.x || '#';
+                    // Facebook removed per request
                     return (
                       <div className="pc-socials">
                         <a
@@ -439,23 +440,15 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                           <Instagram size={26} />
                         </a>
                         <a
-                          href={waHref}
-                          className={`pc-social${socials?.whatsapp ? '' : ' is-disabled'}`}
-                          aria-label="WhatsApp"
-                          target={socials?.whatsapp ? '_blank' : undefined}
-                          rel={socials?.whatsapp ? 'noopener noreferrer' : undefined}
+                          href={xHref}
+                          className={`pc-social${socials?.x ? '' : ' is-disabled'}`}
+                          aria-label="X"
+                          target={socials?.x ? '_blank' : undefined}
+                          rel={socials?.x ? 'noopener noreferrer' : undefined}
                         >
-                          <MessageCircle size={26} />
+                          <X size={26} />
                         </a>
-                        <a
-                          href={fbHref}
-                          className={`pc-social${socials?.facebook ? '' : ' is-disabled'}`}
-                          aria-label="Facebook"
-                          target={socials?.facebook ? '_blank' : undefined}
-                          rel={socials?.facebook ? 'noopener noreferrer' : undefined}
-                        >
-                          <Facebook size={26} />
-                        </a>
+                        {/* Facebook icon removed */}
                       </div>
                     );
                   })()}
