@@ -18,7 +18,6 @@ export default function Home() {
   const [showContent, setShowContent] = useState<boolean>(false);
 
   useEffect(() => {
-    // decide whether to show intro based on localStorage
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       const ts = raw ? Number(raw) : 0;
@@ -31,7 +30,6 @@ export default function Home() {
         setShowContent(true);
       }
     } catch (e) {
-      // if localStorage isn't available, show intro
       setShowIntro(true);
     }
   }, []);
@@ -46,7 +44,6 @@ export default function Home() {
   }
 
   if (!showContent) {
-    // while deciding, render nothing to avoid showing base site before intro
     return null;
   }
 

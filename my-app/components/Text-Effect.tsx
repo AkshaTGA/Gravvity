@@ -29,7 +29,7 @@ export function LettersPullUp({
     }),
   };
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const isInView = useInView(ref, { once: false });
   return (
     <div className="flex justify-center">
       {splittedText.map((current, i) => (
@@ -98,23 +98,10 @@ export const BlurText: React.FC<BlurTextProps> = ({
   stepDuration = 0.35,
 }) => {
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
-  const [inView, setInView] = useState(false);
   const ref = useRef<HTMLParagraphElement>(null);
+  const inView= useInView(ref, { once: false })
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.unobserve(ref.current as Element);
-        }
-      },
-      { threshold, rootMargin }
-    );
-    observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [threshold, rootMargin]);
+  
 
   const defaultFrom = useMemo(
     () =>
@@ -188,22 +175,32 @@ export function GradualSpacing({
   className: string;
 }) {
   const ref = React.useRef(null);
-  const isInView = useInView(ref, { once: true });
+  const isInView = useInView(ref, { once: false });
+
+  const words = text.split(" ");
+
   return (
-    <div className="flex flex-wrap space-x-[0.5px] justify-center items-center gap-y-0">
+    <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-0">
       <AnimatePresence>
-        {text.split("").map((char, i) => (
-          <motion.p
-            ref={ref}
-            key={i}
-            initial={{ opacity: 0, x: -18 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            exit="hidden"
-            transition={{ duration: 0.5 }}
-            className={className}
-          >
-            {char === " " ? <span>&nbsp;</span> : char}
-          </motion.p>
+        {words.map((word, wordIndex) => (
+          <div key={wordIndex} className="flex">
+            {word.split("").map((char, charIndex) => (
+              <motion.p
+                ref={ref}
+                key={`${wordIndex}-${charIndex}`}
+                initial={{ opacity: 0, x: -18 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                exit="hidden"
+                transition={{
+                  duration: 0.5,
+                  delay: (wordIndex * word.length + charIndex) * 0.05,
+                }}
+                className={className}
+              >
+                {char}
+              </motion.p>
+            ))}
+          </div>
         ))}
       </AnimatePresence>
     </div>
