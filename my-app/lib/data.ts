@@ -267,23 +267,4 @@ export const defaultProjects: Project[] = [
   },
 ]
 
-export const defaultBlogs: BlogPost[] = [
-  {
-    id: "1",
-    title: "Getting Started with Competitive Programming",
-    content: "A comprehensive guide to start your competitive programming journey...",
-    author: "Aditya Sharma",
-    date: "2024-12-01",
-    category: "Competitive Coding",
-  image: "/placeholder-avatar.svg",
-  },
-  {
-    id: "2",
-    title: "Web3 Development Essentials",
-    content: "Everything you need to know about building dApps...",
-    author: "Priya Verma",
-    date: "2024-11-28",
-    category: "Blockchain",
-  image: "/placeholder-avatar.svg",
-  },
-]
+export const defaultBlogs: BlogPost[] = []
