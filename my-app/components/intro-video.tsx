@@ -44,8 +44,24 @@ export default function IntroVideo({ onFinish }: { onFinish?: () => void }) {
 
   useEffect(() => {
     if (shouldShow && videoRef.current) {
-      // Wait for video to be loaded before playing
-      const video = videoRef.current;
+      const v = videoRef.current;
+      // Wait for enough data, then mark loaded and try to play
+      const tryPlay = () => v.play().catch(() => {});
+      const handleCanPlay = () => {
+        setIsLoading(false);
+        tryPlay();
+      };
+      if (v.readyState >= 3) {
+        handleCanPlay();
+      } else {
+        v.addEventListener("canplaythrough", handleCanPlay, { once: true });
+      }
+
+      return () => {
+        v.removeEventListener("canplaythrough", handleCanPlay as any);
+      };
+    }
+  }, [shouldShow, videoSrc]);
 
       const handleCanPlay = () => {
         setIsLoading(false);
@@ -86,6 +102,14 @@ export default function IntroVideo({ onFinish }: { onFinish?: () => void }) {
   function handleEnded() {
     handleSkip();
   }
+  function handleError() {
+    // If video fails, just skip without setting the seen flag
+    setAnimating(false);
+    setShouldShow(false);
+    try {
+      onFinish?.();
+    } catch {}
+  }
 
   if (!shouldShow) return null;
 
@@ -104,15 +128,15 @@ export default function IntroVideo({ onFinish }: { onFinish?: () => void }) {
       <video
         ref={videoRef}
         className={`intro-video ${
-          videoSrc === "/introvideo.mp4"
-            ? "intro-video-desktop"
-            : "intro-video-mobile"
-        } ${isLoading ? "video-hidden" : ""}`}
+          videoSrc === "/introvideo.mp4" ? "intro-video-desktop" : "intro-video-mobile"
+        } ${animating ? "intro-video-hidden" : ""} ${isLoading ? "video-hidden" : ""}`}
         src={videoSrc}
+        poster="/gravity-logo.svg"
         playsInline
         muted
         preload="auto"
         onEnded={handleEnded}
+        onError={handleError}
       />
 
       {!isLoading && (
