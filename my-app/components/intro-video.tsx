@@ -63,23 +63,6 @@ export default function IntroVideo({ onFinish }: { onFinish?: () => void }) {
     }
   }, [shouldShow, videoSrc]);
 
-      const handleCanPlay = () => {
-        setIsLoading(false);
-        video.play().catch(() => {});
-      };
-
-      if (video.readyState >= 3) {
-        // Video is already loaded
-        handleCanPlay();
-      } else {
-        video.addEventListener("canplaythrough", handleCanPlay, { once: true });
-      }
-
-      return () => {
-        video.removeEventListener("canplaythrough", handleCanPlay);
-      };
-    }
-  }, [shouldShow, videoSrc]);
 
   function handleSkip() {
     try {
