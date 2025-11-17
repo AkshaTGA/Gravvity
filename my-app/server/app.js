@@ -82,6 +82,16 @@ app.get('/api/health', (_req, res) => {
   res.json({ ok: true, env: { hasMongoUri: !!process.env.MONGO_URI, adminId: !!ADMIN_ID } })
 })
 
+// Diagnostic endpoint for deployment troubleshooting
+app.get('/api/diag', (_req, res) => {
+  const keys = ['MONGO_URI','ADMIN_ID','ADMIN_PASSWORD','JWT_SECRET']
+  const envPresence = Object.fromEntries(keys.map(k => [k, !!process.env[k]]))
+  const stateMap = { 0: 'disconnected', 1: 'connected', 2: 'connecting', 3: 'disconnecting' }
+  let mongoState = 'not-initialized'
+  try { mongoState = stateMap[mongoose.connection.readyState] ?? String(mongoose.connection.readyState) } catch {}
+  res.json({ ok: true, mongo: { state: mongoState }, env: envPresence })
+})
+
 // Auth
 app.post('/api/admin/login', (req, res) => {
   try {
@@ -225,6 +235,13 @@ app.delete('/api/projects/:id', auth, async (req, res) => {
   } catch (e) {
     res.status(400).json({ error: e.message })
   }
+})
+
+// Global error handler (placed before 404)
+// Any uncaught error bubbles here instead of producing a 502/timeout.
+app.use((err, _req, res, _next) => {
+  console.error('[API ERROR]', err && err.stack ? err.stack : err)
+  res.status(500).json({ error: 'Internal server error', detail: err && err.message })
 })
 
 // Final catch-all 404 AFTER all route definitions
