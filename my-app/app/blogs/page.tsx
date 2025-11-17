@@ -10,6 +10,9 @@ import { Calendar, User, Tag, Search, X } from "lucide-react"
 import MagicButton from "@/components/magic-button"
 
 export default function BlogsPage() {
+  const formatDate = (input: string | number | Date) =>
+    new Date(input).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' })
+
   const [open, setOpen] = useState(false)
   const [approved, setApproved] = useState(() => [] as any[])
   const [query, setQuery] = useState("")
@@ -42,10 +45,10 @@ export default function BlogsPage() {
             <h2 className="text-2xl font-bold mb-3 group-hover:gradient-text transition-all">Medium Article</h2>
             <p className="text-foreground/70 break-all mb-2">{b.mediumUrl}</p>
           </div>
-          <div className="flex flex-wrap gap-4 text-sm text-foreground/60 pt-4 border-t border-border">
+            <div className="flex flex-wrap gap-4 text-sm text-foreground/60 pt-4 border-t border-border">
             <div className="flex items-center gap-1"><span>By</span><span className="font-medium">{b.name}</span></div>
             <div className="flex items-center gap-1"><span>Roll</span><span className="font-medium">{b.rollNumber}</span></div>
-            <div className="flex items-center gap-1"><span>{new Date(b.createdAt).toLocaleDateString()}</span></div>
+            <div className="flex items-center gap-1"><span>{formatDate(b.createdAt)}</span></div>
           </div>
         </div>
       </div>
@@ -197,7 +200,7 @@ export default function BlogsPage() {
                     </div>
                     <div className="flex items-center gap-1">
                       <Calendar size={16} />
-                      <span>{new Date(post.date).toLocaleDateString()}</span>
+                      <span>{formatDate(post.date)}</span>
                     </div>
                   </div>
                 </div>
