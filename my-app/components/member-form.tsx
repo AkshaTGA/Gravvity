@@ -46,32 +46,41 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
   const [rawImage, setRawImage] = useState<string | null>(null)
   const [rawFileName, setRawFileName] = useState<string | null>(null)
   const [crop, setCrop] = useState<{ x: number; y: number; size: number } | null>(null)
-  const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(null)
+  const [dragStart, setDragStart] = useState<{ offsetX: number; offsetY: number } | null>(null)
   const imageContainerRef = useRef<HTMLDivElement | null>(null)
+  const imageRef = useRef<HTMLImageElement | null>(null)
+
+  const onImageLoaded = () => {
+    if (!imageContainerRef.current) return
+    const rect = imageContainerRef.current.getBoundingClientRect()
+    const w = rect.width
+    const h = rect.height
+    const size = Math.min(w, h)
+    setCrop({ x: (w - size) / 2, y: (h - size) / 2, size })
+  }
 
   const startCrop = (e: React.MouseEvent) => {
-    if (!imageContainerRef.current) return
+    if (!imageContainerRef.current || !crop) return
     const rect = imageContainerRef.current.getBoundingClientRect()
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
-    setDragStart({ x, y })
-    setCrop({ x, y, size: 0 })
+    // Calculate offset from current crop top-left and clamp inside square
+    const offsetX = Math.min(Math.max(x - crop.x, 0), crop.size)
+    const offsetY = Math.min(Math.max(y - crop.y, 0), crop.size)
+    setDragStart({ offsetX, offsetY })
   }
 
   const moveCrop = (e: React.MouseEvent) => {
-    if (!dragStart || !imageContainerRef.current) return
+    if (!dragStart || !imageContainerRef.current || !crop) return
     const rect = imageContainerRef.current.getBoundingClientRect()
-    let x2 = e.clientX - rect.left
-    let y2 = e.clientY - rect.top
-    // clamp
-    x2 = Math.max(0, Math.min(rect.width, x2))
-    y2 = Math.max(0, Math.min(rect.height, y2))
-    const dx = x2 - dragStart.x
-    const dy = y2 - dragStart.y
-    const size = Math.min(Math.abs(dx), Math.abs(dy))
-    const x = dx >= 0 ? dragStart.x : dragStart.x - size
-    const y = dy >= 0 ? dragStart.y : dragStart.y - size
-    setCrop({ x: Math.max(0, x), y: Math.max(0, y), size: Math.max(0, size) })
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    let newX = x - dragStart.offsetX
+    let newY = y - dragStart.offsetY
+    // Clamp within image bounds
+    newX = Math.max(0, Math.min(rect.width - crop.size, newX))
+    newY = Math.max(0, Math.min(rect.height - crop.size, newY))
+    setCrop({ x: newX, y: newY, size: crop.size })
   }
 
   const endCrop = () => {
@@ -290,7 +299,7 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
         />
         {cropping && rawImage && (
           <div className="mt-4 space-y-3">
-            <p className="text-xs text-foreground/60">Drag to select a square crop region. Release to set. Then apply.</p>
+            <p className="text-xs text-foreground/60">Drag the square to reposition, then apply.</p>
             <div
               ref={imageContainerRef}
               onMouseDown={startCrop}
@@ -299,7 +308,14 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
               className="relative inline-block select-none border border-border rounded"
               style={{ cursor: 'crosshair' }}
             >
-              <img src={rawImage} alt="To crop" className="max-h-96 max-w-full block" draggable={false} />
+              <img
+                ref={imageRef}
+                onLoad={onImageLoaded}
+                src={rawImage}
+                alt="To crop"
+                className="max-h-96 max-w-full block"
+                draggable={false}
+              />
               {crop && (
                 <div
                   className="absolute border-2 border-primary/80 bg-primary/10"
