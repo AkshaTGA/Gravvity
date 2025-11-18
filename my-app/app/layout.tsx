@@ -1,17 +1,18 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import "./globals.css"
-import { AOSProvider } from "@/components/aos-provider"
-import { BackgroundRippleEffect } from "@/components/Background"
+import type React from "react";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import "./globals.css";
+import { AOSProvider } from "@/components/aos-provider";
+import { BackgroundRippleEffect } from "@/components/Background";
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const _geist = Geist({ subsets: ["latin"] });
+const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Gravity - Tech Society",
-  description: "Gravity Technical Society - Competitive Coding, Web Dev, Design, FOSS, AI, Blockchain & Metaverse",
+  description:
+    "Gravity Technical Society - Competitive Coding, Web Dev, Design, FOSS, AI, Blockchain & Metaverse",
   generator: "v0.app",
   icons: {
     icon: [
@@ -30,15 +31,21 @@ export const metadata: Metadata = {
     ],
     apple: "/apple-icon.png",
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en" className="dark">
+      <header>
+        <meta
+          name="google-site-verification"
+          content="jm4pb03r3m47iY5AeinV_DM-fW8lHKPAcOYaLOOChMI"
+        />
+      </header>
       <body className={`font-sans antialiased bg-background text-foreground`}>
         {/* Global background effect */}
         <div className="fixed inset-0 z-0">
@@ -51,5 +58,5 @@ export default function RootLayout({
         </div>
       </body>
     </html>
-  )
+  );
 }
