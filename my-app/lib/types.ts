@@ -18,6 +18,7 @@ export interface Member {
   socials?: {
     github?: string
     linkedin?: string
+    instagram?: string
     twitter?: string
   }
   /** Timestamp when the member was added (ms since epoch). */

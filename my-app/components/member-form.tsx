@@ -23,6 +23,9 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
     image: string
     isOverallCoordinator: boolean
     isFacultyCoordinator: boolean
+    linkedin?: string
+    instagram?: string
+    twitter?: string
   }>({
     name: member?.name || "",
     role: member?.role || "member",
@@ -31,6 +34,9 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
     image: member?.image || "",
     isOverallCoordinator: member?.isOverallCoordinator || false,
     isFacultyCoordinator: member?.isFacultyCoordinator || false,
+    linkedin: member?.socials?.linkedin || "",
+    instagram: member?.socials?.instagram || "",
+    twitter: member?.socials?.twitter || "",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -94,7 +100,15 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const payload = { ...member, ...formData }
+    const { linkedin, instagram, twitter, ...rest } = formData
+    const payload: any = { ...member, ...rest }
+    // Preserve existing socials fields (e.g., github) and merge new ones
+    payload.socials = {
+      ...(member as any)?.socials,
+      linkedin: linkedin || undefined,
+      instagram: instagram || undefined,
+      twitter: twitter || undefined,
+    }
     if (!payload.image) {
       payload.image = '/gravity-logo.ico'
     }
@@ -207,6 +221,43 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
           className="w-full px-4 py-2 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary resize-none"
           placeholder="Enter member bio"
         />
+      </div>
+
+      {/* Social Links */}
+      <div className="grid md:grid-cols-3 gap-4">
+        <div>
+          <label className="block text-sm font-medium mb-2">LinkedIn URL</label>
+          <input
+            type="url"
+            name="linkedin"
+            value={formData.linkedin}
+            onChange={handleChange}
+            placeholder="https://www.linkedin.com/in/username"
+            className="w-full px-4 py-2 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">Instagram URL</label>
+          <input
+            type="url"
+            name="instagram"
+            value={formData.instagram}
+            onChange={handleChange}
+            placeholder="https://www.instagram.com/username"
+            className="w-full px-4 py-2 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-2">Twitter (X) URL</label>
+          <input
+            type="url"
+            name="twitter"
+            value={formData.twitter}
+            onChange={handleChange}
+            placeholder="https://x.com/username"
+            className="w-full px-4 py-2 rounded-lg bg-card border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+          />
+        </div>
       </div>
 
       <div>

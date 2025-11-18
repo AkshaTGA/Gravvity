@@ -417,7 +417,9 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                   {(() => {
                     const linkedInHref = socials?.linkedin || '#';
                     const instaHref = socials?.instagram || '#';
-                    const xHref = socials?.x || '#';
+                    // Prefer explicit x, else fall back to twitter
+                    const xUrl = socials?.x || socials?.twitter;
+                    const xHref = xUrl || '#';
                     // Facebook removed per request
                     return (
                       <div className="pc-socials">
@@ -441,10 +443,10 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                         </a>
                         <a
                           href={xHref}
-                          className={`pc-social${socials?.x ? '' : ' is-disabled'}`}
+                          className={`pc-social${xUrl ? '' : ' is-disabled'}`}
                           aria-label="X"
-                          target={socials?.x ? '_blank' : undefined}
-                          rel={socials?.x ? 'noopener noreferrer' : undefined}
+                          target={xUrl ? '_blank' : undefined}
+                          rel={xUrl ? 'noopener noreferrer' : undefined}
                         >
                           <X size={26} />
                         </a>

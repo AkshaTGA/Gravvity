@@ -17,6 +17,7 @@ const MemberSchema = new Schema(
     socials: {
       github: { type: String },
       linkedin: { type: String },
+      instagram: { type: String },
       twitter: { type: String },
     },
   },

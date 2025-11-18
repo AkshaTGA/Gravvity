@@ -29,9 +29,8 @@ export function OverallCoordinatorsSection() {
                 avatarUrl={member.image || '/placeholder-avatar.svg'}
                 socials={{
                   linkedin: member.socials?.linkedin,
-                  instagram: member.socials?.twitter,
-                  facebook: member.socials?.github,
-                  whatsapp: undefined,
+                  instagram: member.socials?.instagram,
+                  x: member.socials?.twitter,
                 }}
                 showUserInfo={true}
                 enableTilt={true}
