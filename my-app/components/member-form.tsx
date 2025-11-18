@@ -3,6 +3,7 @@
 import type React from "react"
 
 import { useState } from "react"
+import { useRef, useCallback } from "react"
 import type { Member } from "@/lib/types"
 import { wings } from "@/lib/data"
 import { uploadToCloudinary } from "@/lib/cloudinary"
@@ -40,54 +41,123 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
 
   const [uploading, setUploading] = useState(false)
 
+  // Cropping state
+  const [cropping, setCropping] = useState(false)
+  const [rawImage, setRawImage] = useState<string | null>(null)
+  const [rawFileName, setRawFileName] = useState<string | null>(null)
+  const [crop, setCrop] = useState<{ x: number; y: number; size: number } | null>(null)
+  const [dragStart, setDragStart] = useState<{ x: number; y: number } | null>(null)
+  const imageContainerRef = useRef<HTMLDivElement | null>(null)
+
+  const startCrop = (e: React.MouseEvent) => {
+    if (!imageContainerRef.current) return
+    const rect = imageContainerRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+    setDragStart({ x, y })
+    setCrop({ x, y, size: 0 })
+  }
+
+  const moveCrop = (e: React.MouseEvent) => {
+    if (!dragStart || !imageContainerRef.current) return
+    const rect = imageContainerRef.current.getBoundingClientRect()
+    let x2 = e.clientX - rect.left
+    let y2 = e.clientY - rect.top
+    // clamp
+    x2 = Math.max(0, Math.min(rect.width, x2))
+    y2 = Math.max(0, Math.min(rect.height, y2))
+    const dx = x2 - dragStart.x
+    const dy = y2 - dragStart.y
+    const size = Math.min(Math.abs(dx), Math.abs(dy))
+    const x = dx >= 0 ? dragStart.x : dragStart.x - size
+    const y = dy >= 0 ? dragStart.y : dragStart.y - size
+    setCrop({ x: Math.max(0, x), y: Math.max(0, y), size: Math.max(0, size) })
+  }
+
+  const endCrop = () => {
+    setDragStart(null)
+  }
+
+  const resetCropState = () => {
+    setCropping(false)
+    setRawImage(null)
+    setRawFileName(null)
+    setCrop(null)
+    setDragStart(null)
+  }
+
+  const processDataUrl = useCallback(async (dataUrl: string, originalName: string | null) => {
+    try {
+      if (
+        process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME &&
+        process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
+      ) {
+        setUploading(true)
+        const blob = await (await fetch(dataUrl)).blob()
+        const safeName = (originalName || 'image').replace(/\.[^.]+$/, '.jpg')
+        const outFile = new File([blob], safeName, { type: 'image/jpeg' })
+        const url = await uploadToCloudinary(outFile)
+        setFormData((prev) => ({ ...prev, image: url }))
+      } else {
+        setFormData((prev) => ({ ...prev, image: dataUrl }))
+      }
+    } catch (err) {
+      console.error(err)
+      setFormData((prev) => ({ ...prev, image: dataUrl }))
+    } finally {
+      setUploading(false)
+      resetCropState()
+    }
+  }, [])
+
+  const confirmCrop = async () => {
+    if (!rawImage || !crop || !imageContainerRef.current) return
+    const img = new Image()
+    img.onload = () => {
+      // Determine scale between displayed image and natural size
+      const displayWidth = imageContainerRef.current!.clientWidth
+      const displayHeight = imageContainerRef.current!.clientHeight
+      const scaleX = img.naturalWidth / displayWidth
+      const scaleY = img.naturalHeight / displayHeight
+      const sx = Math.round(crop.x * scaleX)
+      const sy = Math.round(crop.y * scaleY)
+      const sSize = Math.round(crop.size * Math.min(scaleX, scaleY))
+      const MAX_DIM = 512
+      let targetSize = sSize
+      if (targetSize > MAX_DIM) targetSize = MAX_DIM
+      const canvas = document.createElement('canvas')
+      canvas.width = targetSize
+      canvas.height = targetSize
+      const ctx = canvas.getContext('2d')
+      if (ctx) {
+        ctx.drawImage(
+          img,
+          sx,
+          sy,
+          sSize,
+          sSize,
+          0,
+          0,
+          targetSize,
+          targetSize
+        )
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
+        processDataUrl(dataUrl, rawFileName)
+      }
+    }
+    img.src = rawImage
+  }
+
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
     if (!file.type.startsWith("image/")) return
-
     const reader = new FileReader()
-    reader.onload = async () => {
-      const img = new Image()
-      img.onload = async () => {
-        // Downscale large images to max 512px (width or height)
-        const MAX_DIM = 512
-        let { width, height } = img
-        if (width > MAX_DIM || height > MAX_DIM) {
-          const scale = Math.min(MAX_DIM / width, MAX_DIM / height)
-          width = Math.round(width * scale)
-          height = Math.round(height * scale)
-        }
-        const canvas = document.createElement("canvas")
-        canvas.width = width
-        canvas.height = height
-        const ctx = canvas.getContext("2d")
-        if (ctx) {
-          ctx.drawImage(img, 0, 0, width, height)
-          const isPng = file.type === "image/png"
-          const dataUrl = canvas.toDataURL(isPng ? "image/png" : "image/jpeg", 0.85)
-          try {
-            // If Cloudinary envs exist, upload and store URL; otherwise keep data URL
-            if (
-              process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME &&
-              process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
-            ) {
-              setUploading(true)
-              const blob = await (await fetch(dataUrl)).blob()
-              const outFile = new File([blob], file.name.replace(/\.[^.]+$/, ".jpg"), { type: "image/jpeg" })
-              const url = await uploadToCloudinary(outFile)
-              setFormData((prev) => ({ ...prev, image: url }))
-            } else {
-              setFormData((prev) => ({ ...prev, image: dataUrl }))
-            }
-          } catch (err) {
-            console.error(err)
-            setFormData((prev) => ({ ...prev, image: dataUrl }))
-          } finally {
-            setUploading(false)
-          }
-        }
-      }
-      img.src = reader.result as string
+    reader.onload = () => {
+      setRawImage(reader.result as string)
+      setRawFileName(file.name)
+      setCropping(true)
+      setCrop(null)
     }
     reader.readAsDataURL(file)
   }
@@ -215,8 +285,52 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
           type="file"
           accept="image/*"
           onChange={handleImageChange}
+          disabled={cropping || uploading}
           className="w-full px-4 py-2 rounded-lg bg-card border border-border text-foreground file:bg-primary file:text-white file:border-0 file:rounded file:px-3 file:py-1 file:mr-3 cursor-pointer"
         />
+        {cropping && rawImage && (
+          <div className="mt-4 space-y-3">
+            <p className="text-xs text-foreground/60">Drag to select a square crop region. Release to set. Then apply.</p>
+            <div
+              ref={imageContainerRef}
+              onMouseDown={startCrop}
+              onMouseMove={moveCrop}
+              onMouseUp={endCrop}
+              className="relative inline-block select-none border border-border rounded"
+              style={{ cursor: 'crosshair' }}
+            >
+              <img src={rawImage} alt="To crop" className="max-h-96 max-w-full block" draggable={false} />
+              {crop && (
+                <div
+                  className="absolute border-2 border-primary/80 bg-primary/10"
+                  style={{
+                    left: crop.x,
+                    top: crop.y,
+                    width: crop.size,
+                    height: crop.size,
+                  }}
+                />
+              )}
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={confirmCrop}
+                disabled={!crop || uploading}
+                className="px-3 py-2 text-sm font-medium rounded bg-primary text-white disabled:opacity-50"
+              >
+                Apply Crop
+              </button>
+              <button
+                type="button"
+                onClick={resetCropState}
+                className="px-3 py-2 text-sm font-medium rounded bg-card border border-border"
+              >
+                Cancel Crop
+              </button>
+            </div>
+          </div>
+        )}
         {uploading && <p className="mt-2 text-sm text-foreground/60">Uploading image...</p>}
         {formData.image && (
           <div className="mt-2 flex items-center gap-3">
@@ -247,3 +361,5 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
     </form>
   )
 }
+
+
