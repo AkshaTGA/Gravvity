@@ -67,10 +67,10 @@ export default function WingsPage() {
                     data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                     data-aos-anchor-placement="top-bottom"
                   >
-                    <div className="w-full aspect-video max-w-3xl mx-auto">
+                    <div className="w-full  max-w-3xl mx-auto">
                       <MagicBorderExact
                         className="h-full w-full rounded-2xl"
-                        innerClassName="h-full w-full flex items-center justify-center rounded-2xl p-3 sm:p-4 md:p-5 bg-slate-950/60 overflow-hidden"
+                        innerClassName="h-full w-full flex items-center justify-center rounded-2xl p-3 sm:p-4 md:p-3 bg-slate-950/60 overflow-hidden"
                       >
                         <div className="w-full h-full flex items-center justify-center">
                           <div className="w-full h-full flex items-center justify-center">

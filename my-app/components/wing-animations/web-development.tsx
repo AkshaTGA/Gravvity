@@ -92,7 +92,7 @@ export function WebDevelopmentAnimation() {
             />
           )}
 
-          <div className="p-2 sm:p-3 flex flex-col gap-2 sm:gap-3 min-h-56 sm:min-h-80 lg:min-h-104">
+          <div className="p-2 sm:p-3 flex flex-col gap-2 sm:gap-3 h-full">
             <div
               className={`transition-all duration-500 ${
                 showContent
