@@ -28,6 +28,7 @@ interface ProfileCardProps {
     facebook?: string; // deprecated/unused
     whatsapp?: string; // deprecated/unused
     x?: string; // X (Twitter) profile URL
+    twitter?: string; // legacy alias for X
   };
 }
 

@@ -68,7 +68,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg mb-1">Email</h3>
-                    <p className="text-foreground/70">contact@gravitysociety.com</p>
+                    <p className="text-foreground/70">gravity@iiita.ac.in</p>
                   </div>
                 </div>
               </div>
@@ -80,7 +80,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-lg mb-1">Location</h3>
-                    <p className="text-foreground/70">Your Campus, City</p>
+                    <p className="text-foreground/70">IIIT ALLAHABAD , PRAYAGRAJ</p>
                   </div>
                 </div>
               </div>
@@ -169,8 +169,8 @@ export default function ContactPage() {
                   a: "Fill out the contact form above and mention your interest in joining. Our team will reach out with more details!",
                 },
                 {
-                  q: "Is there a membership fee?",
-                  a: "Gravity is open to all students. There is no membership fee, just a passion for technology!",
+                  q: "How often do the Events occur ?",
+                  a: "Events are scheduled regularly , of different wings in an interval of 1-2 months",
                 },
                 {
                   q: "Can I join multiple wings?",

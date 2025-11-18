@@ -12,6 +12,7 @@ export interface Member {
   role: "coordinator" | "member"
   wing: string
   bio: string
+    instagram?: string
   image?: string
   isOverallCoordinator?: boolean
   isFacultyCoordinator?: boolean
