@@ -1,40 +1,94 @@
-"use client"
+"use client";
 
-import { useEffect, useState, useMemo } from "react"
-import { Navigation } from "@/components/navigation"
-import { Footer } from "@/components/footer"
-import { Calendar, MapPin, X } from "lucide-react"
-import MagicButton from "@/components/magic-button"
-import { useEvents } from "@/hooks/use-events"
-import type { Event } from "@/lib/types"
+import { useEffect, useState, useMemo } from "react";
+import { Navigation } from "@/components/navigation";
+import { Footer } from "@/components/footer";
+import { Calendar, MapPin, X } from "lucide-react";
+import MagicButton from "@/components/magic-button";
+import { useEvents } from "@/hooks/use-events";
+import type { Event } from "@/lib/types";
+import { number } from "framer-motion";
+
+function EventCard({ event, index, setSelected }) {
+  return (
+    <div
+      key={event.id}
+      className="card-glow overflow-hidden group slide-in-up flex flex-col mx-auto w-full max-w-[440px]"
+      style={{ animationDelay: `${index * 0.1}s` }}
+    >
+      {/* Image Section */}
+      <div className="relative w-full aspect-[3/4] md:aspect-[2/2] bg-black overflow-hidden">
+        <img
+          src={event.image || "/gravity-logo.png"}
+          alt={event.title}
+          loading="lazy"
+          className="absolute inset-0 w-full h-full object-cover object-center transform transition-transform duration-700 ease-out group-hover:scale-110"
+        />
+      </div>
+
+      {/* Content */}
+      <div className="px-5 py-4 sm:px-6 sm:py-5 flex flex-col">
+        <div className="inline-block px-3 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/30 text-xs font-medium text-purple-300 mb-2">
+          {event.wing}
+        </div>
+
+        <h3 className="text-base sm:text-lg font-semibold group-hover:gradient-text transition-all line-clamp-2">
+          {event.title}
+        </h3>
+
+        {/* Date + Venue */}
+        <div className="pt-3 border-t border-border mt-2 flex flex-wrap justify-between gap-3 text-sm text-foreground/60">
+          <div className="flex items-center gap-1.5">
+            <Calendar size={15} />
+            <span>{new Date(event.date).toLocaleDateString()}</span>
+          </div>
+
+          <div className="flex items-center gap-1.5">
+            <MapPin size={15} />
+            <span>Campus</span>
+          </div>
+        </div>
+
+        <button
+          onClick={() => setSelected(event)}
+          className="mt-3 text-sm font-medium text-primary hover:opacity-80 transition inline-flex items-center gap-1 self-start"
+        >
+          More <span aria-hidden>→</span>
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function EventsPage() {
-  const events = useEvents()
-  const [selected, setSelected] = useState<Event | null>(null)
-  const [email, setEmail] = useState("")
-  const [subStatus, setSubStatus] = useState<"idle" | "loading" | "ok" | "error">("idle")
-  const [subMessage, setSubMessage] = useState("")
+  const events = useEvents();
+  const [selected, setSelected] = useState<Event | null>(null);
+  const [email, setEmail] = useState("");
+  const [subStatus, setSubStatus] = useState<
+    "idle" | "loading" | "ok" | "error"
+  >("idle");
+  const [subMessage, setSubMessage] = useState("");
 
   // Close on ESC
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setSelected(null)
-    }
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [])
-  const [showAll, setShowAll] = useState(false)
-  const VISIBLE_LIMIT = 6
+      if (e.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  const [showAll, setShowAll] = useState(false);
+  const VISIBLE_LIMIT = 6;
   const sorted = useMemo(() => {
     // Sort by numeric id (new additions get higher Date.now id) fallback to date
-    return [...events].sort((a,b) => {
-      const idDiff = Number(b.id) - Number(a.id)
-      if (!isNaN(idDiff) && idDiff !== 0) return idDiff
-      return new Date(b.date).getTime() - new Date(a.date).getTime()
-    })
-  }, [events])
+    return [...events].sort((a, b) => {
+      const idDiff = Number(b.id) - Number(a.id);
+      if (!isNaN(idDiff) && idDiff !== 0) return idDiff;
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  }, [events]);
 
-  const visibleEvents = showAll ? sorted : sorted.slice(0, VISIBLE_LIMIT)
+  const visibleEvents = showAll ? sorted : sorted.slice(0, VISIBLE_LIMIT);
 
   return (
     <>
@@ -43,64 +97,31 @@ export default function EventsPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           {/* Header */}
           <div className="text-center mb-16 slide-in-up">
-            <h1 className="text-5xl md:text-6xl font-bold gradient-text mb-4">Events & Activities</h1>
-            <p className="text-xl text-foreground/70">Join our exciting events and competitions</p>
+            <h1 className="text-5xl md:text-6xl font-bold gradient-text mb-4">
+              Events & Activities
+            </h1>
+            <p className="text-xl text-foreground/70">
+              Join our exciting events and competitions
+            </p>
           </div>
 
           {/* Events Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {visibleEvents.map((event, index) => (
-              <div
+              <EventCard
                 key={event.id}
-                className="card-glow overflow-hidden group slide-in-up h-[440px] flex flex-col"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {/* Event Image */}
-                <div className="relative w-full h-[75%] overflow-hidden flex items-center justify-center bg-black">
-                  <img
-                    src={event.image || "/placeholder.svg?key=event"}
-                    alt={event.title}
-                    className="w-55 h-55 object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-
-                {/* Event Content */}
-                <div className="p-5 flex-1 flex flex-col">
-                  <div className="inline-block px-3 py-0.5 rounded-full bg-purple-500/20 border border-purple-500/30 text-xs font-medium text-purple-300 mb-2">
-                    {event.wing}
-                  </div>
-                  <div className="flex-1 flex items-center">
-                    <h3 className="text-lg font-bold mb-1 group-hover:gradient-text transition-all line-clamp-2">{event.title}</h3>
-                  </div>
-                  <div className="space-y-1 pt-3 border-t border-border mt-auto">
-                    <div className="flex items-center gap-2 text-sm text-foreground/60">
-                      <Calendar size={16} />
-                      <span>{new Date(event.date).toLocaleDateString()}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-foreground/60">
-                      <MapPin size={16} />
-                      <span>Campus</span>
-                    </div>
-                    <div className="pt-2">
-                      <button
-                        onClick={() => setSelected(event)}
-                        className="text-sm font-medium text-primary hover:opacity-80 transition inline-flex items-center gap-1"
-                        aria-label={`More about ${event.title}`}
-                      >
-                        More
-                        <span aria-hidden>→</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                event={event}
+                index={index}
+                setSelected={setSelected}
+              />
             ))}
           </div>
+
           {/* Toggle show all */}
           <div className="mt-8 flex justify-center">
             {sorted.length > VISIBLE_LIMIT && (
               <button
-                onClick={() => setShowAll(s => !s)}
+                onClick={() => setShowAll((s) => !s)}
                 className="px-6 py-2 rounded-lg bg-card border border-border hover:bg-card/80 transition text-sm font-medium"
               >
                 {showAll ? "Show Less" : `Show All (${sorted.length})`}
@@ -133,11 +154,12 @@ export default function EventsPage() {
                 {/* Two-column layout: image left, text right */}
                 <div className="grid grid-cols-1 md:grid-cols-[33%_67%] h-full">
                   {/* Left: Image */}
-                  <div className="relative h-full bg-black/20">
+                  <div className="relative h-full overflow-hidden bg-black/20">
                     <img
                       src={selected.image || "/placeholder.svg?key=event"}
                       alt={selected.title}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover object-center transform-gpu transition-transform duration-500 ease-out hover:scale-105"
                     />
                   </div>
 
@@ -158,7 +180,9 @@ export default function EventsPage() {
           {/* Call to Action */}
           <div className="mt-16 card-glow p-8 text-center slide-in-up">
             <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
-            <p className="text-foreground/70 mb-6">Subscribe to get notifications about upcoming events</p>
+            <p className="text-foreground/70 mb-6">
+              Subscribe to get notifications about upcoming events
+            </p>
             <div className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
               <input
                 type="email"
@@ -169,31 +193,34 @@ export default function EventsPage() {
               />
               <MagicButton
                 onClick={async () => {
-                  const valid = /^(?:[a-zA-Z0-9_.'+\-]+)@(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$/.test(email)
+                  const valid =
+                    /^(?:[a-zA-Z0-9_.'+\-]+)@(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$/.test(
+                      email
+                    );
                   if (!valid) {
-                    setSubStatus("error")
-                    setSubMessage("Enter a valid email")
-                    return
+                    setSubStatus("error");
+                    setSubMessage("Enter a valid email");
+                    return;
                   }
                   try {
-                    setSubStatus("loading")
+                    setSubStatus("loading");
                     const res = await fetch("/api/subscribe", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({ email }),
-                    })
-                    const data = await res.json()
+                    });
+                    const data = await res.json();
                     if (res.ok && data.ok) {
-                      setSubStatus("ok")
-                      setSubMessage("You're subscribed!")
-                      setEmail("")
+                      setSubStatus("ok");
+                      setSubMessage("You're subscribed!");
+                      setEmail("");
                     } else {
-                      setSubStatus("error")
-                      setSubMessage(data?.error || "Something went wrong")
+                      setSubStatus("error");
+                      setSubMessage(data?.error || "Something went wrong");
                     }
                   } catch (e) {
-                    setSubStatus("error")
-                    setSubMessage("Network error")
+                    setSubStatus("error");
+                    setSubMessage("Network error");
                   }
                 }}
                 disabled={subStatus === "loading"}
@@ -204,12 +231,18 @@ export default function EventsPage() {
               </MagicButton>
             </div>
             {subStatus !== "idle" && (
-              <p className={`mt-3 text-sm ${subStatus === "ok" ? "text-green-400" : "text-red-400"}`}>{subMessage}</p>
+              <p
+                className={`mt-3 text-sm ${
+                  subStatus === "ok" ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                {subMessage}
+              </p>
             )}
           </div>
         </div>
       </main>
       <Footer />
     </>
-  )
+  );
 }

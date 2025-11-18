@@ -15,7 +15,16 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8 text-center md:text-left">
           {/* Brand */}
           <div>
-            <h3 className="font-bold text-lg gradient-text mb-2">Gravity</h3>
+            <Link href="/" className="flex items-center gap-2">
+            <img
+              src="/gravity-logo.ico"
+              alt="Gravity Logo"
+              className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.3)] transition-transform duration-200 ease-out hover:scale-105"
+            />
+            <span className="font-bold text-xl hidden sm:inline gradient-text">
+              GRAVITY
+            </span>
+          </Link>
             <p className="text-foreground/60 text-sm">
               Technical Society for Innovation & Excellence
             </p>
