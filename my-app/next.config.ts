@@ -10,21 +10,22 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    // On Netlify, we use netlify.toml redirects to the serverless function.
-    // Only generate rewrites if a BACKEND_URL is explicitly provided.
+    // We migrated CRUD + public endpoints into Next.js API routes.
+    // Preserve optional delegation only when an explicit external backend is desired.
     if (!BACKEND_URL) return [];
+    if (process.env.USE_EXTERNAL_BACKEND !== 'true') {
+      // Serve everything from internal API (no rewrites for members/events/projects/admin/public).
+      return [];
+    }
     return [
-      // Health check passthrough to backend
       {
         source: "/api/health",
         destination: `${BACKEND_URL}/api/health`,
       },
-      // Public read-only endpoints consumed by the frontend
       {
         source: "/api/public/:path*",
         destination: `${BACKEND_URL}/api/public/:path*`,
       },
-      // Admin/authenticated CRUD endpoints used by the dashboard
       {
         source: "/api/members/:path*",
         destination: `${BACKEND_URL}/api/members/:path*`,

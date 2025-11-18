@@ -11,17 +11,51 @@ export default function ProjectsPage() {
 
   useEffect(() => {
     let mounted = true
+    const CACHE_KEY = 'projects-cache-v1'
+    const STALE_AFTER_MS = 10 * 60 * 1000 // 10 minutes
+
+    // 1) Try cached first for instant render
+    try {
+      const raw = typeof window !== 'undefined' ? localStorage.getItem(CACHE_KEY) : null
+      if (raw) {
+        const cached = JSON.parse(raw) as { ts: number; data: any[] }
+        if (Array.isArray(cached?.data)) {
+          setProjects(cached.data)
+        }
+      }
+    } catch (e) {
+      // ignore cache errors
+    }
+
+    // 2) Fetch if missing or stale, then revalidate cache
     async function load() {
       try {
-        const res = await fetch('/api/projects')
-        if (!res.ok) return
-        const data = await res.json()
-        if (mounted) setProjects(data)
+        const raw = typeof window !== 'undefined' ? localStorage.getItem(CACHE_KEY) : null
+        let shouldFetch = true
+        if (raw) {
+          try {
+            const cached = JSON.parse(raw) as { ts: number; data: any[] }
+            if (cached?.ts && Date.now() - cached.ts < STALE_AFTER_MS && Array.isArray(cached.data)) {
+              // Fresh enough; still do a background revalidate
+              shouldFetch = true
+            }
+          } catch { /* ignore */ }
+        }
+
+        if (shouldFetch) {
+          const res = await fetch('/api/projects')
+          if (!res.ok) return
+          const data = (await res.json()) as any[]
+          if (mounted) setProjects(data)
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }))
+          } catch { /* ignore quota errors */ }
+        }
       } catch (e) {
         console.error('Failed to fetch projects', e)
       }
     }
-    load()
+    void load()
     return () => { mounted = false }
   }, [])
   return (

@@ -42,11 +42,19 @@ export function useAdminStore() {
         if (membersRes.ok) {
           const data = (await membersRes.json()) as Member[]
           setMembers(data)
+          try {
+            localStorage.setItem('gravity_members', JSON.stringify(data))
+            window.dispatchEvent(new StorageEvent('storage', { key: 'gravity_members', newValue: JSON.stringify(data) }))
+          } catch {}
         }
 
         if (eventsRes.ok) {
           const data = (await eventsRes.json()) as Event[]
           setEvents(data)
+          try {
+            localStorage.setItem('gravity_events', JSON.stringify(data))
+            window.dispatchEvent(new StorageEvent('storage', { key: 'gravity_events', newValue: JSON.stringify(data) }))
+          } catch {}
         }
       } catch (e) {
         console.error("Failed to load admin data", e)
@@ -104,7 +112,14 @@ export function useAdminStore() {
       })
       if (!res.ok) return
       const updated = (await res.json()) as Member
-      setMembers((prev) => prev.map((m) => (m.id === updated.id ? updated : m)))
+      setMembers((prev) => {
+        const next = prev.map((m) => (m.id === updated.id ? updated : m))
+        try {
+          localStorage.setItem('gravity_members', JSON.stringify(next))
+          window.dispatchEvent(new StorageEvent('storage', { key: 'gravity_members', newValue: JSON.stringify(next) }))
+        } catch {}
+        return next
+      })
     } catch (e) {
       console.error("Failed to save member", e)
     }
@@ -119,7 +134,14 @@ export function useAdminStore() {
       })
       if (!res.ok) throw new Error("Failed to create member")
       const created = (await res.json()) as Member
-      setMembers((prev) => [...prev, created])
+      setMembers((prev) => {
+        const next = [...prev, created]
+        try {
+          localStorage.setItem('gravity_members', JSON.stringify(next))
+          window.dispatchEvent(new StorageEvent('storage', { key: 'gravity_members', newValue: JSON.stringify(next) }))
+        } catch {}
+        return next
+      })
       return created
     } catch (e) {
       console.error("Failed to add member", e)
@@ -134,7 +156,14 @@ export function useAdminStore() {
         headers: authHeaders(),
       })
       if (!res.ok && res.status !== 204) return
-      setMembers((prev) => prev.filter((m) => m.id !== id))
+      setMembers((prev) => {
+        const next = prev.filter((m) => m.id !== id)
+        try {
+          localStorage.setItem('gravity_members', JSON.stringify(next))
+          window.dispatchEvent(new StorageEvent('storage', { key: 'gravity_members', newValue: JSON.stringify(next) }))
+        } catch {}
+        return next
+      })
     } catch (e) {
       console.error("Failed to delete member", e)
     }
@@ -150,7 +179,14 @@ export function useAdminStore() {
       })
       if (!res.ok) throw new Error("Failed to create event")
       const created = (await res.json()) as Event
-      setEvents((prev) => [...prev, created])
+      setEvents((prev) => {
+        const next = [...prev, created]
+        try {
+          localStorage.setItem('gravity_events', JSON.stringify(next))
+          window.dispatchEvent(new StorageEvent('storage', { key: 'gravity_events', newValue: JSON.stringify(next) }))
+        } catch {}
+        return next
+      })
       return created
     } catch (e) {
       console.error("Failed to add event", e)
@@ -167,7 +203,14 @@ export function useAdminStore() {
       })
       if (!res.ok) return
       const updated = (await res.json()) as Event
-      setEvents((prev) => prev.map((e) => (e.id === updated.id ? updated : e)))
+      setEvents((prev) => {
+        const next = prev.map((e) => (e.id === updated.id ? updated : e))
+        try {
+          localStorage.setItem('gravity_events', JSON.stringify(next))
+          window.dispatchEvent(new StorageEvent('storage', { key: 'gravity_events', newValue: JSON.stringify(next) }))
+        } catch {}
+        return next
+      })
     } catch (e) {
       console.error("Failed to save event", e)
     }
@@ -180,7 +223,14 @@ export function useAdminStore() {
         headers: authHeaders(),
       })
       if (!res.ok && res.status !== 204) return
-      setEvents((prev) => prev.filter((e) => e.id !== id))
+      setEvents((prev) => {
+        const next = prev.filter((e) => e.id !== id)
+        try {
+          localStorage.setItem('gravity_events', JSON.stringify(next))
+          window.dispatchEvent(new StorageEvent('storage', { key: 'gravity_events', newValue: JSON.stringify(next) }))
+        } catch {}
+        return next
+      })
     } catch (e) {
       console.error("Failed to delete event", e)
     }
