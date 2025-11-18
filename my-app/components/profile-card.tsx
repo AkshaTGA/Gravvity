@@ -430,6 +430,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
                         >
                           <Linkedin size={26} />
                         </a>
+                        {/* hi */}
                         <a
                           href={instaHref}
                           className={`pc-social${socials?.instagram ? '' : ' is-disabled'}`}
