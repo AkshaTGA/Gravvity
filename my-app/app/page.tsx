@@ -22,7 +22,7 @@ export default function Home() {
     try {
       const params = new URLSearchParams(window.location.search);
       const introParam = params.get("intro");
-
+// hi
       if (introParam === "reset") {
         localStorage.removeItem(INTRO_VIDEO_STORAGE_KEY);
         setShowIntro(true);
