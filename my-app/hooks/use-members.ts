@@ -1,5 +1,4 @@
 "use client"
-
 import { useEffect, useState } from "react"
 import type { Member } from "@/lib/types"
 
