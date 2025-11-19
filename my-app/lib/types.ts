@@ -20,6 +20,7 @@ export interface Member {
     github?: string;
     linkedin?: string;
     twitter?: string;
+    instagram?: string;
   };
   /** Timestamp when the member was added (ms since epoch). */
   createdAt?: number;

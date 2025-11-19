@@ -8,8 +8,11 @@ import MagicBorderCard from "@/components/magic-border-card";
 import MagicBorderExact from "@/components/magic-border-exact";
 import { useEffect } from "react";
 import { GradualSpacing } from "@/components/Text-Effect";
+import { useRouter } from "next/navigation";
 
 export default function WingsPage() {
+  // Router hook must be called at top-level, not inside effects
+  const router = useRouter();
   const slug = (s: string) =>
     s
       .toLowerCase()
@@ -24,7 +27,6 @@ export default function WingsPage() {
       if (!el) return;
       el.scrollIntoView({ behavior: "smooth", block: "start" });
     };
-
     scrollToHash();
     const onHashChange = () => scrollToHash(window.location.hash);
     window.addEventListener("hashchange", onHashChange);
@@ -67,7 +69,12 @@ export default function WingsPage() {
                     data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
                     data-aos-anchor-placement="top-bottom"
                   >
-                    <div className="w-full  max-w-3xl mx-auto">
+                    <div
+                      className="w-full cursor-pointer max-w-3xl mx-auto"
+                      onClick={() => {
+                        router.push(`/members?wing=${wing.name}`);
+                      }}
+                    >
                       <MagicBorderExact
                         className="h-full w-full rounded-2xl"
                         innerClassName="h-full w-full flex items-center justify-center rounded-2xl p-3 sm:p-4 md:p-3 bg-slate-950/60 overflow-hidden"
