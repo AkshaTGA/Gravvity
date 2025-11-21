@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Mail, Github, Linkedin, Twitter, Instagram } from "lucide-react";
 import { wings } from "@/lib/data";
+import { useState } from "react";
 
 const slug = (s: string) =>
   s
@@ -9,23 +10,34 @@ const slug = (s: string) =>
     .replace(/(^-|-$)/g, "");
 
 export function Footer() {
+
+  const [counter, setcounter] = useState(0);
+  const [data, setdata] = useState(false);
+
+  const handleClick = () => {
+    const c = counter + 1;
+    setcounter(c);
+    if (c === 5) {
+      setdata(true);
+    }
+  };
+
   return (
     <footer className="bg-card/50 border-t border-border mt-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid md:grid-cols-4 gap-8 mb-8 text-center md:text-left">
           {/* Brand */}
           <div className="flex sm:block flex-col items-center">
-            <div >
-            <Link href="/" className="flex items-center my-4 gap-2">
-            <img
-              src="/gravity-logo.ico"
-              alt="Gravity Logo"
-              className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.3)] transition-transform duration-200 ease-out hover:scale-105"
-            />
-            <span className="font-bold text-xl gradient-text">
-              GRAVITY
-            </span>
-          </Link></div>
+            <div>
+              <Link href="/" className="flex items-center my-4 gap-2">
+                <img
+                  src="/gravity-logo.ico"
+                  alt="Gravity Logo"
+                  className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.3)] transition-transform duration-200 ease-out hover:scale-105"
+                />
+                <span className="font-bold text-xl gradient-text">GRAVITY</span>
+              </Link>
+            </div>
             <p className="text-foreground/60 text-sm">
               Technical Society for Innovation & Excellence
             </p>
@@ -134,8 +146,225 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Removed lower legal section per request */}
+        <div className="w-full h-10" onClick={handleClick}></div>
+        {data && (
+          <SecretPopup
+            onClose={() => {
+              setdata(false);
+              setcounter(0);
+            }}
+          />
+        )}
       </div>
     </footer>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function SecretPopup({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      onClick={onClose}
+    >
+      <div
+        className="relative bg-card border-2 border-primary rounded-lg p-8 max-w-md mx-4 shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="confetti-container absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={i}
+              className="confetti"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 2}s`,
+                animationDuration: `${2 + Math.random() * 2}s`,
+                backgroundColor: ["#7c5cff", "#ff6b9d", "#ffd93d", "#6bcf7f"][
+                  Math.floor(Math.random() * 4)
+                ],
+              }}
+            />
+          ))}
+        </div>
+        <div className="relative z-10 text-center">
+          <h2 className="text-3xl font-bold gradient-text mb-4">
+            🎉 Congratulations! 🎉
+          </h2>
+          <p className="text-lg mb-6">You have found a secret!</p>
+          <div className="text-sm text-foreground/70 border-t border-border pt-4">
+            <p className="font-bold font-serif mt-2">
+             - .... -.- .-.. / -.. .--. .- --- / ... ...- -.-. .-.. / .. ..-. / .... .-. --.. --- .... .- / .... ..- -.- / -.-- .... -. --- .... -.-. --..-- / .. .- .-.. .--- --- .----. ..--- ---.. .-.-.-
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="mt-6 px-6 py-2 bg-primary text-primary-foreground rounded-md hover:opacity-90 transition"
+          >
+            Close
+          </button>
+        </div>
+        <style jsx>{`
+          .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            animation: fall linear infinite;
+          }
+          @keyframes fall {
+            to {
+              transform: translateY(100vh) rotate(360deg);
+            }
+          }
+        `}</style>
+      </div>
+    </div>
   );
 }
