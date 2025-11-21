@@ -10,14 +10,14 @@ const slug = (s: string) =>
     .replace(/(^-|-$)/g, "");
 
 export function Footer() {
-
+const clickreq=window.innerWidth>1024?5:10;
   const [counter, setcounter] = useState(0);
   const [data, setdata] = useState(false);
 
   const handleClick = () => {
     const c = counter + 1;
     setcounter(c);
-    if (c === 5) {
+    if (c === clickreq) {
       setdata(true);
     }
   };
