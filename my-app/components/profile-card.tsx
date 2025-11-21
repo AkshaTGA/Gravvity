@@ -414,13 +414,13 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             {/* Details first */}
             <div className="pc-content">
               <div className="pc-details">
-                <h3 className="p-3 text-xl  mask-radial-from-sidebar-accent-foreground" title={name}>{name}</h3>
+                <h3 className="px-5 md:p-3 text-[2px] md:text-2xl  mask-radial-from-sidebar-accent-foreground" title={name}>{name}</h3>
                 {/* Subtitle removed per request */}
               </div>
             </div>
 
             {/* Image next, then the info bar */}
-            <div className="pc-content pc-avatar-content">
+            <div className="pc-content p-3 md:p-0 pc-avatar-content">
               <img
                 className="avatar"
                 src={normalizeSrc(avatarUrl) || PLACEHOLDER}

@@ -110,6 +110,7 @@
   /* Use theme card color to match overall site theme */
   background-color: var(--card);
   transform: none;
+  
 }
 
 .pc-shine {

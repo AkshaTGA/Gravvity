@@ -13,16 +13,22 @@ import {
   INTRO_VIDEO_EXPIRY_MS,
   INTRO_VIDEO_STORAGE_KEY,
 } from "@/lib/intro-video-config";
+import { prefetchMembers } from "@/lib/prefetch";
 
 export default function Home() {
   const [showIntro, setShowIntro] = useState<boolean>(false);
   const [showContent, setShowContent] = useState<boolean>(false);
 
   useEffect(() => {
+    // Prefetch members data immediately
+    prefetchMembers();
+  }, []);
+
+  useEffect(() => {
     try {
       const params = new URLSearchParams(window.location.search);
       const introParam = params.get("intro");
-// hi
+      // hi
       if (introParam === "reset") {
         localStorage.removeItem(INTRO_VIDEO_STORAGE_KEY);
         setShowIntro(true);
