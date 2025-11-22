@@ -55,4 +55,8 @@ export interface BlogPost {
   date: string;
   category: string;
   image?: string;
+  rollNumber?: string;
+  mediumUrl?: string;
+  status?: "pending" | "approved" | "rejected";
+  createdAt?: number;
 }
