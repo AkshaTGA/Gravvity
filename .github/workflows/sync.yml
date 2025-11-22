@@ -2,7 +2,7 @@ name: Sync Fork
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # Runs every 15 minutes
+    - cron: '*/10 * * * *'  # Runs every 10 minutes
   workflow_dispatch:
 
 jobs:
@@ -12,10 +12,15 @@ jobs:
       contents: write
 
     steps:
+      - name: Set Git identity
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Checkout fork repo
         uses: actions/checkout@v3
         with:
-          ref: main  # Change to your default branch if needed
+          ref: main  # Change if your default branch is different
 
       - name: Add upstream remote
         run: git remote add upstream https://github.com/connectwithusemail-debug/Gravvity.git
