@@ -6,7 +6,7 @@ import {
   INTRO_VIDEO_EXPIRY_MS,
   INTRO_VIDEO_STORAGE_KEY,
 } from "@/lib/intro-video-config";
-import { prefetchMembers } from "@/lib/prefetch";
+import { prefetchAll } from "@/lib/prefetch";
 
 export default function IntroVideo({ onFinish }: { onFinish?: () => void }) {
   const [shouldShow, setShouldShow] = useState<boolean>(false);
@@ -28,8 +28,8 @@ export default function IntroVideo({ onFinish }: { onFinish?: () => void }) {
     updateVideoSrc();
     window.addEventListener("resize", updateVideoSrc);
 
-    // Prefetch members data while video is loading
-    prefetchMembers();
+    // Prefetch members, events, blogs in parallel while video is loading
+    prefetchAll();
 
     return () => window.removeEventListener("resize", updateVideoSrc);
   }, []);

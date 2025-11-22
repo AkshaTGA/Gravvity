@@ -25,7 +25,8 @@ function EventCard({ event, index, setSelected }: EventCardProps) {
       <div className="relative w-full cursor-pointer aspect-square sm:aspect-3/2 md:aspect-square bg-black overflow-hidden">
         <img
           src={event.image || "/gravity-logo.png"}
-          alt={event.title} onClick={() => setSelected(event)}
+          alt={event.title}
+          onClick={() => setSelected(event)}
           loading="lazy"
           className="absolute inset-0 w-full h-full object-cover object-center transform transition-transform duration-700 ease-out"
         />
@@ -65,8 +66,6 @@ function EventCard({ event, index, setSelected }: EventCardProps) {
   );
 }
 
-
-
 export default function EventsPage() {
   const events = useEvents();
   const [selected, setSelected] = useState<Event | null>(null);
@@ -81,8 +80,14 @@ export default function EventsPage() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setSelected(null);
     };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", onKey);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("keydown", onKey);
+      }
+    };
   }, []);
   const [showAll, setShowAll] = useState(false);
   const VISIBLE_LIMIT = 6;

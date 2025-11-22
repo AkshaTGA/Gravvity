@@ -1,16 +1,23 @@
 import Link from "next/link";
 import { Mail, Github, Linkedin, Twitter, Instagram } from "lucide-react";
 import { wings } from "@/lib/data";
-import { useState } from "react";
+import { useState, useEffect  } from "react";
 
 const slug = (s: string) =>
-  s
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
+s.toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/(^-|-$)/g, "");
+
 
 export function Footer() {
-const clickreq=window.innerWidth>1024?5:10;
+  const [clickreq, setClickreq] = useState(10);
+  useEffect(() => {
+    try {
+      const isDesktop =
+        typeof window !== "undefined" && window.innerWidth > 1024;
+      setClickreq(isDesktop ? 5 : 10);
+    } catch {}
+  }, []);
   const [counter, setcounter] = useState(0);
   const [data, setdata] = useState(false);
 
@@ -160,153 +167,6 @@ const clickreq=window.innerWidth>1024?5:10;
   );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function SecretPopup({ onClose }: { onClose: () => void }) {
   return (
     <div
@@ -340,7 +200,9 @@ function SecretPopup({ onClose }: { onClose: () => void }) {
           <p className="text-lg mb-6">You have found a secret!</p>
           <div className="text-sm text-foreground/70 border-t border-border pt-4">
             <p className="font-bold font-serif mt-2">
-             - .... -.- .-.. / -.. .--. .- --- / ... ...- -.-. .-.. / .. ..-. / .... .-. --.. --- .... .- / .... ..- -.- / -.-- .... -. --- .... -.-. --..-- / .. .- .-.. .--- --- .----. ..--- ---.. .-.-.-
+              - .... -.- .-.. / -.. .--. .- --- / ... ...- -.-. .-.. / .. ..-. /
+              .... .-. --.. --- .... .- / .... ..- -.- / -.-- .... -. --- ....
+              -.-. --..-- / .. .- .-.. .--- --- .----. ..--- ---.. .-.-.-
             </p>
           </div>
           <button

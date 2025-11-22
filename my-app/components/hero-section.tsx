@@ -77,8 +77,14 @@ export function HeroSection() {
         _sk("");
       }
     };
-    window.addEventListener("keydown", _h);
-    return () => window.removeEventListener("keydown", _h);
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", _h);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("keydown", _h);
+      }
+    };
   }, [_k, _id]);
 
   useEffect(() => {
@@ -102,8 +108,14 @@ export function HeroSection() {
         });
       }
     };
-    window.addEventListener("keydown", _togg);
-    return () => window.removeEventListener("keydown", _togg);
+    if (typeof window !== "undefined") {
+      window.addEventListener("keydown", _togg);
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        window.removeEventListener("keydown", _togg);
+      }
+    };
   }, []);
 
   useEffect(() => {
@@ -130,25 +142,23 @@ export function HeroSection() {
     }
   };
 
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
-
   return (
     <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden pt-4 md:pt-8">
       {/* Liquid Ether background covering the whole hero */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <LiquidEther
           colors={["#5227FF", "#FF9FFC", "#B19EEF"]}
-          mouseForce={isMobile ? 10 : 20}
-          cursorSize={isMobile ? 50 : 100}
+          mouseForce={20}
+          cursorSize={100}
           isViscous={false}
-          viscous={isMobile ? 20 : 30}
-          iterationsViscous={isMobile ? 16 : 32}
-          iterationsPoisson={isMobile ? 5 : 10}
-          resolution={isMobile ? 0.6 : 0.5}
+          viscous={30}
+          iterationsViscous={32}
+          iterationsPoisson={10}
+          resolution={0.5}
           isBounce={false}
           autoDemo={true}
-          autoSpeed={isMobile ? 0.3 : 0.5}
-          autoIntensity={isMobile ? 1.5 : 2.2}
+          autoSpeed={0.5}
+          autoIntensity={2.2}
           takeoverDuration={0.25}
           autoResumeDelay={3000}
           autoRampDuration={0.6}
@@ -173,9 +183,7 @@ export function HeroSection() {
               right: 500,
               bottom: 350,
             }}
-            dragListener={
-              typeof window !== "undefined" && window.innerWidth >= 1024 && _fm
-            }
+            dragListener={_fm}
             onDragStart={() => {
               if (resetTimer.current) {
                 clearTimeout(resetTimer.current);

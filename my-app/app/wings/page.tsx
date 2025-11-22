@@ -29,9 +29,13 @@ export default function WingsPage() {
     };
     scrollToHash();
     const onHashChange = () => scrollToHash(window.location.hash);
-    window.addEventListener("hashchange", onHashChange);
+    if (typeof window !== "undefined") {
+      window.addEventListener("hashchange", onHashChange);
+    }
     return () => {
-      window.removeEventListener("hashchange", onHashChange);
+      if (typeof window !== "undefined") {
+        window.removeEventListener("hashchange", onHashChange);
+      }
     };
   }, []);
 

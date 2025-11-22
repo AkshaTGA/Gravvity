@@ -1,92 +1,145 @@
-"use client"
+"use client";
 
-import { Navigation } from "@/components/navigation"
-import { Footer } from "@/components/footer"
-import { defaultBlogs } from "@/lib/data"
-import { useEffect, useMemo, useState } from "react"
-import BlogSubmitModal from "@/components/blog-submit-modal"
-import { Calendar, User, Tag, Search, X } from "lucide-react"
-import MagicButton from "@/components/magic-button"
+import { Navigation } from "@/components/navigation";
+import { Footer } from "@/components/footer";
+import { defaultBlogs } from "@/lib/data";
+import { useEffect, useMemo, useState } from "react";
+import BlogSubmitModal from "@/components/blog-submit-modal";
+import { Calendar, User, Tag, Search, X } from "lucide-react";
+import MagicButton from "@/components/magic-button";
 
 export default function BlogsPage() {
   const formatDate = (input: string | number | Date) =>
-    new Date(input).toLocaleDateString('en-GB', { year: 'numeric', month: 'short', day: '2-digit' })
+    new Date(input).toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    });
 
-  const [open, setOpen] = useState(false)
-  const [approved, setApproved] = useState(() => [] as any[])
-  const [query, setQuery] = useState("")
+  const [open, setOpen] = useState(false);
+  const [approved, setApproved] = useState(() => [] as any[]);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
-    // Load approved blogs from server on mount and when window regains focus
-    let mounted = true
+    // Seed from cache and fetch fresh on focus/initial mount
+    let mounted = true;
+    const KEY = "gravity_approved_blogs";
+
+    // 1) Seed from localStorage
+    try {
+      const raw =
+        typeof window !== "undefined" ? localStorage.getItem(KEY) : null;
+      if (raw) {
+        const cached = JSON.parse(raw);
+        if (Array.isArray(cached)) setApproved(cached);
+      }
+    } catch {}
+
+    // 2) Fetch fresh
     async function fetchApproved() {
       try {
-        const res = await fetch('/api/public/blogs')
-        if (!res.ok) return
-        const data = await res.json()
-        if (mounted) setApproved(data)
+        const res = await fetch("/api/public/blogs");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (mounted) setApproved(data);
+        try {
+          localStorage.setItem(KEY, JSON.stringify(data));
+        } catch {}
       } catch (e) {
-        console.error('Failed to fetch approved blogs', e)
+        console.error("Failed to fetch approved blogs", e);
       }
     }
-    fetchApproved()
-    const onFocus = () => fetchApproved()
-    window.addEventListener('focus', onFocus)
-    return () => {
-      mounted = false
-      window.removeEventListener('focus', onFocus)
+    fetchApproved();
+    const onFocus = () => fetchApproved();
+    if (typeof window !== "undefined") {
+      window.addEventListener("focus", onFocus);
     }
-  }, [])
+    return () => {
+      mounted = false;
+      if (typeof window !== "undefined") {
+        window.removeEventListener("focus", onFocus);
+      }
+    };
+  }, []);
 
-  const communityCards = useMemo(() => approved.map((b) => (
-    <a key={b.id} href={b.mediumUrl} target="_blank" rel="noreferrer"
-       className="block card-glow overflow-hidden group cursor-pointer slide-in-up">
-      <div className="p-6 grid md:grid-cols-3 gap-6">
-        <div className="md:col-span-1 h-48 md:h-auto rounded-lg overflow-hidden wing-card-gradient flex items-center justify-center text-6xl">✍️</div>
-        <div className="md:col-span-2 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">Community</span>
+  const communityCards = useMemo(
+    () =>
+      approved.map((b) => (
+        <a
+          key={b.id}
+          href={b.mediumUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="block card-glow overflow-hidden group cursor-pointer slide-in-up"
+        >
+          <div className="p-6 grid md:grid-cols-3 gap-6">
+            <div className="md:col-span-1 h-48 md:h-auto rounded-lg overflow-hidden wing-card-gradient flex items-center justify-center text-6xl">
+              ✍️
             </div>
-            <h2 className="text-2xl font-bold mb-3 group-hover:gradient-text transition-all">Medium Article</h2>
-            <p className="text-foreground/70 break-all mb-2">{b.mediumUrl}</p>
+            <div className="md:col-span-2 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">
+                    Community
+                  </span>
+                </div>
+                <h2 className="text-2xl font-bold mb-3 group-hover:gradient-text transition-all">
+                  Medium Article
+                </h2>
+                <p className="text-foreground/70 break-all mb-2">
+                  {b.mediumUrl}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-4 text-sm text-foreground/60 pt-4 border-t border-border">
+                <div className="flex items-center gap-1">
+                  <span>By</span>
+                  <span className="font-medium">{b.name}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span>Roll</span>
+                  <span className="font-medium">{b.rollNumber}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span>{formatDate(b.createdAt)}</span>
+                </div>
+              </div>
+            </div>
           </div>
-            <div className="flex flex-wrap gap-4 text-sm text-foreground/60 pt-4 border-t border-border">
-            <div className="flex items-center gap-1"><span>By</span><span className="font-medium">{b.name}</span></div>
-            <div className="flex items-center gap-1"><span>Roll</span><span className="font-medium">{b.rollNumber}</span></div>
-            <div className="flex items-center gap-1"><span>{formatDate(b.createdAt)}</span></div>
-          </div>
-        </div>
-      </div>
-    </a>
-  )), [approved])
+        </a>
+      )),
+    [approved]
+  );
 
-  const staticPosts = useMemo(() =>
-    [...defaultBlogs].sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-  , [])
+  const staticPosts = useMemo(
+    () =>
+      [...defaultBlogs].sort(
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      ),
+    []
+  );
 
-  const normalizedQuery = query.trim().toLowerCase()
+  const normalizedQuery = query.trim().toLowerCase();
 
   const filteredApproved = useMemo(() => {
-    if (!normalizedQuery) return approved
-    return approved.filter(b => {
+    if (!normalizedQuery) return approved;
+    return approved.filter((b) => {
       return (
         b.name.toLowerCase().includes(normalizedQuery) ||
         b.rollNumber.toLowerCase().includes(normalizedQuery) ||
         b.mediumUrl.toLowerCase().includes(normalizedQuery)
-      )
-    })
-  }, [approved, normalizedQuery])
+      );
+    });
+  }, [approved, normalizedQuery]);
 
   const filteredStaticPosts = useMemo(() => {
-    if (!normalizedQuery) return staticPosts
-    return staticPosts.filter(p => {
+    if (!normalizedQuery) return staticPosts;
+    return staticPosts.filter((p) => {
       return (
         p.title.toLowerCase().includes(normalizedQuery) ||
         (p.author || "").toLowerCase().includes(normalizedQuery)
-      )
-    })
-  }, [staticPosts, normalizedQuery])
+      );
+    });
+  }, [staticPosts, normalizedQuery]);
   return (
     <>
       <Navigation />
@@ -96,21 +149,28 @@ export default function BlogsPage() {
           <div className="mb-10 slide-in-up">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="text-left">
-                <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-2">Blog & Articles</h1>
-                <p className="text-base md:text-lg text-foreground/70">Insights and stories from our community</p>
+                <h1 className="text-4xl md:text-5xl font-bold gradient-text mb-2">
+                  Blog & Articles
+                </h1>
+                <p className="text-base md:text-lg text-foreground/70">
+                  Insights and stories from our community
+                </p>
               </div>
 
-                <div className="flex items-center gap-2 w-full md:w-1/3">
+              <div className="flex items-center gap-2 w-full md:w-3/7">
                 <div className="relative flex-1">
                   <input
                     value={query}
-                    onChange={e => setQuery(e.target.value)}
-                    placeholder="Search by name, title or roll..."
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search by title, Author or Roll No..."
                     className="w-full pl-10 pr-10 py-2 rounded-lg bg-card border border-border text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   />
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/50" />
                   {query ? (
-                    <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/50">
+                    <button
+                      onClick={() => setQuery("")}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/50"
+                    >
                       <X />
                     </button>
                   ) : null}
@@ -118,9 +178,11 @@ export default function BlogsPage() {
                 <button
                   onClick={() => {
                     // normalize query to trigger any filtering and remove focus
-                    setQuery(q => q.trim())
-                    const el = document.querySelector('#blog-search-input') as HTMLInputElement | null
-                    if (el) el.blur()
+                    setQuery((q) => q.trim());
+                    const el = document.querySelector(
+                      "#blog-search-input"
+                    ) as HTMLInputElement | null;
+                    if (el) el.blur();
                   }}
                   className="px-4 py-2 rounded-lg bg-card border border-border hover:bg-card/80 text-sm flex items-center gap-2"
                   aria-label="Search blogs"
@@ -157,18 +219,32 @@ export default function BlogsPage() {
 
                 <div className="p-5 flex-1 flex flex-col">
                   <div className="flex items-center gap-2 mb-3">
-                    <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">Community</span>
+                    <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">
+                      Community
+                    </span>
                   </div>
 
                   <div className="flex-1">
-                    <h2 className="text-lg font-bold mb-2 group-hover:gradient-text transition-all line-clamp-2">Medium Article</h2>
-                    <p className="text-foreground/70 break-all text-sm mb-2">{b.mediumUrl}</p>
+                    <h2 className="text-lg font-bold mb-2 group-hover:gradient-text transition-all line-clamp-2">
+                      Medium Article
+                    </h2>
+                    <p className="text-foreground/70 break-all text-sm mb-2">
+                      {b.mediumUrl}
+                    </p>
                   </div>
 
                   <div className="flex flex-wrap gap-4 text-sm text-foreground/60 pt-3 border-t border-border mt-4">
-                    <div className="flex items-center gap-1"><span>By</span><span className="font-medium">{b.name}</span></div>
-                    <div className="flex items-center gap-1"><span>Roll</span><span className="font-medium">{b.rollNumber}</span></div>
-                    <div className="flex items-center gap-1"><span>{new Date(b.createdAt).toLocaleDateString()}</span></div>
+                    <div className="flex items-center gap-1">
+                      <span>By</span>
+                      <span className="font-medium">{b.name}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span>Roll</span>
+                      <span className="font-medium">{b.rollNumber}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span>{new Date(b.createdAt).toLocaleDateString()}</span>
+                    </div>
                   </div>
                 </div>
               </a>
@@ -191,12 +267,18 @@ export default function BlogsPage() {
                 <div className="p-5 flex-1 flex flex-col">
                   <div className="flex items-center gap-2 mb-3">
                     <Tag size={16} className="text-purple-500" />
-                    <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">{post.category}</span>
+                    <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">
+                      {post.category}
+                    </span>
                   </div>
 
                   <div className="flex-1">
-                    <h2 className="text-lg font-bold mb-2 group-hover:gradient-text transition-all line-clamp-2">{post.title}</h2>
-                    <p className="text-foreground/70 text-sm line-clamp-3 mb-3">{post.content}</p>
+                    <h2 className="text-lg font-bold mb-2 group-hover:gradient-text transition-all line-clamp-2">
+                      {post.title}
+                    </h2>
+                    <p className="text-foreground/70 text-sm line-clamp-3 mb-3">
+                      {post.content}
+                    </p>
                   </div>
 
                   <div className="flex flex-wrap gap-4 text-sm text-foreground/60 pt-3 border-t border-border mt-4">
@@ -214,24 +296,41 @@ export default function BlogsPage() {
             ))}
           </div>
 
-          {filteredApproved.length === 0 && filteredStaticPosts.length === 0 && (
-            <div className="mt-8 text-center text-foreground/60">No results found for "{query}"</div>
-          )}
+          {filteredApproved.length === 0 &&
+            filteredStaticPosts.length === 0 && (
+              <div className="mt-8 text-center text-foreground/60">
+                No results found for "{query}"
+              </div>
+            )}
 
           {/* CTA for more blogs */}
           <div className="mt-16 card-glow p-8 text-center slide-in-up">
             <h2 className="text-3xl font-bold mb-4">Share Your Story</h2>
             <p className="text-foreground/70 mb-6">
-              Are you working on something interesting? Share your insights with the Gravity community!
+              Are you working on something interesting? Share your insights with
+              the Gravity community!
             </p>
-            <MagicButton heightClass="h-11" onClick={()=>setOpen(true)}>
+            <MagicButton heightClass="h-11" onClick={() => setOpen(true)}>
               Submit Article
             </MagicButton>
           </div>
         </div>
       </main>
-      <BlogSubmitModal open={open} onClose={()=>{ setOpen(false); (async()=>{ try { const res = await fetch('/api/public/blogs'); if(res.ok){ setApproved(await res.json()) } } catch {} })() }} />
+      <BlogSubmitModal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          (async () => {
+            try {
+              const res = await fetch("/api/public/blogs");
+              if (res.ok) {
+                setApproved(await res.json());
+              }
+            } catch {}
+          })();
+        }}
+      />
       <Footer />
     </>
-  )
+  );
 }
