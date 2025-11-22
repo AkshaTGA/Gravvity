@@ -1,33 +1,49 @@
-import mongoose, { Schema, models, model } from 'mongoose'
+import mongoose, { Schema, models, model } from "mongoose";
 
+// Align schema with provided BlogSubmissionSchema
 const BlogSchema = new Schema(
   {
     title: { type: String, required: true },
-    name: { type: String, required: true },
-    rollNumber: { type: String, required: true },
-    mediumUrl: { type: String, required: true },
-    datePublished: { type: String, required: true },
-    approved: { type: Boolean, default: false },
+    content: { type: String },
+    author: { type: String },
+    date: { type: String },
+    category: { type: String },
+    image: { type: String },
+    rollNumber: { type: String },
+    mediumUrl: { type: String },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: "rejected",
+    },
+    createdAt: { type: Number, default: () => Date.now() },
   },
   {
-    timestamps: true,
     toJSON: {
       virtuals: true,
       transform: (_doc, ret: any) => {
-        ret.id = ret._id?.toString()
-        delete ret._id
-        delete ret.__v
-        if (ret.createdAt instanceof Date) ret.createdAt = ret.createdAt.getTime()
-        if (ret.updatedAt instanceof Date) ret.updatedAt = ret.updatedAt.getTime()
-        return ret
+        ret.id = ret._id?.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
       },
     },
   }
-)
+);
 
-BlogSchema.virtual('id').get(function (this: any) {
-  return this._id.toString()
-})
+BlogSchema.virtual("id").get(function (this: any) {
+  return this._id.toString();
+});
 
-export const Blog = models.Blog || model('Blog', BlogSchema)
-export type BlogDoc = mongoose.InferSchemaType<typeof BlogSchema> & { id: string }
+// Ensure schema updates take effect in dev by deleting existing model definition
+try {
+  if (mongoose.models.Blog) {
+    // Available in Mongoose v7+
+    (mongoose as any).deleteModel?.("Blog");
+  }
+} catch {}
+
+export const Blog = models.Blog || model("Blog", BlogSchema);
+export type BlogDoc = mongoose.InferSchemaType<typeof BlogSchema> & {
+  id: string;
+};
