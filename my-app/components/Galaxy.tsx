@@ -261,7 +261,7 @@ export default function Galaxy({
     const mesh = new Mesh(gl, { geometry, program });
     let animateId: number | null = null;
 
-    function update(t) {
+    function update(t: number) {
       animateId = requestAnimationFrame(update);
       if (!disableAnimation && program) {
         program.uniforms.uTime.value = t * 0.001;
@@ -285,7 +285,7 @@ export default function Galaxy({
     animateId = requestAnimationFrame(update);
     ctn.appendChild(gl.canvas);
 
-    function handleMouseMove(e) {
+    function handleMouseMove(e: MouseEvent) {
       // Calculate mouse position relative to the container
       const rect = ctn.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width;
