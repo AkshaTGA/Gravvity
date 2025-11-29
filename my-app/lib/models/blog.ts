@@ -6,6 +6,7 @@ const BlogSchema = new Schema(
     name: { type: String, required: true },
     rollNumber: { type: String, required: true },
     mediumUrl: { type: String, required: true },
+    imageUrl: { type: String, required: false },
     datePublished: { type: String, required: true },
     approved: { type: Boolean, default: false },
   },

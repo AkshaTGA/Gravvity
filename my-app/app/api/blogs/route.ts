@@ -33,13 +33,13 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   const body = await request.json().catch(() => null)
   if (!body) return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
-  const { title, name, rollNumber, mediumUrl, datePublished } = body as Record<string, string>
+  const { title, name, rollNumber, mediumUrl, datePublished, imageUrl } = body as Record<string, string>
   if (!title || !name || !rollNumber || !mediumUrl) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
   }
   await connectToDatabase()
   try {
-    const created = await Blog.create({ title: title.trim(), name: name.trim(), rollNumber: rollNumber.trim(), mediumUrl: mediumUrl.trim(), datePublished: (datePublished || new Date().toISOString()), approved: false })
+    const created = await Blog.create({ title: title.trim(), name: name.trim(), rollNumber: rollNumber.trim(), mediumUrl: mediumUrl.trim(), imageUrl: imageUrl ? String(imageUrl).trim() : undefined, datePublished: (datePublished || new Date().toISOString()), approved: false })
     return NextResponse.json(created, { status: 201 })
   } catch (e: any) {
     console.error('[Blog POST] error', e?.message)

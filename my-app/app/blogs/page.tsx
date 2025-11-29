@@ -208,13 +208,12 @@ export default function BlogsPage() {
               >
                 {/* Top area: matching card background with centered logo */}
                 <div className="relative w-full h-[75%] overflow-hidden bg-card flex items-center justify-center rounded-t-lg">
-                  <div className="rounded-full bg-black/80 p-3 transition-transform duration-300 group-hover:scale-105">
-                    <img
-                      src="/gravity-logo.png"
-                      alt="Gravity logo"
-                      className="w-40 h-40 object-contain"
-                    />
-                  </div>
+                  {/* Use submitted image when available, otherwise fall back to default Gravity image */}
+                  <img
+                    src={b.imageUrl || "/gravity-logo.png"}
+                    alt={b.title || 'Blog image'}
+                    className="w-full h-full object-cover"
+                  />
                 </div>
 
                 <div className="p-5 flex-1 flex flex-col">

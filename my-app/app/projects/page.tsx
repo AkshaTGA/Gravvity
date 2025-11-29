@@ -103,7 +103,7 @@ export default function ProjectsPage() {
                   <img
                     src={project.image || "/gravity-logo.png"}
                     alt={project.title}
-                    className="w-53 h-53 object-cover group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                 </div>
 

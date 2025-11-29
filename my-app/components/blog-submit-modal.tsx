@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { CheckCircle } from "lucide-react"
 import MagicButton from "@/components/magic-button"
 import { submitBlog } from "@/lib/blog-store"
+import { uploadToCloudinary } from "@/lib/cloudinary"
 
 function isMediumUrl(url: string) {
   try {
@@ -22,6 +23,10 @@ export default function BlogSubmitModal({ open, onClose }: { open: boolean; onCl
   const [title, setTitle] = useState("")
   const [datePublished, setDatePublished] = useState("")
   const [link, setLink] = useState("")
+  const [imageUrl, setImageUrl] = useState("")
+  const [file, setFile] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string>("")
   const [submitted, setSubmitted] = useState(false)
   const [submittedMsg, setSubmittedMsg] = useState("")
@@ -36,6 +41,17 @@ export default function BlogSubmitModal({ open, onClose }: { open: boolean; onCl
       setError("")
     }
   }, [open])
+
+  // Revoke preview object URL when it changes or on unmount
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        try {
+          URL.revokeObjectURL(preview)
+        } catch {}
+      }
+    }
+  }, [preview])
 
   if (!open) return null
 
@@ -57,6 +73,7 @@ export default function BlogSubmitModal({ open, onClose }: { open: boolean; onCl
         <form
           onSubmit={async (e) => {
             e.preventDefault()
+            setError("")
             const trimmed = link.trim()
             if (!title.trim() || !name.trim() || !roll.trim() || !trimmed) {
               setError("All fields are required")
@@ -66,17 +83,43 @@ export default function BlogSubmitModal({ open, onClose }: { open: boolean; onCl
               setError("Only Medium links are allowed (medium.com)")
               return
             }
+
+            setIsSubmitting(true)
             try {
+              const payload: Record<string, any> = {
+                title: title.trim(),
+                name: name.trim(),
+                rollNumber: roll.trim(),
+                mediumUrl: trimmed,
+                datePublished: datePublished || new Date().toISOString(),
+              }
+
+              if (file) {
+                try {
+                  const uploaded = await uploadToCloudinary(file)
+                  payload.imageUrl = uploaded
+                } catch (uerr) {
+                  console.error('Image upload failed', uerr)
+                  setError('Image upload failed — please try again or use an image URL')
+                  setIsSubmitting(false)
+                  return
+                }
+              } else if (imageUrl && imageUrl.trim()) {
+                payload.imageUrl = imageUrl.trim()
+              }
+
               const res = await fetch('/api/blogs', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title: title.trim(), name: name.trim(), rollNumber: roll.trim(), mediumUrl: trimmed, datePublished: datePublished || new Date().toISOString() })
+                body: JSON.stringify(payload),
               })
+
               if (!res.ok) throw new Error('Failed to submit')
+
               // Optional: keep local fallback for instant UI
               submitBlog({ name, rollNumber: roll, mediumUrl: trimmed })
               setSubmitted(true)
-              setSubmittedMsg("Submitted — awaiting admin approval")
+              setSubmittedMsg('Submitted — awaiting admin approval')
               setTimeout(() => {
                 setSubmitted(false)
                 onClose()
@@ -84,6 +127,8 @@ export default function BlogSubmitModal({ open, onClose }: { open: boolean; onCl
             } catch (err) {
               console.error('Blog submit failed', err)
               setError('Submission failed — please try again later')
+            } finally {
+              setIsSubmitting(false)
             }
           }}
           className="space-y-4"
@@ -132,6 +177,52 @@ export default function BlogSubmitModal({ open, onClose }: { open: boolean; onCl
               className="w-full px-3 py-2 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-purple-500"
               placeholder="https://medium.com/@username/article"
             />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-1">Image URL (optional)</label>
+            <input
+              value={imageUrl}
+              onChange={e=>setImageUrl(e.target.value)}
+              className="w-full px-3 py-2 rounded-lg bg-background border border-border focus:outline-none focus:ring-2 focus:ring-purple-500"
+              placeholder="https://example.com/your-image.jpg"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-semibold mb-1">Or upload image (optional)</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(ev) => {
+                const f = ev.target.files?.[0] || null
+                if (f) {
+                  setFile(f)
+                  try {
+                    const url = URL.createObjectURL(f)
+                    setPreview(url)
+                  } catch {}
+                } else {
+                  setFile(null)
+                  setPreview(null)
+                }
+              }}
+              className="w-full"
+            />
+            {preview && (
+              <div className="mt-2 flex items-center gap-3">
+                <img src={preview} alt="preview" className="w-20 h-20 object-cover rounded-md" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (preview) URL.revokeObjectURL(preview)
+                    setPreview(null)
+                    setFile(null)
+                  }}
+                  className="px-3 py-1 text-sm rounded bg-card border border-border"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
           </div>
           <div className="flex gap-3 pt-2">
             <MagicButton type="submit" className="flex-1" heightClass="h-11">Submit</MagicButton>
