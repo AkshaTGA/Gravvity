@@ -1,5 +1,5 @@
 "use client";
-
+// hello
 import { useEffect, useState } from "react";
 
 export function AIAnimation() {
