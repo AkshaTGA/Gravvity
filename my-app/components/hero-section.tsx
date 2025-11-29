@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, Grab } from "lucide-react";
-import LiquidEther from "./LiquidEther";
+import Galaxy from "./Galaxy";
 import { useState, useEffect, useRef } from "react";
 import MagicButton from "@/components/magic-button";
 import { LettersPullUp } from "@/components/Text-Effect";
@@ -144,26 +144,9 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden pt-4 md:pt-8">
-      {/* Liquid Ether background covering the whole hero */}
+      {/* Galaxy background covering the whole hero */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <LiquidEther
-          colors={["#5227FF", "#FF9FFC", "#B19EEF"]}
-          mouseForce={20}
-          cursorSize={100}
-          isViscous={false}
-          viscous={30}
-          iterationsViscous={32}
-          iterationsPoisson={10}
-          resolution={0.5}
-          isBounce={false}
-          autoDemo={true}
-          autoSpeed={0.5}
-          autoIntensity={2.2}
-          takeoverDuration={0.25}
-          autoResumeDelay={3000}
-          autoRampDuration={0.6}
-          style={{ width: "100%", height: "100%" }}
-        />
+        <Galaxy />
       </div>
 
       <div className="relative z-10 max-w-5xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
