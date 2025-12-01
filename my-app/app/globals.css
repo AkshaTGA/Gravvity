@@ -460,23 +460,25 @@
 }
 
 .fade-in-left {
-  animation: fadeInLeft 0.8s ease-out forwards;
-  opacity: 0;
+  /* base state does nothing; animation is applied on visibility */
 }
 
 .fade-in-right {
-  animation: fadeInRight 0.8s ease-out forwards;
-  opacity: 0;
+  /* base state does nothing; animation is applied on visibility */
 }
 
 /* Intersection observer trigger */
 .wings-animate {
-  opacity: 0;
+  opacity: 1; /* default visible to avoid hidden content if IO fails */
   transition: none;
 }
 
-.wings-animate.visible {
-  animation-play-state: running;
+.wings-animate.visible.fade-in-left {
+  animation: fadeInLeft 0.8s ease-out forwards;
+}
+
+.wings-animate.visible.fade-in-right {
+  animation: fadeInRight 0.8s ease-out forwards;
 }
 
 .custom-scrollbar {
