@@ -1,9 +1,14 @@
 "use client"
 
 import { useMembers } from "@/hooks/use-members"
-import ProfileCard from './profile-card'
+import dynamic from 'next/dynamic'
 import "./ProfileCard.css"
 import ShinyText from './BlurText';
+
+const ProfileCard = dynamic(() => import('./profile-card'), {
+  ssr: false,
+  loading: () => <div className="w-full h-[480px] rounded-2xl bg-card/50 animate-pulse" />
+});
 export function OverallCoordinatorsSection() {
   const members = useMembers()
   const overallCoordinators = members.filter((member) => member.isOverallCoordinator)
@@ -18,8 +23,8 @@ export function OverallCoordinatorsSection() {
         <p className="text-foreground/60 mb-16 text-lg text-center">Meet our overall coordinators and advisors</p>
 
         <div className="flex flex-wrap gap-8 justify-center">
-          {overallCoordinators.map((member,id) => (
-            <div key={member.id} className="fade-in-up">
+          {overallCoordinators.map((member, index) => (
+            <div key={member.id}>
               <ProfileCard
                 name={member.name}
                 title={member.bio || member.wing}

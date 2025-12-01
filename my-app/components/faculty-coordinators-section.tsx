@@ -1,8 +1,13 @@
 "use client";
 
 import { useMembers } from "@/hooks/use-members";
-import ProfileCard from "./profile-card";
+import dynamic from 'next/dynamic';
 import "./ProfileCard.css";
+
+const ProfileCard = dynamic(() => import('./profile-card'), {
+  ssr: false,
+  loading: () => <div className="w-full h-[480px] rounded-2xl bg-card/50 animate-pulse" />
+});
 
 export function FacultyCoordinatorsSection() {
   const members = useMembers();
@@ -23,8 +28,8 @@ export function FacultyCoordinatorsSection() {
         </p>
 
         <div className="flex flex-wrap gap-8 justify-center">
-          {facultyCoordinators.slice(0, 3).map((member) => (
-            <div key={member.id} className="fade-in-up">
+          {facultyCoordinators.slice(0, 3).map((member, index) => (
+            <div key={member.id}>
               <ProfileCard
                 name={member.name}
                 title={member.bio || member.wing}

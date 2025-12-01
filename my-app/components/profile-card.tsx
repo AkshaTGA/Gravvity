@@ -367,7 +367,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             }
           }
         },
-        { threshold: 0.1, rootMargin: "50px" }
+        { threshold: 0.05, rootMargin: "100px" }
       );
       io.observe(shell);
     } else {

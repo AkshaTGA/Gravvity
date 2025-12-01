@@ -71,6 +71,8 @@ export default function WingsPage() {
                   <div
                     className={`${index % 2 === 1 ? "md:order-2" : ""} `}
                     data-aos={index % 2 === 0 ? "fade-right" : "fade-left"}
+                    data-aos-duration="800"
+                    data-aos-once="false"
                     data-aos-anchor-placement="top-bottom"
                   >
                     <div
@@ -99,8 +101,10 @@ export default function WingsPage() {
                   <div
                     className={`${index % 2 === 1 ? "md:order-1" : ""} `}
                     data-aos={index % 2 === 0 ? "fade-left" : "fade-right"}
+                    data-aos-duration="800"
+                    data-aos-delay="100"
+                    data-aos-once="false"
                     data-aos-anchor-placement="top-bottom"
-                    style={{ animationDelay: "0.1s" }}
                   >
                     <div className="text-5xl mb-4 gap-3 flex justify-center items-center">
                       <span className="mb-3">{wing.icon}</span>
