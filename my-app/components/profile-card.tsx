@@ -41,6 +41,7 @@ const ANIMATION_CONFIG = {
   INITIAL_Y_OFFSET: 60,
   DEVICE_BETA_OFFSET: 20,
   ENTER_TRANSITION_MS: 180,
+  THROTTLE_MS: 16, // ~60fps
 } as const;
 
 const clamp = (v: number, min = 0, max = 100): number =>
@@ -93,6 +94,8 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   const enterTimerRef = useRef<number | null>(null);
   const leaveRafRef = useRef<number | null>(null);
   const hoverTimerRef = useRef<number | null>(null);
+  const lastPointerMoveRef = useRef<number>(0);
+  const isVisibleRef = useRef<boolean>(false);
 
   const tiltEngine = useMemo(() => {
     if (!enableTilt) return null;
@@ -221,7 +224,13 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   const handlePointerMove = useCallback(
     (event: PointerEvent) => {
       const shell = shellRef.current;
-      if (!shell || !tiltEngine) return;
+      if (!shell || !tiltEngine || !isVisibleRef.current) return;
+      
+      // Throttle pointer move to reduce CPU load
+      const now = performance.now();
+      if (now - lastPointerMoveRef.current < ANIMATION_CONFIG.THROTTLE_MS) return;
+      lastPointerMoveRef.current = now;
+      
       const { x, y } = getOffsets(event, shell);
       tiltEngine.setTarget(x, y);
     },
@@ -231,7 +240,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   const handlePointerEnter = useCallback(
     (event: PointerEvent) => {
       const shell = shellRef.current;
-      if (!shell || !tiltEngine) return;
+      if (!shell || !tiltEngine || !isVisibleRef.current) return;
 
       shell.classList.add("active");
       shell.classList.add("entering");
@@ -351,17 +360,19 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
       io = new IntersectionObserver(
         (entries) => {
           for (const entry of entries) {
-            if (entry.isIntersecting) {
+            isVisibleRef.current = entry.isIntersecting;
+            if (entry.isIntersecting && entry.intersectionRatio > 0) {
               startInitial();
               break;
             }
           }
         },
-        { threshold: 0.25 }
+        { threshold: 0.1, rootMargin: "50px" }
       );
       io.observe(shell);
     } else {
       // Fallback: start immediately if IntersectionObserver is not available
+      isVisibleRef.current = true;
       startInitial();
     }
 
@@ -411,7 +422,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
     if (hoverTimerRef.current) window.clearTimeout(hoverTimerRef.current);
     hoverTimerRef.current = window.setTimeout(() => {
       cardRef.current?.classList.add("avatar-expanded");
-    }, 500);
+    }, 200);
   }, []);
 
   const clearAvatarExpandState = useCallback(() => {
@@ -454,21 +465,25 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
 
             {/* Image next, then the info bar */}
             <div className="pc-content p-3 md:p-0 pc-avatar-content">
-              <img
-                className="avatar"
-                src={normalizeSrc(avatarUrl) || PLACEHOLDER}
-                alt={`${name || "User"} avatar`}
-                loading="lazy"
+              <div 
+                className="avatar-hover-zone"
                 onMouseEnter={handleAvatarMouseEnter}
                 onMouseLeave={clearAvatarExpandState}
                 onTouchStart={handleAvatarMouseEnter}
                 onTouchEnd={clearAvatarExpandState}
-                onError={(e) => {
-                  const t = e.target as HTMLImageElement;
-                  t.src = PLACEHOLDER;
-                  t.style.display = "";
-                }}
-              />
+              >
+                <img
+                  className="avatar"
+                  src={normalizeSrc(avatarUrl) || PLACEHOLDER}
+                  alt={`${name || "User"} avatar`}
+                  loading="lazy"
+                  onError={(e) => {
+                    const t = e.target as HTMLImageElement;
+                    t.src = PLACEHOLDER;
+                    t.style.display = "";
+                  }}
+                />
+              </div>
               {showUserInfo && (
                 <div className="pc-user-info">
                   {(() => {

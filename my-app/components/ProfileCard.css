@@ -40,6 +40,7 @@
   transform: translate3d(0, 0, 0.1px);
   position: relative;
   touch-action: none;
+  contain: layout style;
 }
 
 .pc-behind {
@@ -52,10 +53,11 @@
     var(--behind-glow-color) 0%,
     transparent var(--behind-glow-size)
   );
-  filter: blur(50px) saturate(1.1);
+  filter: blur(40px) saturate(1.05);
   /* Reduce overall glow intensity on hover */
-  opacity: calc(0.4 * var(--card-opacity));
-  transition: opacity 200ms ease;
+  opacity: calc(0.35 * var(--card-opacity));
+  transition: opacity 180ms ease;
+  will-change: opacity;
 }
 .pc-card-wrapper:hover,
 .pc-card-wrapper.active {
@@ -69,8 +71,6 @@
   aspect-ratio: 0.66;
   border-radius: var(--card-radius);
   position: relative;
-  background-blend-mode: color-dodge, normal, normal, normal;
-  animation: glow-bg 12s linear infinite;
   box-shadow: rgba(0, 0, 0, 0.8) calc((var(--pointer-from-left) * 10px) - 3px)
     calc((var(--pointer-from-top) * 20px) - 6px) 20px -5px;
   transition: transform 1s ease;
@@ -79,6 +79,8 @@
   background: var(--card);
   backface-visibility: hidden;
   overflow: hidden;
+  will-change: transform;
+  contain: layout style paint;
 }
 
 .pc-card:hover,
@@ -110,7 +112,7 @@
   /* Use theme card color to match overall site theme */
   background-color: var(--card);
   transform: none;
-  
+  will-change: auto;
 }
 
 .pc-shine {
@@ -120,11 +122,12 @@
   mask-size: 150%;
   mask-position: top calc(200% - (var(--background-y) * 5)) left
     calc(100% - var(--background-x));
-  transition: filter 0.8s ease;
+  transition: filter 0.6s ease;
   filter: brightness(0.66) contrast(1.33) saturate(0.33) opacity(0.5);
-  animation: holo-bg 18s linear infinite;
+  animation: holo-bg 24s linear infinite;
   animation-play-state: running;
-  mix-blend-mode: color-dodge;
+  mix-blend-mode: overlay;
+  will-change: filter;
 }
 
 .pc-shine,
@@ -147,25 +150,15 @@
       var(--sunpillar-clr-6) calc(var(--space) * 6),
       var(--sunpillar-clr-1) calc(var(--space) * 7)
     ),
-    repeating-linear-gradient(
-      var(--angle),
-      #0e152e 0%,
-      hsl(180, 10%, 60%) 3.8%,
-      hsl(180, 29%, 66%) 4.5%,
-      hsl(180, 10%, 60%) 5.2%,
-      #0e152e 10%,
-      #0e152e 12%
-    ),
     radial-gradient(
       farthest-corner circle at var(--pointer-x) var(--pointer-y),
-      hsla(0, 0%, 0%, 0.1) 12%,
-      hsla(0, 0%, 0%, 0.15) 20%,
-      hsla(0, 0%, 0%, 0.25) 120%
+      hsla(0, 0%, 0%, 0.08) 12%,
+      hsla(0, 0%, 0%, 0.12) 20%,
+      hsla(0, 0%, 0%, 0.2) 120%
     );
-  background-position: 0 var(--background-y),
-    var(--background-x) var(--background-y), center;
-  background-blend-mode: color, hard-light;
-  background-size: 500% 500%, 300% 300%, 200% 200%;
+  background-position: 0 var(--background-y), center;
+  background-blend-mode: overlay;
+  background-size: 400% 400%, 180% 180%;
   background-repeat: repeat;
 }
 
@@ -184,6 +177,7 @@
   /* Slightly brighter but much softer than before */
   filter: brightness(0.75) contrast(1.3) saturate(0.45);
   animation-play-state: paused;
+  will-change: filter;
 }
 
 .pc-card:hover .pc-shine::before,
@@ -206,26 +200,23 @@
     ),
     radial-gradient(
       circle at var(--pointer-x) var(--pointer-y),
-      hsl(0, 0%, 70%) 0%,
-      hsla(0, 0%, 30%, 0.2) 90%
-    ),
-    var(--grain);
-  background-size: 250% 250%, 100% 100%, 220px 220px;
-  background-position: var(--pointer-x) var(--pointer-y), center,
-    calc(var(--pointer-x) * 0.01) calc(var(--pointer-y) * 0.01);
-  background-blend-mode: color-dodge;
-  filter: brightness(calc(2 - var(--pointer-from-center)))
-    contrast(calc(var(--pointer-from-center) + 2))
-    saturate(calc(0.5 + var(--pointer-from-center)));
-  mix-blend-mode: luminosity;
+      hsl(0, 0%, 65%) 0%,
+      hsla(0, 0%, 30%, 0.15) 90%
+    );
+  background-size: 220% 220%, 100% 100%;
+  background-position: var(--pointer-x) var(--pointer-y), center;
+  background-blend-mode: overlay;
+  filter: brightness(calc(1.8 - var(--pointer-from-center) * 0.6))
+    contrast(calc(var(--pointer-from-center) * 0.8 + 1.8))
+    saturate(calc(0.5 + var(--pointer-from-center) * 0.3));
+  mix-blend-mode: soft-light;
 }
 
 .pc-shine::after {
-  background-position: 0 var(--background-y),
-    calc(var(--background-x) * 0.4) calc(var(--background-y) * 0.5), center;
-  background-size: 200% 300%, 700% 700%, 100% 100%;
-  mix-blend-mode: difference;
-  filter: brightness(0.8) contrast(1.5);
+  background-position: 0 var(--background-y), center;
+  background-size: 180% 280%, 160% 160%;
+  mix-blend-mode: soft-light;
+  filter: brightness(0.85) contrast(1.3);
 }
 
 .pc-glare {
@@ -236,10 +227,11 @@
     hsl(248, 25%, 80%) 12%,
     hsla(207, 40%, 30%, 0.8) 90%
   );
-  mix-blend-mode: overlay;
+  mix-blend-mode: soft-light;
   /* Tone down glare so highlights don't blow out */
   filter: brightness(0.65) contrast(1.1);
   z-index: 4;
+  will-change: auto;
 }
 
 .pc-avatar-content {
@@ -249,31 +241,40 @@
   backface-visibility: hidden;
 }
 
-.pc-avatar-content .avatar {
-  pointer-events: auto; /* allow hover to trigger on the image */
+.avatar-hover-zone {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.avatar-hover-zone .avatar {
+  pointer-events: none; /* hover zone handles interactions */
   width: var(--avatar-width);
   max-height: 80%;
   height: 63%;
   position: absolute;
   left: 50%;
   transform-origin: 50% 100%;
-  transform: translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 6px))
-    translateZ(0) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.02))
-    scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.01));
+  transform: translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 4px))
+    translateZ(0) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.015))
+    scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.008));
   bottom: var(--avatar-bottom);
   object-fit: cover;
   border-radius: var(--avatar-radius);
   backface-visibility: hidden;
-  will-change: transform, width, height, left, bottom, border-radius, opacity,
-    filter;
-  transition: transform 160ms ease-out, width 450ms ease, height 450ms ease,
-    left 450ms ease, bottom 450ms ease, border-radius 450ms ease,
-    opacity 300ms ease, filter 300ms ease;
+  will-change: transform;
+  transition: transform 140ms ease-out, width 380ms ease, height 380ms ease,
+    left 380ms ease, bottom 380ms ease, border-radius 380ms ease,
+    opacity 280ms ease, filter 280ms ease;
 }
 
 /* Hover effect: only when hovering image itself */
 /* Expansion is now controlled via a class added after a delay */
-.pc-card.avatar-expanded .pc-avatar-content .avatar {
+.pc-card.avatar-expanded .avatar-hover-zone .avatar {
   width: 100%;
   height: 100%;
   max-height: 100%;
@@ -404,12 +405,12 @@
   text-align: center;
   position: relative;
   transform: translate3d(
-    calc(var(--pointer-from-left) * -6px + 3px),
-    calc(var(--pointer-from-top) * -6px + 3px),
+    calc(var(--pointer-from-left) * -4px + 2px),
+    calc(var(--pointer-from-top) * -4px + 2px),
     0.1px
   );
   z-index: 5;
-  mix-blend-mode: luminosity;
+  mix-blend-mode: normal;
 }
 
 .pc-details {
