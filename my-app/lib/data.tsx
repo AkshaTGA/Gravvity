@@ -410,6 +410,8 @@ export const defaultBlogs: BlogPost[] = [
     date: "2024-12-01",
     category: "Competitive Coding",
     image: "/placeholder-avatar.svg",
+    rollNumber: "2023001",
+    mediumUrl: "https://medium.com/@aditya/competitive-programming-guide",
   },
   {
     id: "2",
@@ -419,5 +421,7 @@ export const defaultBlogs: BlogPost[] = [
     date: "2024-11-28",
     category: "Blockchain",
     image: "/placeholder-avatar.svg",
+    rollNumber: "2023002",
+    mediumUrl: "https://medium.com/@priya/web3-development-guide",
   },
 ];

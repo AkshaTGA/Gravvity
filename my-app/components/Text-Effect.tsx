@@ -29,7 +29,7 @@ export function LettersPullUp({
       transition: {
         delay: i * 0.03,
         duration: 0.3,
-        ease: "easeOut",
+        ease: [0.4, 0, 0.2, 1] as Easing,
       },
     }),
   };
