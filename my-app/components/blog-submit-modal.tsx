@@ -62,7 +62,7 @@ export default function BlogSubmitModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 custom-scrollbar">
       <div className="absolute inset-0 bg-black/60" onClick={onClose} />
       <div
         role="dialog"
@@ -137,7 +137,7 @@ export default function BlogSubmitModal({
                 setTimeout(() => {
                   setSubmitted(false);
                   onClose();
-                }, 1400);
+                }, 2000);
               } catch (err) {
                 console.error("Blog submit failed", err);
                 const message =
