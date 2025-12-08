@@ -6,6 +6,7 @@ import {
   Transition,
   Easing,
   AnimatePresence,
+  useReducedMotion,
 } from "framer-motion";
 import React, { useRef, useEffect, useState, useMemo } from "react";
 
@@ -17,28 +18,30 @@ export function LettersPullUp({
   className?: string;
 }) {
   const splittedText = text.split("");
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
 
   const pullupVariant = {
-    initial: { y: 10, opacity: 0 },
+    initial: { y: 8, opacity: 0 },
     animate: (i: number) => ({
       y: 0,
       opacity: 1,
       transition: {
-        delay: i * 0.05,
+        delay: i * 0.03,
+        duration: 0.3,
+        ease: "easeOut",
       },
     }),
   };
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: false });
+
   return (
-    <div className="flex justify-center">
+    <div ref={ref} className="flex justify-center">
       {splittedText.map((current, i) => (
         <motion.div
           key={i}
-          ref={ref}
           variants={pullupVariant}
           initial="initial"
-          animate={isInView ? "animate" : ""}
+          animate={isInView ? "animate" : "initial"}
           custom={i}
           className={cn(
             "text-2xl text-center sm:text-4xl font-bold tracking-tighter md:text-6xl md:leading-16",
@@ -83,9 +86,9 @@ const buildKeyframes = (
   return keyframes;
 };
 
-export const BlurText: React.FC<BlurTextProps> = ({
+function BlurTextComponent({
   text = "",
-  delay = 200,
+  delay = 50,
   className = "",
   animateBy = "words",
   direction = "top",
@@ -95,67 +98,50 @@ export const BlurText: React.FC<BlurTextProps> = ({
   animationTo,
   easing = (t: number) => t,
   onAnimationComplete,
-  stepDuration = 0.35,
-}) => {
+  stepDuration = 0.2,
+}: BlurTextProps) {
   const elements = animateBy === "words" ? text.split(" ") : text.split("");
   const ref = useRef<HTMLParagraphElement>(null);
-  const inView= useInView(ref, { once: false })
+  // Animate once only - never re-trigger
+  const inView = useInView(ref, { once: true, amount: threshold });
 
-  
-
-  const defaultFrom = useMemo(
+  // Simple fade + slide with subtle blur for visual effect
+  const fromState = useMemo(
     () =>
       direction === "top"
-        ? { filter: "blur(10px)", opacity: 0, y: -50 }
-        : { filter: "blur(10px)", opacity: 0, y: 50 },
+        ? { opacity: 0, y: -15, filter: "blur(3px)" }
+        : { opacity: 0, y: 15, filter: "blur(3px)" },
     [direction]
   );
 
-  const defaultTo = useMemo(
-    () => [
-      {
-        filter: "blur(5px)",
-        opacity: 0.5,
-        y: direction === "top" ? 5 : -5,
-      },
-      { filter: "blur(0px)", opacity: 1, y: 0 },
-    ],
-    [direction]
+  const toState = useMemo(
+    () => ({ opacity: 1, y: 0, filter: "blur(0px)" }),
+    []
   );
 
-  const fromSnapshot = animationFrom ?? defaultFrom;
-  const toSnapshots = animationTo ?? defaultTo;
-
-  const stepCount = toSnapshots.length + 1;
-  const totalDuration = stepDuration * (stepCount - 1);
-  const times = Array.from({ length: stepCount }, (_, i) =>
-    stepCount === 1 ? 0 : i / (stepCount - 1)
-  );
+  const finalFrom = animationFrom ?? fromState;
+  const finalTo = animationTo?.[animationTo.length - 1] ?? toState;
 
   return (
     <p ref={ref} className={`blur-text ${className} flex flex-wrap`}>
       {elements.map((segment, index) => {
-        const animateKeyframes = buildKeyframes(fromSnapshot, toSnapshots);
-
         const spanTransition: Transition = {
-          duration: totalDuration,
-          times,
+          duration: 0.4,
           delay: (index * delay) / 1000,
-          ease: easing,
+          ease: "easeOut",
         };
 
         return (
           <motion.span
             key={index}
-            initial={fromSnapshot}
-            animate={inView ? animateKeyframes : fromSnapshot}
+            initial={finalFrom}
+            animate={inView ? finalTo : finalFrom}
             transition={spanTransition}
             onAnimationComplete={
               index === elements.length - 1 ? onAnimationComplete : undefined
             }
             style={{
               display: "inline-block",
-              willChange: "transform, filter, opacity",
             }}
           >
             {segment === " " ? "\u00A0" : segment}
@@ -165,7 +151,9 @@ export const BlurText: React.FC<BlurTextProps> = ({
       })}
     </p>
   );
-};
+}
+
+export const BlurText: React.FC<BlurTextProps> = React.memo(BlurTextComponent);
 
 export function GradualSpacing({
   text = "Our Seven Wings",
@@ -175,34 +163,33 @@ export function GradualSpacing({
   className: string;
 }) {
   const ref = React.useRef(null);
-  const isInView = useInView(ref, { once: false });
-
+  const isInView = useInView(ref, { once: true });
   const words = text.split(" ");
 
   return (
-    <div className="flex flex-wrap justify-center items-center gap-x-2 gap-y-0">
-      <AnimatePresence>
-        {words.map((word, wordIndex) => (
-          <div key={wordIndex} className="flex">
-            {word.split("").map((char, charIndex) => (
-              <motion.p
-                ref={ref}
-                key={`${wordIndex}-${charIndex}`}
-                initial={{ opacity: 0, x: -18 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                exit="hidden"
-                transition={{
-                  duration: 0.5,
-                  delay: (wordIndex * word.length + charIndex) * 0.05,
-                }}
-                className={className}
-              >
-                {char}
-              </motion.p>
-            ))}
-          </div>
-        ))}
-      </AnimatePresence>
+    <div
+      ref={ref}
+      className="flex flex-wrap justify-center items-center gap-x-2 gap-y-0"
+    >
+      {words.map((word, wordIndex) => (
+        <div key={wordIndex} className="flex">
+          {word.split("").map((char, charIndex) => (
+            <motion.p
+              key={`${wordIndex}-${charIndex}`}
+              initial={{ opacity: 0, x: -12 }}
+              animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
+              transition={{
+                duration: 0.4,
+                delay: (wordIndex * word.length + charIndex) * 0.03,
+                ease: "easeOut",
+              }}
+              className={className}
+            >
+              {char}
+            </motion.p>
+          ))}
+        </div>
+      ))}
     </div>
   );
 }

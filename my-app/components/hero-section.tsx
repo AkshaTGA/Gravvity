@@ -13,8 +13,8 @@ import { LettersPullUp } from "@/components/Text-Effect";
 import { motion, useAnimation } from "framer-motion";
 
 export function HeroSection() {
-  const [isSpinning, setIsSpinning] = useState(false);
-  const [counter, setcounter] = useState(0);
+  const logoRef = useRef<HTMLDivElement | null>(null);
+  const counterRef = useRef(0);
   const [data, setdata] = useState(false);
 
   const [_k, _sk] = useState("");
@@ -132,16 +132,19 @@ export function HeroSection() {
   }, []);
 
   const handleLogoClick = () => {
-    setIsSpinning(true);
-    const newCount = counter + 1;
-    setcounter(newCount);
+    // Toggle spin class without triggering React re-render
+    const el = logoRef.current;
+    if (el) {
+      el.classList.add("logo-spin-once");
+    }
 
-    if (newCount === 10) {
+    // Track clicks in a ref to avoid re-render each click
+    counterRef.current = counterRef.current + 1;
+    if (counterRef.current === 10) {
       setdata(true);
-
       setTimeout(() => {
         setdata(false);
-        setcounter(0);
+        counterRef.current = 0;
       }, 5000);
     }
   };
@@ -189,12 +192,14 @@ export function HeroSection() {
             }}
           >
             <div
-              className={(
-                "inline-flex items-center justify-center " +
-                (isSpinning ? "logo-spin-once" : "")
-              ).trim()}
+              className={"inline-flex items-center justify-center ".trim()}
               onClick={handleLogoClick}
-              onAnimationEnd={() => setIsSpinning(false)}
+              ref={logoRef}
+              onAnimationEnd={(e) => {
+                (e.currentTarget as HTMLDivElement).classList.remove(
+                  "logo-spin-once"
+                );
+              }}
               role="img"
               aria-label="Gravity Logo"
             >

@@ -2,10 +2,9 @@
 
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
-import { defaultBlogs } from "@/lib/data";
 import { useEffect, useMemo, useState } from "react";
 import BlogSubmitModal from "@/components/blog-submit-modal";
-import { Calendar, User, Tag, Search, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import MagicButton from "@/components/magic-button";
 
 export default function BlogsPage() {
@@ -62,61 +61,7 @@ export default function BlogsPage() {
     };
   }, []);
 
-  const communityCards = useMemo(
-    () =>
-      approved.map((b) => (
-        <a
-          key={b.id}
-          href={b.mediumUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="block card-glow overflow-hidden group cursor-pointer slide-in-up"
-        >
-          <div className="p-6 grid md:grid-cols-3 gap-6">
-            <div className="md:col-span-1 h-48 md:h-auto rounded-lg overflow-hidden wing-card-gradient flex items-center justify-center text-6xl">
-              ✍️
-            </div>
-            <div className="md:col-span-2 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">
-                    Community
-                  </span>
-                </div>
-                <h2 className="text-2xl font-bold mb-3 group-hover:gradient-text transition-all">
-                  Medium Article
-                </h2>
-                <p className="text-foreground/70 break-all mb-2">
-                  {b.mediumUrl}
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-4 text-sm text-foreground/60 pt-4 border-t border-border">
-                <div className="flex items-center gap-1">
-                  <span>By</span>
-                  <span className="font-medium">{b.name}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span>Roll</span>
-                  <span className="font-medium">{b.rollNumber}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <span>{formatDate(b.createdAt)}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </a>
-      )),
-    [approved]
-  );
-
-  const staticPosts = useMemo(
-    () =>
-      [...defaultBlogs].sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-      ),
-    []
-  );
+  // Removed demo static posts from rendering.
 
   const normalizedQuery = query.trim().toLowerCase();
 
@@ -124,22 +69,16 @@ export default function BlogsPage() {
     if (!normalizedQuery) return approved;
     return approved.filter((b) => {
       return (
-        b.name.toLowerCase().includes(normalizedQuery) ||
-        b.rollNumber.toLowerCase().includes(normalizedQuery) ||
-        b.mediumUrl.toLowerCase().includes(normalizedQuery)
+        (b.title || "").toLowerCase().includes(normalizedQuery) ||
+        (b.author || "").toLowerCase().includes(normalizedQuery) ||
+        (b.category || "").toLowerCase().includes(normalizedQuery) ||
+        (b.rollNumber || "").toLowerCase().includes(normalizedQuery) ||
+        (b.mediumUrl || "").toLowerCase().includes(normalizedQuery)
       );
     });
   }, [approved, normalizedQuery]);
 
-  const filteredStaticPosts = useMemo(() => {
-    if (!normalizedQuery) return staticPosts;
-    return staticPosts.filter((p) => {
-      return (
-        p.title.toLowerCase().includes(normalizedQuery) ||
-        (p.author || "").toLowerCase().includes(normalizedQuery)
-      );
-    });
-  }, [staticPosts, normalizedQuery]);
+  // No static posts displayed on this page.
   return (
     <>
       <Navigation />
@@ -157,9 +96,10 @@ export default function BlogsPage() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 w-full md:w-3/7">
+              <div className="flex items-center gap-2 w-full md:w-1/2">
                 <div className="relative flex-1">
                   <input
+                    id="blog-search-input"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search by title, Author or Roll No..."
@@ -203,104 +143,86 @@ export default function BlogsPage() {
                 href={b.mediumUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="block card-glow overflow-hidden group cursor-pointer slide-in-up h-[440px] flex flex-col"
+                className="card-glow overflow-hidden group cursor-pointer slide-in-up flex flex-col sm:min-h-[420px]"
                 style={{ animationDelay: `${idx * 0.06}s` }}
               >
-                {/* Top area: matching card background with centered logo */}
-                <div className="relative w-full h-[75%] overflow-hidden bg-card flex items-center justify-center rounded-t-lg">
-                  {/* Use submitted image when available, otherwise fall back to default Gravity image */}
-                  <img
-                    src={b.imageUrl || "/gravity-logo.png"}
-                    alt={b.title || 'Blog image'}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                {/* Top area: show cover image if available; else logo */}
+                {b.image ? (
+                  <div className="relative w-full aspect-video rounded-t-lg overflow-hidden">
+                    <img
+                      src={b.image}
+                      alt={(b.title || "Blog cover") as string}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                ) : (
+                  <div className="relative w-full aspect-video overflow-hidden bg-card flex items-center justify-center rounded-t-lg">
+                    <div className="rounded-full bg-black/80 p-3 transition-transform duration-300 group-hover:scale-105">
+                      <img
+                        src="/gravity-logo.png"
+                        alt="Gravity logo"
+                        loading="lazy"
+                        className="w-32 h-32 object-contain"
+                      />
+                    </div>
+                  </div>
+                )}
 
                 <div className="p-5 flex-1 flex flex-col">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">
-                      Community
-                    </span>
+                  <div className="flex items-center gap-2 mb-3 flex-wrap">
+                    {b.category ? (
+                      <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">
+                        {b.category}
+                      </span>
+                    ) : null}
                   </div>
 
                   <div className="flex-1">
                     <h2 className="text-lg font-bold mb-2 group-hover:gradient-text transition-all line-clamp-2">
-                      Medium Article
+                      {(b.title || "Medium Article") as string}
                     </h2>
-                    <p className="text-foreground/70 break-all text-sm mb-2">
-                      {b.mediumUrl}
-                    </p>
+                    {b.content ? (
+                      <p className="text-foreground/70 text-sm line-clamp-3 mb-2">
+                        {b.content}
+                      </p>
+                    ) : (
+                      <p className="text-foreground/70 break-all text-sm mb-2">
+                        {b.mediumUrl}
+                      </p>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap gap-4 text-sm text-foreground/60 pt-3 border-t border-border mt-4">
                     <div className="flex items-center gap-1">
                       <span>By</span>
-                      <span className="font-medium">{b.name}</span>
+                      <span className="font-medium">{b.author}</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <span>Roll</span>
                       <span className="font-medium">{b.rollNumber}</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <span>{new Date(b.createdAt).toLocaleDateString()}</span>
+                      <span>{formatDate(b.date || b.createdAt)}</span>
                     </div>
                   </div>
                 </div>
               </a>
             ))}
 
-            {filteredStaticPosts.map((post, index) => (
-              <article
-                key={post.id}
-                className="card-glow overflow-hidden group cursor-pointer slide-in-up h-[440px] flex flex-col"
-                style={{ animationDelay: `${index * 0.06}s` }}
-              >
-                <div className="relative w-full h-[75%] overflow-hidden">
-                  <img
-                    src={post.image || "/placeholder.svg?key=blog"}
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                </div>
-
-                <div className="p-5 flex-1 flex flex-col">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Tag size={16} className="text-purple-500" />
-                    <span className="text-sm font-medium text-purple-300 bg-purple-500/20 px-3 py-1 rounded-full">
-                      {post.category}
-                    </span>
-                  </div>
-
-                  <div className="flex-1">
-                    <h2 className="text-lg font-bold mb-2 group-hover:gradient-text transition-all line-clamp-2">
-                      {post.title}
-                    </h2>
-                    <p className="text-foreground/70 text-sm line-clamp-3 mb-3">
-                      {post.content}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-4 text-sm text-foreground/60 pt-3 border-t border-border mt-4">
-                    <div className="flex items-center gap-1">
-                      <User size={16} />
-                      <span>{post.author}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Calendar size={16} />
-                      <span>{formatDate(post.date)}</span>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            ))}
+            {/* Demo blogs intentionally not rendered */}
           </div>
 
-          {filteredApproved.length === 0 &&
-            filteredStaticPosts.length === 0 && (
-              <div className="mt-8 text-center text-foreground/60">
-                No results found for "{query}"
-              </div>
-            )}
+          {filteredApproved.length === 0 && query.length > 0 && (
+            <div className="mt-8 text-center text-foreground/60">
+              No results found for "{query}"
+            </div>
+          )}
+          {filteredApproved.length === 0 && query.length === 0 && (
+            <div className="mt-8 text-center text-foreground/60">
+             No blogs have been approved yet. Be the first to submit one!
+            </div>
+          )}
 
           {/* CTA for more blogs */}
           <div className="mt-16 card-glow p-8 text-center slide-in-up">

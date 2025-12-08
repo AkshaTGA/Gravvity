@@ -1,6 +1,6 @@
-import { Renderer, Program, Mesh, Color, Triangle } from 'ogl';
-import { useEffect, useRef } from 'react';
-import './Galaxy.css';
+import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
+import React, { useEffect, useRef } from "react";
+import "./Galaxy.css";
 
 const vertexShader = `
 attribute vec2 uv;
@@ -167,7 +167,7 @@ void main() {
 }
 `;
 
-export default function Galaxy({
+function Galaxy({
   focal = [0.5, 0.5],
   rotation = [1.0, 0.0],
   starSpeed = 0.5,
@@ -197,7 +197,7 @@ export default function Galaxy({
     const ctn = ctnDom.current as HTMLDivElement;
     const renderer = new Renderer({
       alpha: transparent,
-      premultipliedAlpha: false
+      premultipliedAlpha: false,
     });
     const gl = renderer.gl;
 
@@ -226,7 +226,7 @@ export default function Galaxy({
         );
       }
     }
-    window.addEventListener('resize', resize, false);
+    window.addEventListener("resize", resize, false);
     resize();
 
     const geometry = new Triangle(gl);
@@ -236,7 +236,11 @@ export default function Galaxy({
       uniforms: {
         uTime: { value: 0 },
         uResolution: {
-          value: new Color(gl.canvas.width, gl.canvas.height, gl.canvas.width / gl.canvas.height)
+          value: new Color(
+            gl.canvas.width,
+            gl.canvas.height,
+            gl.canvas.width / gl.canvas.height
+          ),
         },
         uFocal: { value: new Float32Array(focal) },
         uRotation: { value: new Float32Array(rotation) },
@@ -245,7 +249,10 @@ export default function Galaxy({
         uHueShift: { value: hueShift },
         uSpeed: { value: speed },
         uMouse: {
-          value: new Float32Array([smoothMousePos.current.x, smoothMousePos.current.y])
+          value: new Float32Array([
+            smoothMousePos.current.x,
+            smoothMousePos.current.y,
+          ]),
         },
         uGlowIntensity: { value: glowIntensity },
         uSaturation: { value: saturation },
@@ -255,8 +262,8 @@ export default function Galaxy({
         uRepulsionStrength: { value: repulsionStrength },
         uMouseActiveFactor: { value: 0.0 },
         uAutoCenterRepulsion: { value: autoCenterRepulsion },
-        uTransparent: { value: transparent }
-      }
+        uTransparent: { value: transparent },
+      },
     });
 
     const mesh = new Mesh(gl, { geometry, program });
@@ -272,10 +279,13 @@ export default function Galaxy({
       }
 
       const lerpFactor = 0.08;
-      smoothMousePos.current.x += (targetMousePos.current.x - smoothMousePos.current.x) * lerpFactor;
-      smoothMousePos.current.y += (targetMousePos.current.y - smoothMousePos.current.y) * lerpFactor;
+      smoothMousePos.current.x +=
+        (targetMousePos.current.x - smoothMousePos.current.x) * lerpFactor;
+      smoothMousePos.current.y +=
+        (targetMousePos.current.y - smoothMousePos.current.y) * lerpFactor;
 
-      smoothMouseActive.current += (targetMouseActive.current - smoothMouseActive.current) * lerpFactor;
+      smoothMouseActive.current +=
+        (targetMouseActive.current - smoothMouseActive.current) * lerpFactor;
 
       if (program) {
         program.uniforms.uMouse.value[0] = smoothMousePos.current.x;
@@ -303,7 +313,7 @@ export default function Galaxy({
         }
       }
     }
-    document.addEventListener('visibilitychange', handleVisibility, false);
+    document.addEventListener("visibilitychange", handleVisibility, false);
 
     function handleMouseMove(e: MouseEvent) {
       // Calculate mouse position relative to the container
@@ -311,7 +321,10 @@ export default function Galaxy({
       const x = (e.clientX - rect.left) / rect.width;
       const y = 1.0 - (e.clientY - rect.top) / rect.height;
       // clamp
-      targetMousePos.current = { x: Math.max(0, Math.min(1, x)), y: Math.max(0, Math.min(1, y)) };
+      targetMousePos.current = {
+        x: Math.max(0, Math.min(1, x)),
+        y: Math.max(0, Math.min(1, y)),
+      };
       targetMouseActive.current = 1.0;
     }
 
@@ -321,27 +334,31 @@ export default function Galaxy({
 
     if (mouseInteraction) {
       // listen on container for direct interactions
-      ctn.addEventListener('mousemove', handleMouseMove);
-      ctn.addEventListener('mouseleave', handleMouseLeave);
+      ctn.addEventListener("mousemove", handleMouseMove);
+      ctn.addEventListener("mouseleave", handleMouseLeave);
       // also listen on window so interactions still work when other UI elements
       // overlay the canvas. Use passive listeners where supported to reduce
       // main-thread work from pointer events.
-      window.addEventListener('mousemove', handleMouseMove, { passive: true } as AddEventListenerOptions);
-      window.addEventListener('mouseout', handleMouseLeave, { passive: true } as AddEventListenerOptions);
+      window.addEventListener("mousemove", handleMouseMove, {
+        passive: true,
+      } as AddEventListenerOptions);
+      window.addEventListener("mouseout", handleMouseLeave, {
+        passive: true,
+      } as AddEventListenerOptions);
     }
 
     return () => {
       if (animateId != null) cancelAnimationFrame(animateId);
-      window.removeEventListener('resize', resize);
+      window.removeEventListener("resize", resize);
       if (mouseInteraction) {
-        ctn.removeEventListener('mousemove', handleMouseMove);
-        ctn.removeEventListener('mouseleave', handleMouseLeave);
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseout', handleMouseLeave);
+        ctn.removeEventListener("mousemove", handleMouseMove);
+        ctn.removeEventListener("mouseleave", handleMouseLeave);
+        window.removeEventListener("mousemove", handleMouseMove);
+        window.removeEventListener("mouseout", handleMouseLeave);
       }
-      document.removeEventListener('visibilitychange', handleVisibility, false);
+      document.removeEventListener("visibilitychange", handleVisibility, false);
       ctn.removeChild(gl.canvas);
-      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [
     focal,
@@ -359,8 +376,10 @@ export default function Galaxy({
     rotationSpeed,
     repulsionStrength,
     autoCenterRepulsion,
-    transparent
+    transparent,
   ]);
 
   return <div ref={ctnDom} className="galaxy-container" {...rest} />;
 }
+
+export default React.memo(Galaxy);

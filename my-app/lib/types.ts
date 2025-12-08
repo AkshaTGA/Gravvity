@@ -55,4 +55,20 @@ export interface BlogPost {
   date: string;
   category: string;
   image?: string;
+  rollNumber: string;
+  mediumUrl: string;
+  approved?: boolean;
+  createdAt?: number;
+  updatedAt?: number;
+}
+
+export interface BlogSubmissionInput {
+  title: string;
+  author: string;
+  content: string;
+  category: string;
+  image: string;
+  rollNumber: string;
+  mediumUrl: string;
+  date: string;
 }

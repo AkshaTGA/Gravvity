@@ -5,8 +5,10 @@ export function AboutSection() {
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card/50">
       <div className="max-w-4xl mx-auto">
-        
-          <GradualSpacing text="About Gravity" className="text-4xl md:text-5xl font-bold mb-8 gradient-text select-none"/>
+        <GradualSpacing
+          text="About Gravity"
+          className="text-4xl md:text-5xl font-bold mb-8 gradient-text select-none"
+        />
 
         <div className="grid md:grid-cols-2 selection:bg-[#6555554f]  selection:text-white gap-12">
           <div>
@@ -19,7 +21,7 @@ export function AboutSection() {
               innovation, creativity, and excellence in technology. We bring
               together passionate developers, designers, and tech enthusiasts
               from across the campus."
-              delay={10}
+              delay={5}
               animateBy="words"
               direction="top"
               className="text-foreground/70 leading-relaxed mb-4"
@@ -29,7 +31,7 @@ export function AboutSection() {
               text=" Through our seven specialized wings, we provide platforms for
               learning, collaboration, and real-world project experience in
               cutting-edge technologies."
-              delay={10}
+              delay={5}
               animateBy="words"
               direction="top"
               className="text-foreground/70 leading-relaxed"
@@ -44,7 +46,7 @@ export function AboutSection() {
             <BlurText
               text="To become the leading hub for technological innovation and talent
               development, creating leaders who shape the future of technology."
-              delay={10}
+              delay={5}
               animateBy="words"
               direction="top"
               className="text-foreground/70 leading-relaxed mb-4"
@@ -53,7 +55,7 @@ export function AboutSection() {
             <BlurText
               text=" We aim to bridge the gap between academics and industry, fostering
               a community where ideas transform into impactful solutions."
-              delay={10}
+              delay={5}
               animateBy="words"
               direction="top"
               className="text-foreground/70 leading-relaxed"

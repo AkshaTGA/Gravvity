@@ -22,7 +22,7 @@ export const BackgroundRippleEffect = ({
     <div
       ref={ref}
       className={cn(
-        "absolute inset-0 h-full w-full",
+        "absolute inset-0 opacity-60 -z-10 h-full w-full",
         // Light theme: slightly brighter purple wash
         "[--cell-border-color:rgba(168,85,247,0.22)] [--cell-fill-color:linear-gradient(180deg,rgba(168,85,247,0.09)_0%,rgba(99,102,241,0.09)_100%)] [--cell-shadow-color:rgba(168,85,247,0.18)]",
         // Dark theme: increase glow subtly for more presence
