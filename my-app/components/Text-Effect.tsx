@@ -105,13 +105,23 @@ function BlurTextComponent({
   // Animate once only - never re-trigger
   const inView = useInView(ref, { once: true, amount: threshold });
 
-  // Simple fade + slide with subtle blur for visual effect
+  // Detect mobile for performance optimization
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
+    };
+    checkMobile();
+  }, []);
+
+  // Simple fade + slide with subtle blur for visual effect (no blur on mobile)
   const fromState = useMemo(
     () =>
       direction === "top"
-        ? { opacity: 0, y: -15, filter: "blur(3px)" }
-        : { opacity: 0, y: 15, filter: "blur(3px)" },
-    [direction]
+        ? { opacity: 0, y: -15, filter: isMobile ? "blur(0px)" : "blur(3px)" }
+        : { opacity: 0, y: 15, filter: isMobile ? "blur(0px)" : "blur(3px)" },
+    [direction, isMobile]
   );
 
   const toState = useMemo(

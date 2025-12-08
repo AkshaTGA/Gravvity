@@ -1,13 +1,34 @@
 "use client";
 import { BlurText, GradualSpacing } from "@/components/Text-Effect";
+import { useState, useEffect } from "react";
+
+// Mobile detection hook
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  return isMobile;
+};
 
 export function AboutSection() {
+  const isMobile = useIsMobile();
   return (
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card/50">
       <div className="max-w-4xl mx-auto">
         <GradualSpacing
           text="About Gravity"
-          className="text-4xl md:text-5xl font-bold mb-8 gradient-text select-none"
+          className={`text-4xl md:text-5xl font-bold mb-8 gradient-text select-none ${
+            isMobile ? "animate-fade-in-up" : ""
+          }`}
         />
 
         <div className="grid md:grid-cols-2 selection:bg-[#6555554f]  selection:text-white gap-12">
@@ -16,26 +37,49 @@ export function AboutSection() {
               Our Mission
             </h3>
 
-            <BlurText
-              text="Gravity is a premier technical society dedicated to fostering
-              innovation, creativity, and excellence in technology. We bring
-              together passionate developers, designers, and tech enthusiasts
-              from across the campus."
-              delay={5}
-              animateBy="words"
-              direction="top"
-              className="text-foreground/70 leading-relaxed mb-4"
-            />
-
-            <BlurText
-              text=" Through our seven specialized wings, we provide platforms for
-              learning, collaboration, and real-world project experience in
-              cutting-edge technologies."
-              delay={5}
-              animateBy="words"
-              direction="top"
-              className="text-foreground/70 leading-relaxed"
-            />
+            {isMobile ? (
+              <>
+                <p
+                  className="text-foreground/70 leading-relaxed mb-4 animate-fade-in-up"
+                  style={{ animationDelay: "0.1s" }}
+                >
+                  Gravity is a premier technical society dedicated to fostering
+                  innovation, creativity, and excellence in technology. We bring
+                  together passionate developers, designers, and tech
+                  enthusiasts from across the campus.
+                </p>
+                <p
+                  className="text-foreground/70 leading-relaxed animate-fade-in-up"
+                  style={{ animationDelay: "0.3s" }}
+                >
+                  Through our seven specialized wings, we provide platforms for
+                  learning, collaboration, and real-world project experience in
+                  cutting-edge technologies.
+                </p>
+              </>
+            ) : (
+              <>
+                <BlurText
+                  text="Gravity is a premier technical society dedicated to fostering
+                  innovation, creativity, and excellence in technology. We bring
+                  together passionate developers, designers, and tech enthusiasts
+                  from across the campus."
+                  delay={5}
+                  animateBy="words"
+                  direction="top"
+                  className="text-foreground/70 leading-relaxed mb-4"
+                />
+                <BlurText
+                  text=" Through our seven specialized wings, we provide platforms for
+                  learning, collaboration, and real-world project experience in
+                  cutting-edge technologies."
+                  delay={5}
+                  animateBy="words"
+                  direction="top"
+                  className="text-foreground/70 leading-relaxed"
+                />
+              </>
+            )}
           </div>
 
           <div>
@@ -43,23 +87,45 @@ export function AboutSection() {
               Our Vision
             </h3>
 
-            <BlurText
-              text="To become the leading hub for technological innovation and talent
-              development, creating leaders who shape the future of technology."
-              delay={5}
-              animateBy="words"
-              direction="top"
-              className="text-foreground/70 leading-relaxed mb-4"
-            />
-
-            <BlurText
-              text=" We aim to bridge the gap between academics and industry, fostering
-              a community where ideas transform into impactful solutions."
-              delay={5}
-              animateBy="words"
-              direction="top"
-              className="text-foreground/70 leading-relaxed"
-            />
+            {isMobile ? (
+              <>
+                <p
+                  className="text-foreground/70 leading-relaxed mb-4 animate-fade-in-up"
+                  style={{ animationDelay: "0.5s" }}
+                >
+                  To become the leading hub for technological innovation and
+                  talent development, creating leaders who shape the future of
+                  technology.
+                </p>
+                <p
+                  className="text-foreground/70 leading-relaxed animate-fade-in-up"
+                  style={{ animationDelay: "0.7s" }}
+                >
+                  We aim to bridge the gap between academics and industry,
+                  fostering a community where ideas transform into impactful
+                  solutions.
+                </p>
+              </>
+            ) : (
+              <>
+                <BlurText
+                  text="To become the leading hub for technological innovation and talent
+                  development, creating leaders who shape the future of technology."
+                  delay={5}
+                  animateBy="words"
+                  direction="top"
+                  className="text-foreground/70 leading-relaxed mb-4"
+                />
+                <BlurText
+                  text=" We aim to bridge the gap between academics and industry, fostering
+                  a community where ideas transform into impactful solutions."
+                  delay={5}
+                  animateBy="words"
+                  direction="top"
+                  className="text-foreground/70 leading-relaxed"
+                />
+              </>
+            )}
           </div>
         </div>
 

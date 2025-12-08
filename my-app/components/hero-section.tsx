@@ -12,7 +12,25 @@ import MagicButton from "@/components/magic-button";
 import { LettersPullUp } from "@/components/Text-Effect";
 import { motion, useAnimation } from "framer-motion";
 
+// Mobile detection hook
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768 || "ontouchstart" in window);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  return isMobile;
+};
+
 export function HeroSection() {
+  const isMobile = useIsMobile();
   const logoRef = useRef<HTMLDivElement | null>(null);
   const counterRef = useRef(0);
   const [data, setdata] = useState(false);
@@ -151,10 +169,44 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-[88vh] flex items-center justify-center overflow-hidden pt-4 md:pt-8">
-      {/* Galaxy background covering the whole hero */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <Galaxy />
-      </div>
+      {/* Galaxy background covering the whole hero - disabled on mobile for performance */}
+      {!isMobile && (
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Galaxy />
+        </div>
+      )}
+      {/* Mobile-optimized animated background */}
+      {isMobile && (
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <div className="absolute inset-0 bg-linear-to-b from-purple-900/30 via-purple-800/10 to-black animate-gradient" />
+          <div
+            className="absolute top-0 left-0 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: "0s" }}
+          />
+          <div
+            className="absolute bottom-0 right-0 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: "2s" }}
+          />
+          <div
+            className="absolute top-1/2 left-1/2 w-72 h-72 bg-pink-500/15 rounded-full blur-3xl animate-float"
+            style={{ animationDelay: "4s" }}
+          />
+          {/* Lightweight particle stars */}
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${2 + Math.random() * 2}s`,
+                opacity: 0.3 + Math.random() * 0.4,
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       <div className="relative z-10 max-w-5xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
         <div className="pt-8 flex justify-center">
@@ -162,9 +214,14 @@ export function HeroSection() {
             className={`${
               !_fm ? "cursor-pointer" : "cursor-grab"
             } z-100 active:cursor-grabbing inline-flex mb-2 `}
-            drag
-            animate={_controls}
+            drag={!isMobile}
+            animate={isMobile ? { scale: [1, 1.008, 1] } : _controls}
             initial={{ x: 0, y: 0 }}
+            transition={
+              isMobile
+                ? { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                : undefined
+            }
             dragElastic={0.5}
             dragTransition={{ bounceStiffness: 500, bounceDamping: 10 }}
             dragConstraints={{
@@ -173,7 +230,7 @@ export function HeroSection() {
               right: 500,
               bottom: 350,
             }}
-            dragListener={_fm}
+            dragListener={isMobile ? false : _fm}
             onDragStart={() => {
               if (resetTimer.current) {
                 clearTimeout(resetTimer.current);
@@ -217,7 +274,7 @@ export function HeroSection() {
         </div>
 
         {/* Main Heading */}
-        <div>
+        <div className={isMobile ? "animate-fade-in-up" : ""}>
           <LettersPullUp
             text={`GRAVITY`}
             className="gradient-text  select-none"
@@ -226,13 +283,23 @@ export function HeroSection() {
         </div>
 
         {/* Subheading */}
-        <p className="text-sm md:text-2xl selection:bg-[#65555563] selection:text-white  text-foreground/70 mb-8 max-w-2xl mx-auto leading-relaxed">
+        <p
+          className={`text-sm md:text-2xl selection:bg-[#65555563] selection:text-white text-foreground/70 mb-8 max-w-2xl mx-auto leading-relaxed ${
+            isMobile ? "animate-fade-in-up" : ""
+          }`}
+          style={isMobile ? { animationDelay: "0.2s" } : {}}
+        >
           Seven wings of innovation: Competitive Coding, Web Development,
           Design, FOSS, Private AI, Blockchain, and Metaverse
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+        <div
+          className={`flex flex-col sm:flex-row gap-4 justify-center mb-12 ${
+            isMobile ? "animate-fade-in-up" : ""
+          }`}
+          style={isMobile ? { animationDelay: "0.4s" } : {}}
+        >
           <MagicButton
             href="#wings"
             className="font-bold w-60 sm:w-auto self-center"
@@ -280,7 +347,7 @@ const S2: React.FC<{
         initial={{ opacity: 0, y: 100 }}
         animate={{ opacity: [0, 1, 1, 0], y: -200 }}
         transition={{ duration: 3.5, ease: "easeOut" }}
-        className="fixed z-50 px-4 py-2 rounded-full backdrop-blur-md bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-white/30 shadow-xl pointer-events-none"
+        className="fixed z-50 px-4 py-2 rounded-full backdrop-blur-md bg-linear-to-br from-purple-500/20 to-pink-500/20 border border-white/30 shadow-xl pointer-events-none"
         style={{
           right: `${10 + (_bb.id % 5) * 15}%`,
           top: `${_bb.pos}%`,
