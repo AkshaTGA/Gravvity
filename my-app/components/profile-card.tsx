@@ -462,12 +462,10 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
               <div className="pc-details">
                 <h3
                   className={`px-5 md:p-3 ${
-                  name.length > 20
-                    ? "text-xs"
-                    : name.length > 14
+                    name.length > 14
                     ? "text-sm"
-                    : "text-base md:text-2xl"
-                  } mask-radial-from-sidebar-accent-foreground`}
+                    : "text-2xl"
+                  } md:text-2xl mask-radial-from-sidebar-accent-foreground`}
                   title={name}
                 >
                   {name}
