@@ -337,7 +337,7 @@ export default function AdminDashboard() {
                   </button>
                 </div>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-4 overflow-y-scroll max-h-108 md:max-h-128 custom-scrollbar">
                 {displayMembers.map((member) => (
                   <div key={member.id} className="card-glow p-6 flex gap-4">
                     <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
@@ -365,7 +365,10 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex gap-2 shrink-0">
                       <button
-                        onClick={() => setEditingMember(member)}
+                        onClick={() => {
+                          setEditingMember(member);
+                          scrollTo(0,100)
+                        }}
                         className="p-2 rounded-lg hover:bg-card transition-all text-primary"
                       >
                         <Edit2 size={20} />
