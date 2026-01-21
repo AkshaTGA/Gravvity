@@ -1,3 +1,5 @@
+"use client";
+
 import { Renderer, Program, Mesh, Color, Triangle } from "ogl";
 import React, { useEffect, useRef } from "react";
 import "./Galaxy.css";
@@ -195,11 +197,24 @@ function Galaxy({
   useEffect(() => {
     if (!ctnDom.current) return;
     const ctn = ctnDom.current as HTMLDivElement;
-    const renderer = new Renderer({
-      alpha: transparent,
-      premultipliedAlpha: false,
-    });
+    let renderer: Renderer;
+    try {
+      renderer = new Renderer({
+        alpha: transparent,
+        premultipliedAlpha: false,
+      });
+    } catch (err) {
+      // WebGL context creation can fail on some devices/browsers (or when disabled).
+      // OGL will throw when trying to attach itself to a null gl context.
+      console.warn("Galaxy: WebGL init failed; disabling effect.", err);
+      return;
+    }
+
     const gl = renderer.gl;
+    if (!gl) {
+      console.warn("Galaxy: WebGL context unavailable; disabling effect.");
+      return;
+    }
 
     if (transparent) {
       gl.enable(gl.BLEND);
@@ -357,8 +372,8 @@ function Galaxy({
         window.removeEventListener("mouseout", handleMouseLeave);
       }
       document.removeEventListener("visibilitychange", handleVisibility, false);
-      ctn.removeChild(gl.canvas);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
+      if (gl?.canvas && ctn.contains(gl.canvas)) ctn.removeChild(gl.canvas);
+      gl?.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [
     focal,

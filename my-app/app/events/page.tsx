@@ -7,6 +7,7 @@ import { Calendar, MapPin, X } from "lucide-react";
 import MagicButton from "@/components/magic-button";
 import { useEvents } from "@/hooks/use-events";
 import type { Event } from "@/lib/types";
+import { parseEventDescription } from "@/lib/utils";
 
 type EventCardProps = {
   event: Event;
@@ -18,7 +19,7 @@ function EventCard({ event, index, setSelected }: EventCardProps) {
   return (
     <div
       key={event.id}
-      className="card-glow overflow-hidden group slide-in-up flex flex-col hover:scale-101 mx-auto w-full max-w-[440px] h-full"
+      className="card-glow overflow-hidden group slide-in-up flex flex-col hover:scale-101 mx-auto w-full max-w-110 h-full"
       style={{ animationDelay: `${index * 0.1}s` }}
     >
       {/* Image Section */}
@@ -89,18 +90,46 @@ export default function EventsPage() {
       }
     };
   }, []);
-  const [showAll, setShowAll] = useState(false);
+  const [showAllUpcoming, setShowAllUpcoming] = useState(false);
+  const [showAllPast, setShowAllPast] = useState(false);
   const VISIBLE_LIMIT = 6;
-  const sorted = useMemo(() => {
-    // Sort by numeric id (new additions get higher Date.now id) fallback to date
-    return [...events].sort((a, b) => {
-      const idDiff = Number(b.id) - Number(a.id);
-      if (!isNaN(idDiff) && idDiff !== 0) return idDiff;
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
+
+  const { upcomingEvents, pastEvents } = useMemo(() => {
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const upcoming: Event[] = [];
+    const past: Event[] = [];
+
+    for (const ev of events) {
+      const evDate = new Date(ev.date);
+      if (
+        !isNaN(evDate.getTime()) &&
+        evDate.getTime() < startOfToday.getTime()
+      ) {
+        past.push(ev);
+      } else {
+        upcoming.push(ev);
+      }
+    }
+
+    // Upcoming: soonest first. Past: most recent first.
+    upcoming.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+    );
+    past.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+    );
+
+    return { upcomingEvents: upcoming, pastEvents: past };
   }, [events]);
 
-  const visibleEvents = showAll ? sorted : sorted.slice(0, VISIBLE_LIMIT);
+  const visibleUpcoming = showAllUpcoming
+    ? upcomingEvents
+    : upcomingEvents.slice(0, VISIBLE_LIMIT);
+  const visiblePast = showAllPast
+    ? pastEvents
+    : pastEvents.slice(0, VISIBLE_LIMIT);
 
   return (
     <>
@@ -118,28 +147,99 @@ export default function EventsPage() {
           </div>
 
           {/* Events Grid */}
-          <div className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
-            {visibleEvents.map((event, index) => (
-              <EventCard
-                key={event.id}
-                event={event}
-                index={index}
-                setSelected={setSelected}
-              />
-            ))}
-          </div>
+          {/* Upcoming Events (only when available) */}
+          {upcomingEvents.length > 0 && (
+            <section className="mb-10 sm:mb-12 md:mb-14">
+              <div className="flex items-end justify-between gap-4 mb-4 sm:mb-6">
+                <div>
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">
+                    Upcoming Events
+                  </h2>
+                  <p className="text-sm sm:text-base text-foreground/70">
+                    Don’t miss what’s next
+                  </p>
+                </div>
+                <span className="text-sm text-foreground/60">
+                  {upcomingEvents.length}
+                </span>
+              </div>
 
-          {/* Toggle show all */}
-          <div className="mt-6 sm:mt-8 flex justify-center px-4">
-            {sorted.length > VISIBLE_LIMIT && (
-              <button
-                onClick={() => setShowAll((s) => !s)}
-                className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg bg-card border border-border hover:bg-card/80 transition-all text-sm sm:text-base font-medium hover:scale-105"
-              >
-                {showAll ? "Show Less" : `Show All (${sorted.length})`}
-              </button>
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+                  {visibleUpcoming.map((event, index) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      index={index}
+                      setSelected={setSelected}
+                    />
+                  ))}
+                </div>
+
+                <div className="mt-6 sm:mt-8 flex justify-center px-4">
+                  {upcomingEvents.length > VISIBLE_LIMIT && (
+                    <button
+                      onClick={() => setShowAllUpcoming((s) => !s)}
+                      className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg bg-card border border-border hover:bg-card/80 transition-all text-sm sm:text-base font-medium hover:scale-105"
+                    >
+                      {showAllUpcoming
+                        ? "Show Less"
+                        : `Show All (${upcomingEvents.length})`}
+                    </button>
+                  )}
+                </div>
+              </>
+            </section>
+          )}
+
+          {/* Past Events */}
+          <section className="mb-10 sm:mb-12 md:mb-14">
+            <div className="flex items-end justify-between gap-4 mb-4 sm:mb-6">
+              <div>
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">
+                  Past Events
+                </h2>
+                <p className="text-sm sm:text-base text-foreground/70">
+                  Highlights from previous activities
+                </p>
+              </div>
+              <span className="text-sm text-foreground/60">
+                {pastEvents.length}
+              </span>
+            </div>
+
+            {pastEvents.length === 0 ? (
+              <div className="card-glow p-5 sm:p-6 text-center text-foreground/70">
+                No past events yet.
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6">
+                  {visiblePast.map((event, index) => (
+                    <EventCard
+                      key={event.id}
+                      event={event}
+                      index={index}
+                      setSelected={setSelected}
+                    />
+                  ))}
+                </div>
+
+                <div className="mt-6 sm:mt-8 flex justify-center px-4">
+                  {pastEvents.length > VISIBLE_LIMIT && (
+                    <button
+                      onClick={() => setShowAllPast((s) => !s)}
+                      className="px-4 sm:px-6 py-2 sm:py-2.5 rounded-lg bg-card border border-border hover:bg-card/80 transition-all text-sm sm:text-base font-medium hover:scale-105"
+                    >
+                      {showAllPast
+                        ? "Show Less"
+                        : `Show All (${pastEvents.length})`}
+                    </button>
+                  )}
+                </div>
+              </>
             )}
-          </div>
+          </section>
 
           {/* Modal Overlay for selected event */}
           {selected && (
@@ -166,12 +266,12 @@ export default function EventsPage() {
                 {/* Responsive layout: stack on mobile, side-by-side on desktop */}
                 <div className="flex flex-col md:flex-row max-h-[90vh] overflow-y-auto custom-scrollbar">
                   {/* Left: Image */}
-                  <div className="relative flex items-center justify-center bg-black/20 p-4 sm:p-6 md:p-8 lg:p-10 md:w-1/2 md:min-h-[500px]">
+                  <div className="relative flex items-center justify-center bg-black/20 p-4 sm:p-6 md:p-8 lg:p-10 md:w-1/2 md:min-h-125">
                     <img
                       src={selected.image || "/gravity-logo.png"}
                       alt={selected.title}
                       loading="lazy"
-                      className="w-full h-auto max-h-[250px] sm:max-h-[300px] md:max-h-[450px] object-contain rounded-xl transition-transform duration-500 ease-out hover:scale-105"
+                      className="w-full h-auto max-h-62.5 sm:max-h-75 md:max-h-112.5 object-contain rounded-xl transition-transform duration-500 ease-out hover:scale-105"
                     />
                   </div>
 
@@ -180,9 +280,24 @@ export default function EventsPage() {
                     <h3 className="text-lg sm:text-xl md:text-2xl font-semibold mb-3 sm:mb-4 text-foreground pr-8">
                       {selected.title}
                     </h3>
-                    <div className="text-xs sm:text-sm md:text-base text-foreground/80 leading-relaxed whitespace-pre-line">
-                      {selected.description}
-                    </div>
+                    {(() => {
+                      const { format, content } = parseEventDescription(
+                        selected.description,
+                      );
+                      if (format === "html") {
+                        return (
+                          <div
+                            className="text-xs sm:text-sm md:text-base text-foreground/80 leading-relaxed"
+                            dangerouslySetInnerHTML={{ __html: content }}
+                          />
+                        );
+                      }
+                      return (
+                        <div className="text-xs sm:text-sm md:text-base text-foreground/80 leading-relaxed whitespace-pre-line">
+                          {content}
+                        </div>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>
@@ -209,8 +324,10 @@ export default function EventsPage() {
                 onClick={async () => {
                   const valid =
                     /^(?:[a-zA-Z0-9_.'+\-]+)@(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$/.test(
-                      email
+                      email,
                     );
+                  const email_validation_APIKEY =
+                    process.env.NEXT_PUBLIC_EMAIL_VALIDATION_API_KEY;
                   if (!valid) {
                     setSubStatus("error");
                     setSubMessage("Enter a valid email");
@@ -218,6 +335,17 @@ export default function EventsPage() {
                   }
                   try {
                     setSubStatus("loading");
+                    const check = await fetch(
+                      `https://emailreputation.abstractapi.com/v1?api_key=${email_validation_APIKEY}&&email=${email}`,
+                    );
+
+                    const d = await check.json();
+                    if (d.email_deliverability.status == "undeliverable") {
+                      setSubStatus("error");
+                      setSubMessage("The Email you provided was undeliverable");
+                      return;
+                    }
+
                     const res = await fetch("/api/subscribe", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },

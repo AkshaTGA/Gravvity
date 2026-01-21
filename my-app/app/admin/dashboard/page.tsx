@@ -9,6 +9,7 @@ import { MemberForm } from "@/components/member-form";
 import { EventForm } from "@/components/event-form";
 import { ProjectForm, ProjectInput } from "@/components/project-form";
 import type { Member, Event } from "@/lib/types";
+import { parseEventDescription } from "@/lib/utils";
 import {
   Edit2,
   Trash2,
@@ -17,6 +18,7 @@ import {
   Users,
   Calendar,
   BookOpen,
+  X,
 } from "lucide-react";
 // Replace localStorage blog store with server-backed API calls
 import { useMemo, useState as useReactState } from "react";
@@ -50,6 +52,12 @@ export default function AdminDashboard() {
   const [isAddingProject, setIsAddingProject] = useState(false);
   const [pendingBlogs, setPendingBlogs] = useState<any[]>([]);
   const [approvedBlogs, setApprovedBlogs] = useState<any[]>([]);
+  const [subscribers, setSubscribers] = useState<string[]>([]);
+  const [subscribersLoading, setSubscribersLoading] = useState(false);
+  const [subscribersError, setSubscribersError] = useState<string | null>(null);
+  const [showHtmlSourceByEventId, setShowHtmlSourceByEventId] = useState<
+    Record<string, boolean>
+  >({});
 
   // Run auth check once on mount.
   // Redirect unauthenticated users only after auth has been checked.
@@ -169,8 +177,44 @@ export default function AdminDashboard() {
     }
   };
 
+  const refreshSubscribers = async () => {
+    setSubscribersLoading(true);
+    setSubscribersError(null);
+    try {
+      const token =
+        typeof window !== "undefined"
+          ? localStorage.getItem("gravity_admin_token")
+          : null;
+      const headers: HeadersInit = token
+        ? { Authorization: `Bearer ${token}` }
+        : {};
+      const res = await fetch("/api/subscribe", {
+        cache: "no-store",
+        headers,
+      });
+      if (!res.ok) {
+        const txt = await res.text().catch(() => "");
+        throw new Error(`Failed to load subscribers: ${res.status} ${txt}`);
+      }
+      const data = (await res.json()) as { emails?: unknown };
+      const emails = Array.isArray(data.emails)
+        ? data.emails.filter((x): x is string => typeof x === "string")
+        : [];
+      setSubscribers(emails);
+    } catch (e: any) {
+      console.error("Failed to load subscribers", e);
+      setSubscribersError(e?.message || "Failed to load subscribers");
+    } finally {
+      setSubscribersLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (isLoggedIn) void refreshBlogs();
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    if (isLoggedIn) void refreshSubscribers();
   }, [isLoggedIn]);
 
   if (!authChecked) {
@@ -185,7 +229,7 @@ export default function AdminDashboard() {
 
   // Sort by creation timestamp descending (fallback to date for events if missing)
   const sortedMembers = [...members].sort(
-    (a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0)
+    (a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0),
   );
   const sortedEvents = [...events].sort((a, b) => {
     const ctDiff = (b.createdAt ?? 0) - (a.createdAt ?? 0);
@@ -227,8 +271,8 @@ export default function AdminDashboard() {
                     {editingMember
                       ? "Edit Member"
                       : isAddingNew
-                      ? "Add New Member"
-                      : "Add Member"}
+                        ? "Add New Member"
+                        : "Add Member"}
                   </h2>
                   {(editingMember || isAddingNew) && (
                     <MemberForm
@@ -258,8 +302,8 @@ export default function AdminDashboard() {
                     {editingEvent
                       ? "Edit Event"
                       : isAddingEvent
-                      ? "Add New Event"
-                      : "Add Event"}
+                        ? "Add New Event"
+                        : "Add Event"}
                   </h2>
                   {(editingEvent || isAddingEvent) && (
                     <EventForm
@@ -353,10 +397,10 @@ export default function AdminDashboard() {
                         {member.isOverallCoordinator
                           ? "👑 Overall Coordinator"
                           : member.isFacultyCoordinator
-                          ? "🎓 Faculty Coordinator"
-                          : member.role === "coordinator"
-                          ? "🎖️ Coordinator"
-                          : "👤 Member"}
+                            ? "🎓 Faculty Coordinator"
+                            : member.role === "coordinator"
+                              ? "🎖️ Coordinator"
+                              : "👤 Member"}
                         {member.wing ? ` • ${member.wing}` : ""}
                       </p>
                       <p className="text-sm text-foreground/70 mt-1">
@@ -367,7 +411,7 @@ export default function AdminDashboard() {
                       <button
                         onClick={() => {
                           setEditingMember(member);
-                          scrollTo(0,100)
+                          scrollTo(0, 100);
                         }}
                         className="p-2 rounded-lg hover:bg-card transition-all text-primary"
                       >
@@ -417,11 +461,56 @@ export default function AdminDashboard() {
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 overflow-hidden">
                         <div className="font-semibold">{e.title}</div>
                         <div className="text-xs text-foreground/60">
                           {e.wing} • {new Date(e.date).toLocaleDateString()}
                         </div>
+                        {(() => {
+                          const { format, content } = parseEventDescription(
+                            (e as any).description,
+                          );
+                          if (!content) return null;
+
+                          const isHtml = format === "html";
+                          const showSource =
+                            isHtml && !!showHtmlSourceByEventId[e.id];
+
+                          return (
+                            <div className="mt-2">
+                              {isHtml && (
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setShowHtmlSourceByEventId((prev) => ({
+                                      ...prev,
+                                      [e.id]: !prev[e.id],
+                                    }))
+                                  }
+                                  className="px-3 py-1 rounded-lg bg-card border border-border hover:bg-card/80 transition-all text-xs text-foreground/80"
+                                >
+                                  {showSource ? "Show Less" : "Show More"}
+                                </button>
+                              )}
+
+                              {showSource ? (
+                                <div
+                                  className="mt-2 rounded-lg border border-border bg-black/10 p-3 text-xs text-foreground/80 [&_p]:mb-2 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"
+                                  dangerouslySetInnerHTML={{ __html: content }}
+                                />
+                              ) : isHtml ? (
+                                <div
+                                  className="mt-1 text-xs text-foreground/70 line-clamp-2"
+                                  dangerouslySetInnerHTML={{ __html: content }}
+                                />
+                              ) : (
+                                <div className="mt-1 text-xs text-foreground/70 line-clamp-2 whitespace-pre-line">
+                                  {content}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })()}
                       </div>
                       <div className="flex gap-2">
                         <button
@@ -437,7 +526,7 @@ export default function AdminDashboard() {
                           onClick={async () => {
                             if (
                               !window.confirm(
-                                `Are you sure you want to email subscribers about "${e.title}"?`
+                                `Are you sure you want to email subscribers about "${e.title}"?`,
                               )
                             )
                               return;
@@ -450,13 +539,13 @@ export default function AdminDashboard() {
                               const data = await res.json();
                               if (res.ok && data?.ok) {
                                 alert(
-                                  `Email sent to ${data.sent} subscriber(s).`
+                                  `Email sent to ${data.sent} subscriber(s).`,
                                 );
                               } else {
                                 alert(
                                   `Failed to send: ${
                                     data?.error || "Unknown error"
-                                  }`
+                                  }`,
                                 );
                               }
                             } catch (err) {
@@ -596,7 +685,7 @@ export default function AdminDashboard() {
                                         day: "2-digit",
                                         month: "short",
                                         year: "numeric",
-                                      }
+                                      },
                                     )}
                                   </span>
                                 </>
@@ -624,7 +713,7 @@ export default function AdminDashboard() {
                                 const token =
                                   typeof window !== "undefined"
                                     ? localStorage.getItem(
-                                        "gravity_admin_token"
+                                        "gravity_admin_token",
                                       )
                                     : null;
                                 const headers: HeadersInit = {
@@ -654,7 +743,7 @@ export default function AdminDashboard() {
                                 const token =
                                   typeof window !== "undefined"
                                     ? localStorage.getItem(
-                                        "gravity_admin_token"
+                                        "gravity_admin_token",
                                       )
                                     : null;
                                 const headers: HeadersInit = token
@@ -703,7 +792,7 @@ export default function AdminDashboard() {
                                 />
                               </div>
                             ) : (
-                              <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-gradient-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center text-2xl">
+                              <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-linear-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center text-2xl">
                                 ✍️
                               </div>
                             )}
@@ -735,7 +824,7 @@ export default function AdminDashboard() {
                                           day: "2-digit",
                                           month: "short",
                                           year: "numeric",
-                                        }
+                                        },
                                       )}
                                     </span>
                                   </>
@@ -765,7 +854,7 @@ export default function AdminDashboard() {
                                   const token =
                                     typeof window !== "undefined"
                                       ? localStorage.getItem(
-                                          "gravity_admin_token"
+                                          "gravity_admin_token",
                                         )
                                       : null;
                                   const headers: HeadersInit = token
@@ -773,7 +862,7 @@ export default function AdminDashboard() {
                                     : {};
                                   const res = await fetch(
                                     `/api/blogs/${b.id}`,
-                                    { method: "DELETE", headers }
+                                    { method: "DELETE", headers },
                                   );
                                   if (res.ok) await refreshBlogs();
                                 } catch (e) {
@@ -789,6 +878,91 @@ export default function AdminDashboard() {
                       ))}
                     </div>
                   )}
+                </div>
+
+                {/* Subscribers */}
+                <div className="mt-8">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-lg font-semibold">Subscribers</h3>
+                    <button
+                      onClick={() => void refreshSubscribers()}
+                      className="text-xs cursor-pointer px-3 py-1.5 rounded-lg bg-card border border-border hover:bg-card/80 text-foreground/80"
+                    >
+                      Refresh
+                    </button>
+                  </div>
+
+                  <div className="card-glow p-5">
+                    {subscribersLoading ? (
+                      <div className="text-sm text-foreground/60">
+                        Loading subscribers…
+                      </div>
+                    ) : subscribersError ? (
+                      <div className="text-sm text-red-400">
+                        {subscribersError}
+                      </div>
+                    ) : subscribers.length === 0 ? (
+                      <div className="text-sm text-foreground/60">
+                        No subscribers yet.
+                      </div>
+                    ) : (
+                      <div className="space-y-2 max-h-72 overflow-auto pr-1">
+                        {subscribers.map((email) => (
+                          <div
+                            key={email}
+                            className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-card border border-border"
+                          >
+                            <span className="text-sm text-foreground break-all">
+                              {email}
+                            </span>
+                            <button
+                              aria-label={`Delete subscriber ${email}`}
+                              onClick={async () => {
+                                try {
+                                  const token =
+                                    typeof window !== "undefined"
+                                      ? localStorage.getItem(
+                                          "gravity_admin_token",
+                                        )
+                                      : null;
+                                  const headers: HeadersInit = token
+                                    ? { Authorization: `Bearer ${token}` }
+                                    : {};
+                                  const res = await fetch(
+                                    `/api/subscribe?email=${encodeURIComponent(email)}`,
+                                    { method: "DELETE", headers },
+                                  );
+                                  if (!res.ok) {
+                                    const txt = await res
+                                      .text()
+                                      .catch(() => "");
+                                    throw new Error(
+                                      `Delete failed: ${res.status} ${txt}`,
+                                    );
+                                  }
+                                  const data = (await res.json()) as {
+                                    removed?: boolean;
+                                  };
+                                  if (data.removed) {
+                                    setSubscribers((prev) =>
+                                      prev.filter((x) => x !== email),
+                                    );
+                                  }
+                                } catch (e) {
+                                  console.error("Delete subscriber failed", e);
+                                  alert("Failed to delete subscriber");
+                                }
+                              }}
+                              className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg border border-border hover:bg-card/80 text-red-400"
+                              title="Delete"
+                            >
+                              <X size={18} />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

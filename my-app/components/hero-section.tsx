@@ -37,7 +37,7 @@ export function HeroSection() {
 
   const [_k, _sk] = useState("");
   const [_b, _sb] = useState<Array<{ id: number; text: string; pos: number }>>(
-    []
+    [],
   );
   const [_id, _sid] = useState(0);
   const [_fm, _sfm] = useState(false);
@@ -58,10 +58,11 @@ export function HeroSection() {
     }, delay);
   };
 
+
   useEffect(() => {
     console.log(
       "%cCTRL+SPACE ^_^ ",
-      "color: rgb(255,255,255); background: BLACK; font-size: 24px;border-radius:100px; font-weight: bold; padding: 10px;"
+      "color: rgb(255,255,255); background: BLACK; font-size: 24px;border-radius:100px; font-weight: bold; padding: 10px;",
     );
   }, []);
 
@@ -254,7 +255,7 @@ export function HeroSection() {
               ref={logoRef}
               onAnimationEnd={(e) => {
                 (e.currentTarget as HTMLDivElement).classList.remove(
-                  "logo-spin-once"
+                  "logo-spin-once",
                 );
               }}
               role="img"
