@@ -22,35 +22,96 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "SMTP user/pass not configured" }, { status: 500 })
   }
 
+  // Ensure credentials are trimmed and clean
+  const cleanUser = user.trim()
+  const cleanPass = pass.trim()
+
+  console.log("SMTP Config:", { host, port, secure, user: cleanUser, passLength: cleanPass.length })
+
   const transporter = nodemailer.createTransport({
     host,
     port,
-    secure,
-    auth: { user, pass },
-    logger: true,
-    debug: true,
-    requireTLS: !secure,
-    authMethod: "LOGIN",
+    secure: false, // false for port 587, true for 465
+    auth: { 
+      user: cleanUser, 
+      pass: cleanPass 
+    },
   })
 
   try {
-    await transporter.verify()
+    const verified = await transporter.verify()
+    console.log("SMTP connection verified successfully", verified)
   } catch (err: any) {
-    console.error("Contact SMTP verify failed", err)
-    return NextResponse.json({ ok: false, error: err?.message || "SMTP verify failed" }, { status: 500 })
+    console.error("Contact SMTP verify failed - Full error:", err)
+    return NextResponse.json({ 
+      ok: false, 
+      error: `SMTP Authentication Failed: Check your email credentials or app password. Error: ${err?.message || "Unknown error"}` 
+    }, { status: 500 })
   }
 
   const subject = `New Contact Form Submission from ${name}`
   const html = `
-    <div style="font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;line-height:1.6;color:#111">
-      <h2 style="margin:0 0 12px">Contact Form</h2>
-      <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-      <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-      <p><strong>Message:</strong></p>
-      <div style="white-space:pre-line">${escapeHtml(message)}</div>
-      <p style="margin-top:16px;color:#666">— Gravity Website</p>
+  <div style="
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6;
+    background:#f6f8fb;
+    padding:16px;
+  ">
+
+    <div style="
+      max-width:520px;
+      margin:0 auto;
+      background:#ffffff;
+      border:1px solid #e5e7eb;
+      border-radius:6px;
+      padding:16px;
+      color:#111;
+    ">
+
+      <h2 style="
+        margin:0 0 12px;
+        font-size:18px;
+        font-weight:600;
+        color:#1f2937;
+      ">
+        Contact Form Submission
+      </h2>
+
+      <p style="margin:6px 0;color:#374151">
+        <strong style="color:#111">Name:</strong> ${escapeHtml(name)}
+      </p>
+
+      <p style="margin:6px 0;color:#374151">
+        <strong style="color:#111">Email:</strong> ${escapeHtml(email)}
+      </p>
+
+      <p style="margin:12px 0 6px;color:#111">
+        <strong>Message:</strong>
+      </p>
+
+      <div style="
+        white-space:pre-line;
+        padding:10px 12px;
+        background:#f9fafb;
+        border-left:4px solid #2563eb;
+        color:#1f2937;
+      ">
+        ${escapeHtml(message)}
+      </div>
+
+      <p style="
+        margin-top:16px;
+        font-size:12px;
+        color:#6b7280;
+      ">
+        — Gravity Website
+      </p>
+
     </div>
-  `
+
+  </div>
+`;
+
 
   try {
     const info = await transporter.sendMail({ from, to, subject, html, replyTo: email })

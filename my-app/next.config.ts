@@ -4,6 +4,7 @@ const isNetlify = process.env.NETLIFY === "true";
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (isNetlify ? "" : "http://localhost:4000");
 
 const nextConfig: NextConfig = {
+  output: "standalone", 
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "res.cloudinary.com" },
