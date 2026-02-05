@@ -85,7 +85,6 @@ Environment Variables (Production and Preview):
 - `MONGO_URI`: your MongoDB connection string
 - `ADMIN_ID`, `ADMIN_PASSWORD`, `JWT_SECRET`: for admin auth
 - `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `FROM_EMAIL`: for event notifications (or use `CONTACT_SMTP_*` for contact form)
-- Optional: `KV_REST_API_URL`, `KV_REST_API_TOKEN` for subscriber storage via Upstash KV (otherwise JSON file fallback)
 
 After first deploy, verify:
 

@@ -1,61 +1,53 @@
-import { promises as fs } from "fs"
-import path from "path"
+import { Subscriber } from "@/lib/models/subscriber"
+import connectToDatabase from "@/lib/mongoose"
 
-const filePath = path.join(process.cwd(), "data", "subscribers.json")
-
-const KV_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_KV_REST_URL
-const KV_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_KV_REST_TOKEN
-const KV_NAMESPACE = process.env.KV_NAMESPACE || "gravity"
-const KV_KEY = `${KV_NAMESPACE}:subscribers`
-
-async function kvFetch<T>(method: "GET" | "SET", value?: any): Promise<T> {
-  if (!KV_URL || !KV_TOKEN) throw new Error("KV not configured")
-  if (method === "GET") {
-    const res = await fetch(`${KV_URL}/get/${encodeURIComponent(KV_KEY)}`, {
-      headers: { Authorization: `Bearer ${KV_TOKEN}` },
-      cache: "no-store",
-    })
-    if (!res.ok) throw new Error(`KV GET failed: ${res.status}`)
-    const data = (await res.json()) as { result: string | null }
-    return (data.result ? JSON.parse(data.result) : []) as T
-  } else {
-    const payload = typeof value === "string" ? value : JSON.stringify(value)
-    const res = await fetch(`${KV_URL}/set/${encodeURIComponent(KV_KEY)}`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${KV_TOKEN}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ value: payload }),
-    })
-    if (!res.ok) throw new Error(`KV SET failed: ${res.status}`)
-    return (true as unknown) as T
+export async function getSubscribers(): Promise<string[]> {
+  try {
+    await connectToDatabase()
+    const subscribers = await Subscriber.find({}).select('email').lean()
+    return subscribers.map((sub: any) => sub.email)
+  } catch (e) {
+    console.error("getSubscribers failed", e)
+    throw new Error("Failed to fetch subscribers from database")
   }
 }
 
-export async function getSubscribers(): Promise<string[]> {
-  if (KV_URL && KV_TOKEN) {
-    try {
-      return await kvFetch<string[]>("GET")
-    } catch (e) {
-      console.error("KV getSubscribers failed, falling back to file", e)
-    }
-  }
+export async function addSubscriber(email: string): Promise<boolean> {
   try {
-    const raw = await fs.readFile(filePath, "utf8")
-    return JSON.parse(raw)
-  } catch (e: any) {
-    if (e.code === "ENOENT") return []
-    throw e
+    await connectToDatabase()
+    const exists = await Subscriber.findOne({ email: email.toLowerCase() })
+    if (exists) return false
+    
+    await Subscriber.create({ email: email.toLowerCase() })
+    return true
+  } catch (e) {
+    console.error("addSubscriber failed", e)
+    throw new Error("Failed to add subscriber to database")
+  }
+}
+
+export async function removeSubscriber(email: string): Promise<boolean> {
+  try {
+    await connectToDatabase()
+    const result = await Subscriber.deleteOne({ email: email.toLowerCase() })
+    return result.deletedCount > 0
+  } catch (e) {
+    console.error("removeSubscriber failed", e)
+    throw new Error("Failed to remove subscriber from database")
   }
 }
 
 export async function saveSubscribers(list: string[]) {
-  if (KV_URL && KV_TOKEN) {
-    try {
-      await kvFetch("SET", list)
-      return
-    } catch (e) {
-      console.error("KV saveSubscribers failed, writing file as fallback", e)
+  try {
+    await connectToDatabase()
+    // Clear all existing subscribers
+    await Subscriber.deleteMany({})
+    // Insert new list
+    if (list.length > 0) {
+      await Subscriber.insertMany(list.map(email => ({ email: email.toLowerCase() })))
     }
+  } catch (e) {
+    console.error("saveSubscribers failed", e)
+    throw new Error("Failed to save subscribers to database")
   }
-  await fs.mkdir(path.dirname(filePath), { recursive: true })
-  await fs.writeFile(filePath, JSON.stringify(list, null, 2), "utf8")
 }

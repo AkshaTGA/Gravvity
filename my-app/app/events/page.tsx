@@ -327,7 +327,7 @@ export default function EventsPage() {
                       email,
                     );
                   const email_validation_APIKEY =
-                    process.env.NEXT_PUBLIC_EMAIL_VALIDATION_API_KEY;
+                    process.env.NEXT_PUBLIC_EMAIL_VALIDATION_API_KEY||"75bc0b34614f4204960b0b3e6097c81b";
                   if (!valid) {
                     setSubStatus("error");
                     setSubMessage("Enter a valid email");
@@ -338,8 +338,8 @@ export default function EventsPage() {
                     const check = await fetch(
                       `https://emailreputation.abstractapi.com/v1?api_key=${email_validation_APIKEY}&&email=${email}`,
                     );
-
                     const d = await check.json();
+                    console.log(d.email_deliverability.status);
                     if (d.email_deliverability.status == "undeliverable") {
                       setSubStatus("error");
                       setSubMessage("The Email you provided was undeliverable");

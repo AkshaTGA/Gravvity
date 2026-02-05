@@ -58,7 +58,7 @@ if (!MONGO_URI) {
 // Connect to MongoDB (reuse connection across hot reloads / serverless invocations)
 if (MONGO_URI && !global.__MONGO_CONN_PROMISE__) {
   global.__MONGO_CONN_PROMISE__ = mongoose
-    .connect(MONGO_URI, { dbName: 'gravity' })
+    .connect(MONGO_URI)
     .then(() => console.log('[MongoDB] Connected'))
     .catch((err) => {
       console.error('[MongoDB] Connection error', err.message)

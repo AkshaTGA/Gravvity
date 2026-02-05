@@ -55,6 +55,7 @@ export default function AdminDashboard() {
   const [subscribers, setSubscribers] = useState<string[]>([]);
   const [subscribersLoading, setSubscribersLoading] = useState(false);
   const [subscribersError, setSubscribersError] = useState<string | null>(null);
+  const [deletingSubscriber, setDeletingSubscriber] = useState<string | null>(null);
   const [showHtmlSourceByEventId, setShowHtmlSourceByEventId] = useState<
     Record<string, boolean>
   >({});
@@ -919,6 +920,7 @@ export default function AdminDashboard() {
                               aria-label={`Delete subscriber ${email}`}
                               onClick={async () => {
                                 try {
+                                  setDeletingSubscriber(email);
                                   const token =
                                     typeof window !== "undefined"
                                       ? localStorage.getItem(
@@ -951,12 +953,19 @@ export default function AdminDashboard() {
                                 } catch (e) {
                                   console.error("Delete subscriber failed", e);
                                   alert("Failed to delete subscriber");
+                                } finally {
+                                  setDeletingSubscriber(null);
                                 }
                               }}
-                              className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg border border-border hover:bg-card/80 text-red-400"
+                              disabled={deletingSubscriber === email}
+                              className="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-lg border border-border hover:bg-card/80 text-red-400 disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                               title="Delete"
                             >
-                              <X size={18} />
+                              {deletingSubscriber === email ? (
+                                <div className="w-4 h-4 border-2 border-red-400/30 border-t-red-400 rounded-full animate-spin" />
+                              ) : (
+                                <X size={18} />
+                              )}
                             </button>
                           </div>
                         ))}

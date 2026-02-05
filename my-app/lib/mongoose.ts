@@ -10,7 +10,9 @@ export async function connectToDatabase() {
 
   if (!global.__MONGO_CONN_PROMISE__) {
     // Create a single connection promise for reuse across invocations
-    global.__MONGO_CONN_PROMISE__ = mongoose.connect(MONGO_URI, { dbName: 'gravity' })
+    const dbNameMatch = MONGO_URI.match(/\/([^/?]+)(\?|$)/)
+    const dbName = dbNameMatch ? dbNameMatch[1] : 'Gravity'
+    global.__MONGO_CONN_PROMISE__ = mongoose.connect(MONGO_URI, { dbName })
   }
 
   await global.__MONGO_CONN_PROMISE__

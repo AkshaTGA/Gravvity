@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  # 1. Your MongoDB Container
+  mongo_db:
+    image: mongo:latest
+    container_name: my_mongo_container
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
+
+  # 2. Your Gravity (Next.js) App
+  gravity_app: 
+
+    image: akshatga/gravity:0.0.0.RELEASE 
+    
+
+    container_name: gravity 
+    
+    ports:
+      - "3000:3000"
+    
+
+    env_file:
+      - .env.local
+    
+    environment:
+      - MONGO_URI=mongodb://admin:password123@mongo_db:27017/Gravity?authSource=admin
+    
+    depends_on:
+      - mongo_db

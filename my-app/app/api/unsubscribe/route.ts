@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import { getSubscribers, saveSubscribers } from "@/lib/subscribers";
+import { removeSubscriber } from "@/lib/subscribers";
 
 export const runtime = "nodejs";
 
@@ -21,7 +21,7 @@ function htmlPage(title: string, body: string) {
   <body>
     <div class="card">
       ${body}
-      <p class="muted">If you didn’t request this, you can ignore it.</p>
+      <p class="muted">If you didn't request this, you can ignore it.</p>
       <p class="muted"><a href="/">Back to site</a></p>
     </div>
   </body>
@@ -67,23 +67,28 @@ export async function GET(request: Request) {
       );
     }
 
-    const list = await getSubscribers();
-    const nextList = list.filter((e) => e !== email);
-    const removed = nextList.length !== list.length;
+    try {
+      const removed = await removeSubscriber(email);
 
-    if (removed) {
-      await saveSubscribers(nextList);
+      return new NextResponse(
+        htmlPage(
+          "Unsubscribe",
+          removed
+            ? `<h1>You're unsubscribed</h1><p class="muted">${email} will no longer receive Gravity emails.</p>`
+            : `<h1>Already unsubscribed</h1><p class="muted">${email} is not on our list.</p>`,
+        ),
+        { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } },
+      );
+    } catch (error) {
+      console.error("Failed to remove subscriber", error);
+      return new NextResponse(
+        htmlPage(
+          "Unsubscribe",
+          `<h1>Error</h1><p class="muted">Failed to process unsubscribe request.</p>`,
+        ),
+        { status: 500, headers: { "Content-Type": "text/html; charset=utf-8" } },
+      );
     }
-
-    return new NextResponse(
-      htmlPage(
-        "Unsubscribe",
-        removed
-          ? `<h1>You’re unsubscribed</h1><p class="muted">${email} will no longer receive Gravity emails.</p>`
-          : `<h1>Already unsubscribed</h1><p class="muted">${email} is not on our list.</p>`,
-      ),
-      { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } },
-    );
   } catch (err: any) {
     const message =
       err?.name === "TokenExpiredError"
