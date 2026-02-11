@@ -48,6 +48,7 @@ export default function AdminDashboard() {
   const [isAddingEvent, setIsAddingEvent] = useState(false);
   const [showAllMembers, setShowAllMembers] = useState(false);
   const [showAllEvents, setShowAllEvents] = useState(false);
+  const [memberSearch, setMemberSearch] = useState("");
   const [projects, setProjects] = useState<any[]>([]);
   const [isAddingProject, setIsAddingProject] = useState(false);
   const [pendingBlogs, setPendingBlogs] = useState<any[]>([]);
@@ -237,18 +238,24 @@ export default function AdminDashboard() {
     if (ctDiff !== 0) return ctDiff;
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
+  const normalizedSearch = memberSearch.trim().toLowerCase();
+  const filteredMembers = sortedMembers.filter((m) => {
+    if (showMembersOnly && m.role !== "member") return false;
+    if (!normalizedSearch) return true;
+    return m.name.toLowerCase().includes(normalizedSearch);
+  });
   const displayMembers = showAllMembers
-    ? sortedMembers
-    : sortedMembers.slice(0, 2);
+    ? filteredMembers
+    : filteredMembers.slice(0, 2);
   const displayEvents = showAllEvents ? sortedEvents : sortedEvents.slice(0, 2);
 
   return (
     <>
       <Navigation />
       <main className="min-h-screen mt-15 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {/* Header */}
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
             <div>
               <h1 className="text-4xl font-bold gradient-text">
                 Admin Dashboard
@@ -263,11 +270,11 @@ export default function AdminDashboard() {
             </MagicButton>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
             {/* Left Column: Make whole stack sticky to avoid overlaps */}
             <div className="lg:col-span-1">
-              <div className="sticky top-24 space-y-6">
-                <div className="card-glow p-6">
+              <div className="lg:sticky lg:top-24 space-y-5 sm:space-y-6">
+                <div className="card-glow p-5 sm:p-6">
                   <h2 className="text-xl font-bold mb-6">
                     {editingMember
                       ? "Edit Member"
@@ -298,7 +305,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Events Form Section */}
-                <div className="card-glow p-6">
+                <div className="card-glow p-5 sm:p-6">
                   <h2 className="text-xl font-bold mb-6">
                     {editingEvent
                       ? "Edit Event"
@@ -329,7 +336,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Projects Form Section */}
-                <div className="card-glow p-6">
+                <div className="card-glow p-5 sm:p-6">
                   <h2 className="text-xl font-bold mb-6">
                     {isAddingProject ? "Add New Project" : "Add Project"}
                   </h2>
@@ -355,10 +362,10 @@ export default function AdminDashboard() {
             {/* Members List */}
             <div className="lg:col-span-2">
               {/* Toggle placed directly above the list */}
-              <div className="flex items-center gap-4 mb-4">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 mb-4">
                 <button
                   onClick={() => setShowMembersOnly((prev) => !prev)}
-                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-card border border-border hover:bg-card/80 transition-all"
+                  className="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg bg-card border border-border hover:bg-card/80 transition-all w-full sm:w-auto"
                 >
                   <Users size={20} />
                   {showMembersOnly ? "Show All" : "See All Members"}
@@ -368,8 +375,17 @@ export default function AdminDashboard() {
                     Showing only role = member
                   </span>
                 )}
+                <div className="w-full sm:flex-1 sm:min-w-[240px]">
+                  <input
+                    type="search"
+                    value={memberSearch}
+                    onChange={(e) => setMemberSearch(e.target.value)}
+                    placeholder="Search members by name"
+                    className="w-full px-3 py-2 rounded-lg bg-card border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/60"
+                  />
+                </div>
               </div>
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between gap-3 mb-4">
                 <h2 className="text-xl font-bold flex items-center gap-2">
                   <Users size={20} /> Members
                 </h2>
@@ -382,55 +398,61 @@ export default function AdminDashboard() {
                   </button>
                 </div>
               </div>
-              <div className="space-y-4 overflow-y-scroll max-h-108 md:max-h-128 custom-scrollbar">
-                {displayMembers.map((member) => (
-                  <div key={member.id} className="card-glow p-6 flex gap-4">
-                    <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
-                      <img
-                        src={member.image || "/placeholder.svg?key=default"}
-                        alt={member.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-lg">{member.name}</h3>
-                      <p className="text-sm text-foreground/60">
-                        {member.isOverallCoordinator
-                          ? "👑 Overall Coordinator"
-                          : member.isFacultyCoordinator
-                            ? "🎓 Faculty Coordinator"
-                            : member.role === "coordinator"
-                              ? "🎖️ Coordinator"
-                              : "👤 Member"}
-                        {member.wing ? ` • ${member.wing}` : ""}
-                      </p>
-                      <p className="text-sm text-foreground/70 mt-1">
-                        {member.bio}
-                      </p>
-                    </div>
-                    <div className="flex gap-2 shrink-0">
-                      <button
-                        onClick={() => {
-                          setEditingMember(member);
-                          scrollTo(0, 100);
-                        }}
-                        className="p-2 rounded-lg hover:bg-card transition-all text-primary"
-                      >
-                        <Edit2 size={20} />
-                      </button>
-                      <button
-                        onClick={() => deleteMember(member.id)}
-                        className="p-2 rounded-lg hover:bg-card transition-all text-red-500"
-                      >
-                        <Trash2 size={20} />
-                      </button>
-                    </div>
+              <div className="space-y-4 overflow-y-auto max-h-[60vh] sm:max-h-108 md:max-h-128 custom-scrollbar pr-1">
+                {displayMembers.length === 0 ? (
+                  <div className="text-sm text-foreground/60">
+                    No members match your search.
                   </div>
-                ))}
+                ) : (
+                  displayMembers.map((member) => (
+                    <div key={member.id} className="card-glow p-4 sm:p-5 flex gap-3 sm:gap-4">
+                      <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg overflow-hidden shrink-0">
+                        <img
+                          src={member.image || "/placeholder.svg?key=default"}
+                          alt={member.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-lg">{member.name}</h3>
+                        <p className="text-sm text-foreground/60">
+                          {member.isOverallCoordinator
+                            ? "👑 Overall Coordinator"
+                            : member.isFacultyCoordinator
+                              ? "🎓 Faculty Coordinator"
+                              : member.role === "coordinator"
+                                ? "🎖️ Coordinator"
+                                : "👤 Member"}
+                          {member.wing ? ` • ${member.wing}` : ""}
+                        </p>
+                        <p className="text-sm text-foreground/70 mt-1">
+                          {member.bio}
+                        </p>
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        <button
+                          onClick={() => {
+                            setEditingMember(member);
+                            scrollTo(0, 100);
+                          }}
+                          className="p-2 rounded-lg hover:bg-card transition-all text-primary"
+                        >
+                          <Edit2 size={20} />
+                        </button>
+                        <button
+                          onClick={() => deleteMember(member.id)}
+                          className="p-2 rounded-lg hover:bg-card transition-all text-red-500"
+                        >
+                          <Trash2 size={20} />
+                        </button>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
               {/* Events Management */}
-              <div className="mt-12">
-                <div className="flex items-center justify-between mb-4">
+              <div className="mt-10 sm:mt-12">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                   <h2 className="text-xl font-bold flex items-center gap-2">
                     <Calendar size={18} /> Events
                   </h2>
@@ -453,9 +475,9 @@ export default function AdminDashboard() {
                   {displayEvents.map((e) => (
                     <div
                       key={e.id}
-                      className="card-glow p-4 flex items-center gap-4"
+                      className="card-glow p-4 flex items-center gap-3 sm:gap-4"
                     >
-                      <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-card border border-border">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg overflow-hidden shrink-0 bg-card border border-border">
                         <img
                           src={e.image || "/placeholder.svg?key=event"}
                           alt={e.title}
@@ -571,8 +593,8 @@ export default function AdminDashboard() {
               </div>
 
               {/* Projects Management */}
-              <div className="mt-12">
-                <div className="flex items-center justify-between mb-4">
+              <div className="mt-10 sm:mt-12">
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                   <h2 className="text-xl font-bold flex items-center gap-2">
                     <BookOpen size={18} /> Projects
                   </h2>
@@ -582,9 +604,9 @@ export default function AdminDashboard() {
                   {projects.map((p) => (
                     <div
                       key={p.id}
-                      className="card-glow p-4 flex items-center gap-4"
+                      className="card-glow p-4 flex items-center gap-3 sm:gap-4"
                     >
-                      <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-card border border-border">
+                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg overflow-hidden shrink-0 bg-card border border-border">
                         <img
                           src={p.image || "/gravity-logo.png"}
                           alt={p.title}
@@ -624,7 +646,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Blogs Management */}
-              <div className="mt-12">
+              <div className="mt-10 sm:mt-12">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-xl font-bold flex items-center gap-2">
                     <BookOpen size={18} /> Blogs (Pending)

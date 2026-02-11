@@ -46,10 +46,10 @@ function MembersContent() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           {/* Header */}
           <div className="text-center mb-16 slide-in-up">
-            <h1 className="text-5xl md:text-6xl font-bold gradient-text mb-4">
+            <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
               {heading}
             </h1>
-            <p className="text-xl text-foreground/70">{subheading}</p>
+            <p className="text-md md:text-xl text-foreground/70">{subheading}</p>
           </div>
 
           {/* Coordinators Section */}
