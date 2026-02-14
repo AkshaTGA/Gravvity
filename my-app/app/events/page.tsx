@@ -305,82 +305,132 @@ export default function EventsPage() {
           )}
 
           {/* Call to Action */}
-          <div className="mt-8 sm:mt-12 md:mt-16 card-glow p-5 sm:p-6 md:p-8 text-center slide-in-up">
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
-              Stay Updated
-            </h2>
-            <p className="text-sm sm:text-base text-foreground/70 mb-4 sm:mb-6 px-4">
-              Subscribe to get notifications about upcoming events
-            </p>
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 max-w-md mx-auto px-4">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full sm:flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg bg-card border border-border text-sm sm:text-base text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-              />
-              <MagicButton
-                onClick={async () => {
-                  const valid =
-                    /^(?:[a-zA-Z0-9_.'+\-]+)@(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$/.test(
-                      email,
-                    );
-                  const email_validation_APIKEY =
-                    process.env.NEXT_PUBLIC_EMAIL_VALIDATION_API_KEY||"75bc0b34614f4204960b0b3e6097c81b";
-                  if (!valid) {
-                    setSubStatus("error");
-                    setSubMessage("Enter a valid email");
-                    return;
-                  }
-                  try {
-                    setSubStatus("loading");
-                    const check = await fetch(
-                      `https://emailreputation.abstractapi.com/v1?api_key=${email_validation_APIKEY}&&email=${email}`,
-                    );
-                    const d = await check.json();
-                    console.log(d.email_deliverability.status);
-                    if (d.email_deliverability.status == "undeliverable") {
-                      setSubStatus("error");
-                      setSubMessage("The Email you provided was undeliverable");
-                      return;
-                    }
+          <div className="mt-8 sm:mt-12 md:mt-16 card-glow overflow-hidden slide-in-up max-w-4xl mx-auto">
+            <div className="flex flex-col md:flex-row">
+              {/* Left Content — ~70% */}
+              <div className="md:w-[70%] w-full p-5 sm:p-6 md:p-8 flex flex-col items-center justify-center text-center">
+                <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
+                  Stay Updated
+                </h2>
+                <p className="text-sm sm:text-base text-foreground/70 mb-4 sm:mb-6 max-w-md">
+                  Subscribe to get notifications about upcoming events
+                </p>
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full max-w-md">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full sm:flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg bg-card border border-border text-sm sm:text-base text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                  />
+                  <MagicButton
+                    onClick={async () => {
+                      const valid =
+                        /^(?:[a-zA-Z0-9_.'+\-]+)@(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,}$/.test(
+                          email,
+                        );
+                      const email_validation_APIKEY =
+                        process.env.NEXT_PUBLIC_EMAIL_VALIDATION_API_KEY||"75bc0b34614f4204960b0b3e6097c81b";
+                      if (!valid) {
+                        setSubStatus("error");
+                        setSubMessage("Enter a valid email");
+                        return;
+                      }
+                      try {
+                        setSubStatus("loading");
+                        const check = await fetch(
+                          `https://emailreputation.abstractapi.com/v1?api_key=${email_validation_APIKEY}&&email=${email}`,
+                        );
+                        const d = await check.json();
+                        console.log(d.email_deliverability.status);
+                        if (d.email_deliverability.status == "undeliverable") {
+                          setSubStatus("error");
+                          setSubMessage("The Email you provided was undeliverable");
+                          return;
+                        }
 
-                    const res = await fetch("/api/subscribe", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ email }),
-                    });
-                    const data = await res.json();
-                    if (res.ok && data.ok) {
-                      setSubStatus("ok");
-                      setSubMessage("You're subscribed!");
-                      setEmail("");
-                    } else {
-                      setSubStatus("error");
-                      setSubMessage(data?.error || "Something went wrong");
-                    }
-                  } catch (e) {
-                    setSubStatus("error");
-                    setSubMessage("Network error");
-                  }
-                }}
-                disabled={subStatus === "loading"}
-                heightClass="h-10"
-                className="w-5/6 sm:w-auto self-center"
-              >
-                {subStatus === "loading" ? "Subscribing…" : "Subscribe"}
-              </MagicButton>
+                        const res = await fetch("/api/subscribe", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ email }),
+                        });
+                        const data = await res.json();
+                        if (res.ok && data.ok) {
+                          setSubStatus("ok");
+                          setSubMessage("You're subscribed!");
+                          setEmail("");
+                        } else {
+                          setSubStatus("error");
+                          setSubMessage(data?.error || "Something went wrong");
+                        }
+                      } catch (e) {
+                        setSubStatus("error");
+                        setSubMessage("Network error");
+                      }
+                    }}
+                    disabled={subStatus === "loading"}
+                    heightClass="h-10"
+                    className="w-5/6 sm:w-auto self-center"
+                  >
+                    {subStatus === "loading" ? "Subscribing…" : "Subscribe"}
+                  </MagicButton>
+                </div>
+                {subStatus !== "idle" && (
+                  <p
+                    className={`mt-3 text-sm ${
+                      subStatus === "ok" ? "text-green-400" : "text-red-400"
+                    }`}
+                  >
+                    {subMessage}
+                  </p>
+                )}
+              </div>
+
+              {/* Right Visual — ~30% */}
+              <div className="md:w-[30%] w-full relative flex items-center justify-center p-6 overflow-hidden">
+                {/* Notification bell with radiating pulses */}
+                <div className="relative z-10">
+                  <svg
+                    width="140"
+                    height="140"
+                    viewBox="0 0 140 140"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {/* Radiating pulse waves from bell */}
+                    <circle cx="70" cy="65" r="68" stroke="rgba(167,139,250,0.5)" strokeWidth="2" fill="none">
+                      <animate attributeName="r" values="35;85;35" dur="3s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.7;0;0.7" dur="3s" repeatCount="indefinite" />
+                    </circle>
+                    <circle cx="70" cy="65" r="48" stroke="rgba(138,232,255,0.6)" strokeWidth="1.5" fill="none">
+                      <animate attributeName="r" values="25;60;25" dur="3s" repeatCount="indefinite" begin="1.5s" />
+                      <animate attributeName="opacity" values="0.8;0;0.8" dur="3s" repeatCount="indefinite" begin="1.5s" />
+                    </circle>
+
+                    {/* Soft glow behind bell */}
+                    <circle cx="70" cy="65" r="28" fill="rgba(167,139,250,0.12)" />
+
+                    {/* Bell icon */}
+                    <g transform="translate(70, 65)">
+                      {/* Bell body */}
+                      <path
+                        d="M0 -20 C-11 -20 -16 -10 -16 0 L-16 7 L-20 13 L20 13 L16 7 L16 0 C16 -10 11 -20 0 -20Z"
+                        fill="rgba(167,139,250,0.2)"
+                        stroke="rgba(167,139,250,0.7)"
+                        strokeWidth="1.8"
+                      />
+                      {/* Bell handle/top */}
+                      <ellipse cx="0" cy="-22" rx="4" ry="3" fill="none" stroke="rgba(167,139,250,0.65)" strokeWidth="1.8" />
+                      {/* Bell clapper */}
+                      <ellipse cx="0" cy="16" rx="5" ry="3" fill="rgba(167,139,250,0.5)" stroke="rgba(167,139,250,0.4)" strokeWidth="0.8" />
+                    </g>
+
+                    {/* Subtle inner glow ring */}
+                    <circle cx="70" cy="65" r="32" stroke="rgba(138,232,255,0.2)" strokeWidth="0.8" fill="none" />
+                  </svg>
+                </div>
+              </div>
             </div>
-            {subStatus !== "idle" && (
-              <p
-                className={`mt-3 text-sm ${
-                  subStatus === "ok" ? "text-green-400" : "text-red-400"
-                }`}
-              >
-                {subMessage}
-              </p>
-            )}
           </div>
         </div>
       </main>

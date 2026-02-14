@@ -150,6 +150,19 @@ export function Footer() {
                 <Mail size={20} />
               </a>
             </div>
+
+            <div className="mt-6 border border-foreground/15 rounded-md px-3 py-2.5 max-w-[160px] mx-auto md:mx-0">
+              <p className="text-[11px] text-foreground/60 mb-1.5 tracking-wide uppercase text-center">
+               
+              </p>
+              <div className="flex flex-col gap-0.5 text-xs text-foreground/60 pl-3">
+                <span className="text-[11px] text-foreground/60 mb-1.5 tracking-wide uppercase "> Built by</span>
+                <span>Akshat Parmar</span>
+                <span>Raghav Vohra</span>
+                <span>Kunal Khandelwal</span>
+                <span>Himanshu Grewal</span>
+              </div>
+            </div>
           </div>
         </div>
 

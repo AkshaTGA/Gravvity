@@ -3,9 +3,44 @@
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import MagicButton from "@/components/magic-button";
-import { Divide } from "lucide-react";
+import { useState, useRef } from "react";
 
 export default function AboutPage() {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    setMousePos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    });
+  };
+
+  // Generate network nodes
+  const nodes = [
+    { x: 10, y: 15 }, { x: 30, y: 8 }, { x: 50, y: 20 }, { x: 70, y: 12 }, { x: 90, y: 18 },
+    { x: 15, y: 35 }, { x: 40, y: 40 }, { x: 65, y: 32 }, { x: 85, y: 38 },
+    { x: 8, y: 55 }, { x: 25, y: 60 }, { x: 55, y: 52 }, { x: 75, y: 58 }, { x: 92, y: 50 },
+    { x: 20, y: 78 }, { x: 45, y: 72 }, { x: 60, y: 82 }, { x: 80, y: 75 }, { x: 95, y: 85 },
+    { x: 12, y: 92 }, { x: 35, y: 88 }, { x: 68, y: 95 }, { x: 88, y: 90 },
+  ];
+
+  // Generate connections between nearby nodes
+  const connections: { from: number; to: number }[] = [];
+  nodes.forEach((node, i) => {
+    nodes.forEach((other, j) => {
+      if (i < j) {
+        const dist = Math.sqrt(Math.pow(node.x - other.x, 2) + Math.pow(node.y - other.y, 2));
+        if (dist < 30) {
+          connections.push({ from: i, to: j });
+        }
+      }
+    });
+  });
+
   return (
     <>
       <Navigation />
@@ -21,38 +56,167 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* Mission Section */}
-          <div className="grid md:grid-cols-2 gap-12 mb-16">
-            <div className="card-glow p-8 slide-in-up">
-              <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
-              <p className="text-foreground/70 leading-relaxed mb-4">
-                Gravity is a technical society dedicated to fostering
-                innovation, collaboration, and excellence in technology. We
-                bring together passionate individuals across seven distinct
-                domains to create, learn, and grow together.
-              </p>
-              <p className="text-foreground/70 leading-relaxed">
-                Whether you're into competitive programming, web development,
-                design, open-source, AI, blockchain, or the metaverse, Gravity
-                provides the platform and community to achieve your goals.
-              </p>
-            </div>
-
-            <div
-              className="card-glow p-8 slide-in-up"
-              style={{ animationDelay: "0.1s" }}
+          {/* Mission & Vision Section */}
+          <div className="mb-16">
+            <div 
+              ref={cardRef}
+              className="card-glow p-8 md:p-10 slide-in-up relative overflow-hidden"
+              onMouseMove={handleMouseMove}
+              onMouseEnter={() => setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
             >
-              <h2 className="text-3xl font-bold mb-4">Our Vision</h2>
-              <p className="text-foreground/70 leading-relaxed mb-4">
-                To create a vibrant ecosystem of tech enthusiasts who push the
-                boundaries of innovation and collaborate to solve real-world
-                problems.
-              </p>
-              <p className="text-foreground/70 leading-relaxed">
-                We believe in the power of community, continuous learning, and
-                practical application of knowledge. Together, we're shaping the
-                future of technology.
-              </p>
+              {/* Interactive Network Pattern Background */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                {/* Base gradient ambient */}
+                <div 
+                  className="absolute -top-[20%] -right-[20%] w-[70%] h-[70%] rounded-full opacity-40"
+                  style={{
+                    background: 'radial-gradient(ellipse at center, rgba(139,92,246,0.2) 0%, rgba(124,58,237,0.08) 40%, transparent 70%)',
+                  }}
+                />
+                <div 
+                  className="absolute -bottom-[15%] -left-[15%] w-[60%] h-[60%] rounded-full opacity-35"
+                  style={{
+                    background: 'radial-gradient(ellipse at center, rgba(167,139,250,0.18) 0%, rgba(139,92,246,0.06) 45%, transparent 70%)',
+                  }}
+                />
+                
+                {/* Network Pattern SVG */}
+                <svg 
+                  className="absolute inset-0 w-full h-full"
+                  style={{ opacity: isHovering ? 1 : 0.4, transition: 'opacity 0.5s ease' }}
+                >
+                  <defs>
+                    {/* Radial gradient that follows cursor */}
+                    <radialGradient id="cursorGlow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stopColor="rgba(167,139,250,0.6)" />
+                      <stop offset="50%" stopColor="rgba(139,92,246,0.2)" />
+                      <stop offset="100%" stopColor="transparent" />
+                    </radialGradient>
+                  </defs>
+                  
+                  {/* Connection lines */}
+                  {connections.map((conn, idx) => {
+                    const from = nodes[conn.from];
+                    const to = nodes[conn.to];
+                    const midX = (from.x + to.x) / 2;
+                    const midY = (from.y + to.y) / 2;
+                    
+                    // Calculate distance from cursor to line midpoint
+                    const cardWidth = cardRef.current?.offsetWidth || 400;
+                    const cardHeight = cardRef.current?.offsetHeight || 300;
+                    const lineMidPx = { x: (midX / 100) * cardWidth, y: (midY / 100) * cardHeight };
+                    const distToCursor = Math.sqrt(
+                      Math.pow(mousePos.x - lineMidPx.x, 2) + Math.pow(mousePos.y - lineMidPx.y, 2)
+                    );
+                    const maxDist = 120;
+                    const intensity = isHovering ? Math.max(0, 1 - distToCursor / maxDist) : 0;
+                    
+                    return (
+                      <line
+                        key={`line-${idx}`}
+                        x1={`${from.x}%`}
+                        y1={`${from.y}%`}
+                        x2={`${to.x}%`}
+                        y2={`${to.y}%`}
+                        stroke={`rgba(167,139,250,${0.06 + intensity * 0.38})`}
+                        strokeWidth={0.6 + intensity * 1.2}
+                        style={{ transition: 'stroke 0.15s ease, stroke-width 0.15s ease' }}
+                      />
+                    );
+                  })}
+                  
+                  {/* Network nodes */}
+                  {nodes.map((node, idx) => {
+                    const cardWidth = cardRef.current?.offsetWidth || 400;
+                    const cardHeight = cardRef.current?.offsetHeight || 300;
+                    const nodePx = { x: (node.x / 100) * cardWidth, y: (node.y / 100) * cardHeight };
+                    const distToCursor = Math.sqrt(
+                      Math.pow(mousePos.x - nodePx.x, 2) + Math.pow(mousePos.y - nodePx.y, 2)
+                    );
+                    const maxDist = 100;
+                    const intensity = isHovering ? Math.max(0, 1 - distToCursor / maxDist) : 0;
+                    
+                    return (
+                      <g key={`node-${idx}`}>
+                        {/* Glow effect */}
+                        {intensity > 0.1 && (
+                          <circle
+                            cx={`${node.x}%`}
+                            cy={`${node.y}%`}
+                            r={5 + intensity * 10}
+                            fill={`rgba(167,139,250,${intensity * 0.22})`}
+                            style={{ transition: 'all 0.2s ease' }}
+                          />
+                        )}
+                        {/* Node dot */}
+                        <circle
+                          cx={`${node.x}%`}
+                          cy={`${node.y}%`}
+                          r={1.2 + intensity * 1.8}
+                          fill={`rgba(196,181,253,${0.22 + intensity * 0.7})`}
+                          style={{ transition: 'all 0.15s ease' }}
+                        />
+                      </g>
+                    );
+                  })}
+                </svg>
+                
+                {/* Cursor spotlight gradient */}
+                {isHovering && (
+                  <div
+                    className="absolute w-48 h-48 rounded-full pointer-events-none transition-opacity duration-300"
+                    style={{
+                      left: mousePos.x - 96,
+                      top: mousePos.y - 96,
+                      background: 'radial-gradient(circle at center, rgba(139,92,246,0.08) 0%, rgba(167,139,250,0.04) 40%, transparent 70%)',
+                      opacity: 0.8,
+                    }}
+                  />
+                )}
+                
+                {/* Subtle edge vignette */}
+                <div 
+                  className="absolute inset-0"
+                  style={{
+                    background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.1) 100%)',
+                  }}
+                />
+              </div>
+              
+              {/* Content Grid */}
+              <div className="relative z-10 grid md:grid-cols-2 gap-8 md:gap-12">
+                {/* Mission */}
+                <div>
+                  <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
+                  <p className="text-foreground/70 leading-relaxed mb-4">
+                    Gravity is a technical society dedicated to fostering
+                    innovation, collaboration, and excellence in technology. We
+                    bring together passionate individuals across seven distinct
+                    domains to create, learn, and grow together.
+                  </p>
+                  <p className="text-foreground/70 leading-relaxed">
+                    Whether you're into competitive programming, web development,
+                    design, open-source, AI, blockchain, or the metaverse, Gravity
+                    provides the platform and community to achieve your goals.
+                  </p>
+                </div>
+                
+                {/* Vision */}
+                <div>
+                  <h2 className="text-3xl font-bold mb-4">Our Vision</h2>
+                  <p className="text-foreground/70 leading-relaxed mb-4">
+                    To create a vibrant ecosystem of tech enthusiasts who push the
+                    boundaries of innovation and collaborate to solve real-world
+                    problems.
+                  </p>
+                  <p className="text-foreground/70 leading-relaxed">
+                    We believe in the power of community, continuous learning, and
+                    practical application of knowledge. Together, we're shaping the
+                    future of technology.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -174,17 +338,144 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* History */}
-          <div className="card-glow p-8 text-center slide-in-up">
-            <h2 className="text-3xl font-bold mb-4">Join Our Community</h2>
-            <p className="text-foreground/70 mb-6 max-w-2xl mx-auto">
-              Whether you're a beginner just starting your tech journey or an
-              experienced developer, Gravity welcomes you. Join us in building
-              an amazing tech community!
-            </p>
-            <MagicButton heightClass="h-11" href="/contact">
-              Get Started Today
-            </MagicButton>
+          {/* Join Our Community */}
+          <div className="card-glow overflow-hidden slide-in-up">
+            <div className="flex flex-col md:flex-row">
+              {/* Left Visual — ~30% */}
+              <div className="md:w-[30%] w-full relative flex items-center justify-center p-8 md:p-6 overflow-hidden min-h-[220px]">
+                {/* Central graphic — email with circular orbital rings */}
+                <div className="relative z-10">
+                  <svg
+                    width="160"
+                    height="160"
+                    viewBox="0 0 160 160"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {/* Outer ring — slow rotation */}
+                    <circle
+                      cx="80"
+                      cy="80"
+                      r="70"
+                      stroke="rgba(167,139,250,0.4)"
+                      strokeWidth="1.5"
+                      fill="none"
+                      strokeDasharray="12 8 4 8"
+                    >
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 80 80"
+                        to="360 80 80"
+                        dur="25s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+
+                    {/* Middle ring — opposite direction */}
+                    <circle
+                      cx="80"
+                      cy="80"
+                      r="54"
+                      stroke="rgba(138,232,255,0.45)"
+                      strokeWidth="1.2"
+                      fill="none"
+                      strokeDasharray="6 10"
+                    >
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="360 80 80"
+                        to="0 80 80"
+                        dur="18s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+
+                    {/* Inner ring */}
+                    <circle
+                      cx="80"
+                      cy="80"
+                      r="42"
+                      stroke="rgba(167,139,250,0.35)"
+                      strokeWidth="1"
+                      fill="none"
+                    >
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 80 80"
+                        to="360 80 80"
+                        dur="30s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+
+                    {/* Soft glow behind email */}
+                    <circle cx="80" cy="80" r="30" fill="rgba(167,139,250,0.08)" />
+
+                    {/* Email icon container */}
+                    <rect
+                      x="58"
+                      y="66"
+                      width="44"
+                      height="30"
+                      rx="4"
+                      fill="rgba(167,139,250,0.15)"
+                      stroke="rgba(167,139,250,0.5)"
+                      strokeWidth="1.5"
+                    />
+
+                    {/* Envelope flap */}
+                    <path
+                      d="M58 70 L80 86 L102 70"
+                      fill="none"
+                      stroke="rgba(167,139,250,0.6)"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+
+                    {/* Small accent on outer ring */}
+                    <circle cx="80" cy="10" r="3" fill="rgba(167,139,250,0.6)">
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 80 80"
+                        to="360 80 80"
+                        dur="25s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+
+                    {/* Accent on middle ring */}
+                    <circle cx="80" cy="26" r="2.5" fill="rgba(138,232,255,0.5)">
+                      <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="360 80 80"
+                        to="0 80 80"
+                        dur="18s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                  </svg>
+                </div>
+              </div>
+
+              {/* Right Content — ~70% */}
+              <div className="md:w-[70%] w-full p-8 flex flex-col items-center md:items-start justify-center text-center md:text-left">
+                <h2 className="text-3xl font-bold mb-4">Join Our Community</h2>
+                <p className="text-foreground/70 mb-6 max-w-2xl">
+                  Whether you're a beginner just starting your tech journey or
+                  an experienced developer, Gravity welcomes you. Join us in
+                  building an amazing tech community!
+                </p>
+                <MagicButton heightClass="h-11" href="/contact">
+                  Get Started Today
+                </MagicButton>
+              </div>
+            </div>
           </div>
         </div>
       </main>
