@@ -21,11 +21,29 @@ export default function AboutPage() {
 
   // Generate network nodes
   const nodes = [
-    { x: 10, y: 15 }, { x: 30, y: 8 }, { x: 50, y: 20 }, { x: 70, y: 12 }, { x: 90, y: 18 },
-    { x: 15, y: 35 }, { x: 40, y: 40 }, { x: 65, y: 32 }, { x: 85, y: 38 },
-    { x: 8, y: 55 }, { x: 25, y: 60 }, { x: 55, y: 52 }, { x: 75, y: 58 }, { x: 92, y: 50 },
-    { x: 20, y: 78 }, { x: 45, y: 72 }, { x: 60, y: 82 }, { x: 80, y: 75 }, { x: 95, y: 85 },
-    { x: 12, y: 92 }, { x: 35, y: 88 }, { x: 68, y: 95 }, { x: 88, y: 90 },
+    { x: 10, y: 15 },
+    { x: 30, y: 8 },
+    { x: 50, y: 20 },
+    { x: 70, y: 12 },
+    { x: 90, y: 18 },
+    { x: 15, y: 35 },
+    { x: 40, y: 40 },
+    { x: 65, y: 32 },
+    { x: 85, y: 38 },
+    { x: 8, y: 55 },
+    { x: 25, y: 60 },
+    { x: 55, y: 52 },
+    { x: 75, y: 58 },
+    { x: 92, y: 50 },
+    { x: 20, y: 78 },
+    { x: 45, y: 72 },
+    { x: 60, y: 82 },
+    { x: 80, y: 75 },
+    { x: 95, y: 85 },
+    { x: 12, y: 92 },
+    { x: 35, y: 88 },
+    { x: 68, y: 95 },
+    { x: 88, y: 90 },
   ];
 
   // Generate connections between nearby nodes
@@ -33,7 +51,9 @@ export default function AboutPage() {
   nodes.forEach((node, i) => {
     nodes.forEach((other, j) => {
       if (i < j) {
-        const dist = Math.sqrt(Math.pow(node.x - other.x, 2) + Math.pow(node.y - other.y, 2));
+        const dist = Math.sqrt(
+          Math.pow(node.x - other.x, 2) + Math.pow(node.y - other.y, 2),
+        );
         if (dist < 30) {
           connections.push({ from: i, to: j });
         }
@@ -58,7 +78,7 @@ export default function AboutPage() {
 
           {/* Mission & Vision Section */}
           <div className="mb-16">
-            <div 
+            <div
               ref={cardRef}
               className="card-glow p-8 md:p-10 slide-in-up relative overflow-hidden"
               onMouseMove={handleMouseMove}
@@ -68,23 +88,28 @@ export default function AboutPage() {
               {/* Interactive Network Pattern Background */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 {/* Base gradient ambient */}
-                <div 
+                <div
                   className="absolute -top-[20%] -right-[20%] w-[70%] h-[70%] rounded-full opacity-40"
                   style={{
-                    background: 'radial-gradient(ellipse at center, rgba(139,92,246,0.2) 0%, rgba(124,58,237,0.08) 40%, transparent 70%)',
+                    background:
+                      "radial-gradient(ellipse at center, rgba(139,92,246,0.2) 0%, rgba(124,58,237,0.08) 40%, transparent 70%)",
                   }}
                 />
-                <div 
+                <div
                   className="absolute -bottom-[15%] -left-[15%] w-[60%] h-[60%] rounded-full opacity-35"
                   style={{
-                    background: 'radial-gradient(ellipse at center, rgba(167,139,250,0.18) 0%, rgba(139,92,246,0.06) 45%, transparent 70%)',
+                    background:
+                      "radial-gradient(ellipse at center, rgba(167,139,250,0.18) 0%, rgba(139,92,246,0.06) 45%, transparent 70%)",
                   }}
                 />
-                
+
                 {/* Network Pattern SVG */}
-                <svg 
+                <svg
                   className="absolute inset-0 w-full h-full"
-                  style={{ opacity: isHovering ? 1 : 0.4, transition: 'opacity 0.5s ease' }}
+                  style={{
+                    opacity: isHovering ? 1 : 0.4,
+                    transition: "opacity 0.5s ease",
+                  }}
                 >
                   <defs>
                     {/* Radial gradient that follows cursor */}
@@ -94,24 +119,30 @@ export default function AboutPage() {
                       <stop offset="100%" stopColor="transparent" />
                     </radialGradient>
                   </defs>
-                  
+
                   {/* Connection lines */}
                   {connections.map((conn, idx) => {
                     const from = nodes[conn.from];
                     const to = nodes[conn.to];
                     const midX = (from.x + to.x) / 2;
                     const midY = (from.y + to.y) / 2;
-                    
+
                     // Calculate distance from cursor to line midpoint
                     const cardWidth = cardRef.current?.offsetWidth || 400;
                     const cardHeight = cardRef.current?.offsetHeight || 300;
-                    const lineMidPx = { x: (midX / 100) * cardWidth, y: (midY / 100) * cardHeight };
+                    const lineMidPx = {
+                      x: (midX / 100) * cardWidth,
+                      y: (midY / 100) * cardHeight,
+                    };
                     const distToCursor = Math.sqrt(
-                      Math.pow(mousePos.x - lineMidPx.x, 2) + Math.pow(mousePos.y - lineMidPx.y, 2)
+                      Math.pow(mousePos.x - lineMidPx.x, 2) +
+                        Math.pow(mousePos.y - lineMidPx.y, 2),
                     );
                     const maxDist = 120;
-                    const intensity = isHovering ? Math.max(0, 1 - distToCursor / maxDist) : 0;
-                    
+                    const intensity = isHovering
+                      ? Math.max(0, 1 - distToCursor / maxDist)
+                      : 0;
+
                     return (
                       <line
                         key={`line-${idx}`}
@@ -121,22 +152,31 @@ export default function AboutPage() {
                         y2={`${to.y}%`}
                         stroke={`rgba(167,139,250,${0.06 + intensity * 0.38})`}
                         strokeWidth={0.6 + intensity * 1.2}
-                        style={{ transition: 'stroke 0.15s ease, stroke-width 0.15s ease' }}
+                        style={{
+                          transition:
+                            "stroke 0.15s ease, stroke-width 0.15s ease",
+                        }}
                       />
                     );
                   })}
-                  
+
                   {/* Network nodes */}
                   {nodes.map((node, idx) => {
                     const cardWidth = cardRef.current?.offsetWidth || 400;
                     const cardHeight = cardRef.current?.offsetHeight || 300;
-                    const nodePx = { x: (node.x / 100) * cardWidth, y: (node.y / 100) * cardHeight };
+                    const nodePx = {
+                      x: (node.x / 100) * cardWidth,
+                      y: (node.y / 100) * cardHeight,
+                    };
                     const distToCursor = Math.sqrt(
-                      Math.pow(mousePos.x - nodePx.x, 2) + Math.pow(mousePos.y - nodePx.y, 2)
+                      Math.pow(mousePos.x - nodePx.x, 2) +
+                        Math.pow(mousePos.y - nodePx.y, 2),
                     );
                     const maxDist = 100;
-                    const intensity = isHovering ? Math.max(0, 1 - distToCursor / maxDist) : 0;
-                    
+                    const intensity = isHovering
+                      ? Math.max(0, 1 - distToCursor / maxDist)
+                      : 0;
+
                     return (
                       <g key={`node-${idx}`}>
                         {/* Glow effect */}
@@ -146,7 +186,7 @@ export default function AboutPage() {
                             cy={`${node.y}%`}
                             r={5 + intensity * 10}
                             fill={`rgba(167,139,250,${intensity * 0.22})`}
-                            style={{ transition: 'all 0.2s ease' }}
+                            style={{ transition: "all 0.2s ease" }}
                           />
                         )}
                         {/* Node dot */}
@@ -155,13 +195,13 @@ export default function AboutPage() {
                           cy={`${node.y}%`}
                           r={1.2 + intensity * 1.8}
                           fill={`rgba(196,181,253,${0.22 + intensity * 0.7})`}
-                          style={{ transition: 'all 0.15s ease' }}
+                          style={{ transition: "all 0.15s ease" }}
                         />
                       </g>
                     );
                   })}
                 </svg>
-                
+
                 {/* Cursor spotlight gradient */}
                 {isHovering && (
                   <div
@@ -169,21 +209,23 @@ export default function AboutPage() {
                     style={{
                       left: mousePos.x - 96,
                       top: mousePos.y - 96,
-                      background: 'radial-gradient(circle at center, rgba(139,92,246,0.08) 0%, rgba(167,139,250,0.04) 40%, transparent 70%)',
+                      background:
+                        "radial-gradient(circle at center, rgba(139,92,246,0.08) 0%, rgba(167,139,250,0.04) 40%, transparent 70%)",
                       opacity: 0.8,
                     }}
                   />
                 )}
-                
+
                 {/* Subtle edge vignette */}
-                <div 
+                <div
                   className="absolute inset-0"
                   style={{
-                    background: 'radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.1) 100%)',
+                    background:
+                      "radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.1) 100%)",
                   }}
                 />
               </div>
-              
+
               {/* Content Grid */}
               <div className="relative z-10 grid md:grid-cols-2 gap-8 md:gap-12">
                 {/* Mission */}
@@ -196,24 +238,25 @@ export default function AboutPage() {
                     domains to create, learn, and grow together.
                   </p>
                   <p className="text-foreground/70 leading-relaxed">
-                    Whether you're into competitive programming, web development,
-                    design, open-source, AI, blockchain, or the metaverse, Gravity
-                    provides the platform and community to achieve your goals.
+                    Whether you're into competitive programming, web
+                    development, design, open-source, AI, blockchain, or the
+                    metaverse, Gravity provides the platform and community to
+                    achieve your goals.
                   </p>
                 </div>
-                
+
                 {/* Vision */}
                 <div>
                   <h2 className="text-3xl font-bold mb-4">Our Vision</h2>
                   <p className="text-foreground/70 leading-relaxed mb-4">
-                    To create a vibrant ecosystem of tech enthusiasts who push the
-                    boundaries of innovation and collaborate to solve real-world
-                    problems.
+                    To create a vibrant ecosystem of tech enthusiasts who push
+                    the boundaries of innovation and collaborate to solve
+                    real-world problems.
                   </p>
                   <p className="text-foreground/70 leading-relaxed">
-                    We believe in the power of community, continuous learning, and
-                    practical application of knowledge. Together, we're shaping the
-                    future of technology.
+                    We believe in the power of community, continuous learning,
+                    and practical application of knowledge. Together, we're
+                    shaping the future of technology.
                   </p>
                 </div>
               </div>
@@ -412,7 +455,12 @@ export default function AboutPage() {
                     </circle>
 
                     {/* Soft glow behind email */}
-                    <circle cx="80" cy="80" r="30" fill="rgba(167,139,250,0.08)" />
+                    <circle
+                      cx="80"
+                      cy="80"
+                      r="30"
+                      fill="rgba(167,139,250,0.08)"
+                    />
 
                     {/* Email icon container */}
                     <rect
@@ -449,7 +497,12 @@ export default function AboutPage() {
                     </circle>
 
                     {/* Accent on middle ring */}
-                    <circle cx="80" cy="26" r="2.5" fill="rgba(138,232,255,0.5)">
+                    <circle
+                      cx="80"
+                      cy="26"
+                      r="2.5"
+                      fill="rgba(138,232,255,0.5)"
+                    >
                       <animateTransform
                         attributeName="transform"
                         type="rotate"

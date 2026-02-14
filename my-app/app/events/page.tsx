@@ -330,7 +330,8 @@ export default function EventsPage() {
                           email,
                         );
                       const email_validation_APIKEY =
-                        process.env.NEXT_PUBLIC_EMAIL_VALIDATION_API_KEY||"75bc0b34614f4204960b0b3e6097c81b";
+                        process.env.NEXT_PUBLIC_EMAIL_VALIDATION_API_KEY ||
+                        "75bc0b34614f4204960b0b3e6097c81b";
                       if (!valid) {
                         setSubStatus("error");
                         setSubMessage("Enter a valid email");
@@ -345,7 +346,9 @@ export default function EventsPage() {
                         console.log(d.email_deliverability.status);
                         if (d.email_deliverability.status == "undeliverable") {
                           setSubStatus("error");
-                          setSubMessage("The Email you provided was undeliverable");
+                          setSubMessage(
+                            "The Email you provided was undeliverable",
+                          );
                           return;
                         }
 
@@ -398,17 +401,58 @@ export default function EventsPage() {
                     xmlns="http://www.w3.org/2000/svg"
                   >
                     {/* Radiating pulse waves from bell */}
-                    <circle cx="70" cy="65" r="68" stroke="rgba(167,139,250,0.5)" strokeWidth="2" fill="none">
-                      <animate attributeName="r" values="35;85;35" dur="3s" repeatCount="indefinite" />
-                      <animate attributeName="opacity" values="0.7;0;0.7" dur="3s" repeatCount="indefinite" />
+                    <circle
+                      cx="70"
+                      cy="65"
+                      r="68"
+                      stroke="rgba(167,139,250,0.5)"
+                      strokeWidth="2"
+                      fill="none"
+                    >
+                      <animate
+                        attributeName="r"
+                        values="35;85;35"
+                        dur="3s"
+                        repeatCount="indefinite"
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0.7;0;0.7"
+                        dur="3s"
+                        repeatCount="indefinite"
+                      />
                     </circle>
-                    <circle cx="70" cy="65" r="48" stroke="rgba(138,232,255,0.6)" strokeWidth="1.5" fill="none">
-                      <animate attributeName="r" values="25;60;25" dur="3s" repeatCount="indefinite" begin="1.5s" />
-                      <animate attributeName="opacity" values="0.8;0;0.8" dur="3s" repeatCount="indefinite" begin="1.5s" />
+                    <circle
+                      cx="70"
+                      cy="65"
+                      r="48"
+                      stroke="rgba(138,232,255,0.6)"
+                      strokeWidth="1.5"
+                      fill="none"
+                    >
+                      <animate
+                        attributeName="r"
+                        values="25;60;25"
+                        dur="3s"
+                        repeatCount="indefinite"
+                        begin="1.5s"
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0.8;0;0.8"
+                        dur="3s"
+                        repeatCount="indefinite"
+                        begin="1.5s"
+                      />
                     </circle>
 
                     {/* Soft glow behind bell */}
-                    <circle cx="70" cy="65" r="28" fill="rgba(167,139,250,0.12)" />
+                    <circle
+                      cx="70"
+                      cy="65"
+                      r="28"
+                      fill="rgba(167,139,250,0.12)"
+                    />
 
                     {/* Bell icon */}
                     <g transform="translate(70, 65)">
@@ -420,13 +464,36 @@ export default function EventsPage() {
                         strokeWidth="1.8"
                       />
                       {/* Bell handle/top */}
-                      <ellipse cx="0" cy="-22" rx="4" ry="3" fill="none" stroke="rgba(167,139,250,0.65)" strokeWidth="1.8" />
+                      <ellipse
+                        cx="0"
+                        cy="-22"
+                        rx="4"
+                        ry="3"
+                        fill="none"
+                        stroke="rgba(167,139,250,0.65)"
+                        strokeWidth="1.8"
+                      />
                       {/* Bell clapper */}
-                      <ellipse cx="0" cy="16" rx="5" ry="3" fill="rgba(167,139,250,0.5)" stroke="rgba(167,139,250,0.4)" strokeWidth="0.8" />
+                      <ellipse
+                        cx="0"
+                        cy="16"
+                        rx="5"
+                        ry="3"
+                        fill="rgba(167,139,250,0.5)"
+                        stroke="rgba(167,139,250,0.4)"
+                        strokeWidth="0.8"
+                      />
                     </g>
 
                     {/* Subtle inner glow ring */}
-                    <circle cx="70" cy="65" r="32" stroke="rgba(138,232,255,0.2)" strokeWidth="0.8" fill="none" />
+                    <circle
+                      cx="70"
+                      cy="65"
+                      r="32"
+                      stroke="rgba(138,232,255,0.2)"
+                      strokeWidth="0.8"
+                      fill="none"
+                    />
                   </svg>
                 </div>
               </div>
