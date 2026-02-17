@@ -19,8 +19,50 @@ import {
 import { prefetchMembers } from "@/lib/prefetch";
 
 export default function Home() {
-  const [showIntro, setShowIntro] = useState<boolean>(false);
-  const [showContent, setShowContent] = useState<boolean>(false);
+  const [showIntro, setShowIntro] = useState<boolean>(() => {
+    try {
+      if (typeof window === "undefined") return false;
+      const params = new URLSearchParams(window.location.search);
+      const introParam = params.get("intro");
+      if (
+        introParam === "reset" ||
+        introParam === "1" ||
+        introParam === "true" ||
+        introParam === "force"
+      ) {
+        return true;
+      }
+
+      const raw = localStorage.getItem(INTRO_VIDEO_STORAGE_KEY);
+      const ts = raw ? Number(raw) : 0;
+      const now = Date.now();
+      return !ts || Number.isNaN(ts) || now - ts > INTRO_VIDEO_EXPIRY_MS;
+    } catch {
+      return true;
+    }
+  });
+  const [showContent, setShowContent] = useState<boolean>(() => {
+    try {
+      if (typeof window === "undefined") return false;
+      const params = new URLSearchParams(window.location.search);
+      const introParam = params.get("intro");
+      if (
+        introParam === "reset" ||
+        introParam === "1" ||
+        introParam === "true" ||
+        introParam === "force"
+      ) {
+        return false;
+      }
+
+      const raw = localStorage.getItem(INTRO_VIDEO_STORAGE_KEY);
+      const ts = raw ? Number(raw) : 0;
+      const now = Date.now();
+      return !!ts && !Number.isNaN(ts) && now - ts <= INTRO_VIDEO_EXPIRY_MS;
+    } catch {
+      return false;
+    }
+  });
 
   useEffect(() => {
     // Prefetch members data immediately
@@ -31,37 +73,10 @@ export default function Home() {
     try {
       const params = new URLSearchParams(window.location.search);
       const introParam = params.get("intro");
-      // hi
       if (introParam === "reset") {
         localStorage.removeItem(INTRO_VIDEO_STORAGE_KEY);
-        setShowIntro(true);
-        setShowContent(false);
-        return;
       }
-
-      if (
-        introParam === "1" ||
-        introParam === "true" ||
-        introParam === "force"
-      ) {
-        setShowIntro(true);
-        setShowContent(false);
-        return;
-      }
-
-      const raw = localStorage.getItem(INTRO_VIDEO_STORAGE_KEY);
-      const ts = raw ? Number(raw) : 0;
-      const now = Date.now();
-      if (!ts || Number.isNaN(ts) || now - ts > INTRO_VIDEO_EXPIRY_MS) {
-        setShowIntro(true);
-        setShowContent(false);
-      } else {
-        setShowIntro(false);
-        setShowContent(true);
-      }
-    } catch (e) {
-      setShowIntro(true);
-    }
+    } catch {}
   }, []);
 
   function handleIntroFinish() {

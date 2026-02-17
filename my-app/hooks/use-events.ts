@@ -4,24 +4,23 @@ import { useEffect, useState } from "react"
 import type { Event } from "@/lib/types"
 
 export function useEvents() {
-  const [events, setEvents] = useState<Event[]>([])
+  const [events, setEvents] = useState<Event[]>(() => {
+    try {
+      if (typeof window === 'undefined') return []
+      const raw = localStorage.getItem('gravity_events')
+      if (!raw) return []
+      const data = JSON.parse(raw) as Event[]
+      return Array.isArray(data) ? data : []
+    } catch {
+      return []
+    }
+  })
 
   useEffect(() => {
     let cancelled = false
     const KEY = 'gravity_events'
 
-    // 1. Load cached events immediately
-    if (typeof window !== 'undefined') {
-      try {
-        const raw = localStorage.getItem(KEY)
-        if (raw) {
-          const data = JSON.parse(raw) as Event[]
-          if (Array.isArray(data)) setEvents(data)
-        }
-      } catch {}
-    }
-
-    // 2. Fetch fresh events (public endpoint)
+    // Fetch fresh events (public endpoint)
     const load = async () => {
       try {
         const res = await fetch(`/api/public/events`, { headers: { 'Content-Type': 'application/json' } })

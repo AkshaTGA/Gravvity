@@ -7,28 +7,24 @@ import { useEffect, useState } from "react";
 import MagicButton from "@/components/magic-button";
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState<any[]>([]);
+  const [projects, setProjects] = useState<any[]>(() => {
+    try {
+      if (typeof window === "undefined") return [];
+      const raw = localStorage.getItem("projects-cache-v1");
+      if (!raw) return [];
+      const cached = JSON.parse(raw) as { ts: number; data: any[] };
+      return Array.isArray(cached?.data) ? cached.data : [];
+    } catch {
+      return [];
+    }
+  });
 
   useEffect(() => {
     let mounted = true;
     const CACHE_KEY = "projects-cache-v1";
     const STALE_AFTER_MS = 10 * 60 * 1000; // 10 minutes
 
-    // 1) Try cached first for instant render
-    try {
-      const raw =
-        typeof window !== "undefined" ? localStorage.getItem(CACHE_KEY) : null;
-      if (raw) {
-        const cached = JSON.parse(raw) as { ts: number; data: any[] };
-        if (Array.isArray(cached?.data)) {
-          setProjects(cached.data);
-        }
-      }
-    } catch (e) {
-      // ignore cache errors
-    }
-
-    // 2) Fetch if missing or stale, then revalidate cache
+    // Fetch if missing or stale, then revalidate cache
     async function load() {
       try {
         const raw =
@@ -60,7 +56,7 @@ export default function ProjectsPage() {
           try {
             localStorage.setItem(
               CACHE_KEY,
-              JSON.stringify({ ts: Date.now(), data })
+              JSON.stringify({ ts: Date.now(), data }),
             );
           } catch {
             /* ignore quota errors */
@@ -102,7 +98,7 @@ export default function ProjectsPage() {
                 <div className="relative w-full h-[75%] flex items-center justify-center bg-black overflow-hidden">
                   <img
                     src={project.image || "/gravity-logo.png"}
-                    alt={project.title} 
+                    alt={project.title}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                   />
                 </div>

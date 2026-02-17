@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export function BlockchainAnimation() {
   const [blocks, setBlocks] = useState([
@@ -10,6 +10,14 @@ export function BlockchainAnimation() {
   ]);
   const [mining, setMining] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+
+  const networkStats = useMemo(() => {
+    const latestId = blocks[blocks.length - 1]?.id ?? 0;
+    return {
+      hashRate: 250 + ((latestId * 7) % 50),
+      activeNodes: 8000 + ((latestId * 13) % 1000),
+    };
+  }, [blocks]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -118,10 +126,10 @@ export function BlockchainAnimation() {
                       </div>
                       <div className="flex gap-1 text-xs">
                         <span className="px-1.5 py-0.5 bg-slate-800 text-slate-400 rounded text-xs">
-                          Nonce: {Math.floor(Math.random() * 10000)}
+                          Nonce: {(block.id * 2651) % 10000}
                         </span>
                         <span className="px-1.5 py-0.5 bg-slate-800 text-slate-400 rounded text-xs">
-                          Gas: {Math.floor(20 + Math.random() * 30)}
+                          Gas: {20 + ((block.id * 17) % 30)}
                         </span>
                       </div>
                     </div>
@@ -144,7 +152,7 @@ export function BlockchainAnimation() {
               <div>
                 <div className="text-xs text-slate-400 mb-0.5">Hash Rate</div>
                 <div className="text-xs font-bold text-orange-400">
-                  {Math.floor(250 + Math.random() * 50)} TH/s
+                  {networkStats.hashRate} TH/s
                 </div>
               </div>
               <div>
@@ -152,7 +160,7 @@ export function BlockchainAnimation() {
                   Active Nodes
                 </div>
                 <div className="text-xs font-bold text-cyan-400">
-                  {Math.floor(8000 + Math.random() * 1000)}
+                  {networkStats.activeNodes}
                 </div>
               </div>
             </div>

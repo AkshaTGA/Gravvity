@@ -9,6 +9,7 @@ import MagicBorderExact from "@/components/magic-border-exact";
 import { useEffect, useRef } from "react";
 import { GradualSpacing } from "@/components/Text-Effect";
 import { useRouter } from "next/navigation";
+import { getWingMembersPath } from "@/lib/wing-routes";
 
 export default function WingsPage() {
   // Router hook must be called at top-level, not inside effects
@@ -112,7 +113,7 @@ export default function WingsPage() {
                     <div
                       className="w-full cursor-pointer max-w-3xl mx-auto"
                       onClick={() => {
-                        router.push(`/members?wing=${wing.name}`);
+                        router.push(getWingMembersPath(wing.name));
                       }}
                     >
                       <MagicBorderExact
@@ -174,10 +175,7 @@ export default function WingsPage() {
                       {/* More link to members page for this wing */}
                       <div className="pt-2">
                         <Link
-                          href={{
-                            pathname: "/members",
-                            query: { wing: wing.name },
-                          }}
+                          href={getWingMembersPath(wing.name)}
                           className="inline-flex items-center gap-2 font-semibold text-transparent bg-clip-text bg-linear-to-r from-purple-400 to-cyan-400 hover:opacity-90 transition-opacity"
                         >
                           More...

@@ -15,7 +15,6 @@ function requireAuth(request: Request) {
   try {
     const token = auth.replace('Bearer ', '')
     // Lazy require to avoid ESM/CJS interop issues
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const jwt = require('jsonwebtoken')
     jwt.verify(token, JWT_SECRET)
     return true

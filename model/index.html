@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Gravity Metaverse Gallery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+
+  <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+      <div class="loading-bg-particles" id="loading-particles"></div>
+      <div class="loading-content">
+        <div class="loading-logo-wrap">
+          <img src="/gravity-logo.png" alt="Gravity" class="loading-logo" />
+          <div class="loading-logo-glow"></div>
+        </div>
+        <h2 class="loading-title">Gravity Metaverse</h2>
+        <p class="loading-subtitle">Initializing your immersive experience…</p>
+        <div class="loading-bar-track">
+          <div class="loading-bar-fill" id="loading-bar-fill"></div>
+        </div>
+        <p class="loading-percent" id="loading-percent">0%</p>
+      </div>
+      <div class="loading-ring loading-ring-1"></div>
+      <div class="loading-ring loading-ring-2"></div>
+      <div class="loading-ring loading-ring-3"></div>
+    </div>
+
+    <!-- Lock UI / Controls Panel -->
+    <div id="lock-ui">
+      <div class="lock-ui-inner">
+        <button id="lock_pointer_button" type="button">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+          <span>Start Exploring</span>
+        </button>
+        <div id="lock-controls">
+          <div class="control-row"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd><span class="control-label">Move</span></div>
+          <div class="control-row"><kbd>⇧</kbd><span class="control-plus">+</span><kbd>W</kbd><span class="control-label">Sprint</span></div>
+          <div class="control-row"><kbd>Space</kbd><span class="control-label">Jump</span></div>
+          <div class="control-row"><kbd>C</kbd><span class="control-label">Zoom</span></div>
+          <div class="control-row"><kbd>Esc</kbd><span class="control-label">Menu</span></div>
+        </div>
+        <button id="back-to-home" type="button" onclick="window.parent.postMessage({type:'metaverse-go-home'},'*')">
+          <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          Back to Home
+        </button>
+      </div>
+    </div>
+
+    <!-- Painting Info Panel -->
+    <div id="painting-info"></div>
+
+    <!-- Crosshair -->
+    <div id="crosshair">
+      <div class="crosshair-dot"></div>
+      <div class="crosshair-ring"></div>
+    </div>
+
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>

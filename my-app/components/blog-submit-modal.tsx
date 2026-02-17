@@ -50,10 +50,10 @@ export default function BlogSubmitModal({
       setImage("");
       setUploading(false);
       setUploadError("");
-      if (localPreview) {
-        URL.revokeObjectURL(localPreview);
-        setLocalPreview("");
-      }
+      setLocalPreview((prev) => {
+        if (prev) URL.revokeObjectURL(prev);
+        return "";
+      });
       setContent("");
       setError("");
     }
@@ -235,7 +235,6 @@ export default function BlogSubmitModal({
                 </div>
                 {(image || localPreview) && (
                   <div className="rounded-lg overflow-hidden border border-border">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={image || localPreview}
                       alt="Cover preview"

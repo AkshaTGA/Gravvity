@@ -3,24 +3,23 @@ import { useEffect, useState } from "react"
 import type { Member } from "@/lib/types"
 
 export function useMembers() {
-  const [members, setMembers] = useState<Member[]>([])
+  const [members, setMembers] = useState<Member[]>(() => {
+    try {
+      if (typeof window === 'undefined') return []
+      const raw = localStorage.getItem('gravity_members')
+      if (!raw) return []
+      const data = JSON.parse(raw) as Member[]
+      return Array.isArray(data) ? data : []
+    } catch {
+      return []
+    }
+  })
 
   useEffect(() => {
     let cancelled = false
     const KEY = 'gravity_members'
 
-    // 1. Instant load from cache
-    if (typeof window !== 'undefined') {
-      try {
-        const raw = localStorage.getItem(KEY)
-        if (raw) {
-          const data = JSON.parse(raw) as Member[]
-          if (Array.isArray(data)) setMembers(data)
-        }
-      } catch {}
-    }
-
-    // 2. Fetch fresh list
+    // Fetch fresh list
     const loadMembers = async () => {
       try {
         const res = await fetch(`/api/public/members`, { headers: { 'Content-Type': 'application/json' } })

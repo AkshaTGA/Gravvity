@@ -1,36 +1,50 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export function MetaverseAnimation() {
   const [rotation, setRotation] = useState(0);
   const [objects, setObjects] = useState<{ x: number; y: number; z: number }[]>(
-    []
-  );
-  const [isHovered, setIsHovered] = useState(false);
-
-  useEffect(() => {
-    // Initialize floating objects
-    setObjects(
+    () =>
       Array.from({ length: 8 }, (_, i) => ({
         x: Math.cos((i * Math.PI * 2) / 8) * 40,
         y: Math.sin((i * Math.PI * 2) / 8) * 40,
-        z: Math.random(),
-      }))
-    );
+        z: i / 8,
+      })),
+  );
+  const [isHovered, setIsHovered] = useState(false);
+  const particles = useMemo(
+    () =>
+      Array.from({ length: 15 }, (_, index) => {
+        const seed = index + 1;
+        return {
+          id: index,
+          left: (seed * 31) % 100,
+          top: (seed * 53) % 100,
+          animationDelay: ((seed * 19) % 30) / 10,
+          animationDuration: 3 + ((seed * 11) % 20) / 10,
+        };
+      }),
+    [],
+  );
+  const userCount = 100 + Math.floor(((Math.sin(rotation / 20) + 1) / 2) * 50);
 
+  useEffect(() => {
     const interval = setInterval(() => {
-      setRotation((prev) => (prev + 2) % 360);
-      setObjects((prev) =>
-        prev.map((obj, i) => ({
-          x: Math.cos(((rotation + i * 45) * Math.PI) / 180) * 40,
-          y: Math.sin(((rotation + i * 45) * Math.PI) / 180) * 40,
-          z: (obj.z + 0.01) % 1,
-        }))
-      );
+      setRotation((prevRotation) => {
+        const nextRotation = (prevRotation + 2) % 360;
+        setObjects((prev) =>
+          prev.map((obj, i) => ({
+            x: Math.cos(((nextRotation + i * 45) * Math.PI) / 180) * 40,
+            y: Math.sin(((nextRotation + i * 45) * Math.PI) / 180) * 40,
+            z: (obj.z + 0.01) % 1,
+          })),
+        );
+        return nextRotation;
+      });
     }, 50);
     return () => clearInterval(interval);
-  }, [rotation]);
+  }, []);
 
   return (
     <div
@@ -43,17 +57,17 @@ export function MetaverseAnimation() {
           isHovered ? "scale-105" : "scale-100"
         }`}
       >
-        {/* VR Headset View */}
+        {/* 3D Gallery Preview */}
         <div className="bg-slate-900/80 rounded-2xl p-2 backdrop-blur-sm border border-indigo-500/30">
-          {/* VR HUD Header */}
+          {/* Header */}
           <div className="flex items-center justify-between mb-1.5">
             <div className="flex items-center gap-1.5">
-              <div className="w-6 h-6 rounded-lg bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-sm">
-                🌌
+              <div className="w-6 h-6 rounded-lg bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-[10px] font-semibold text-white tracking-wide">
+                3D
               </div>
               <div>
                 <div className="text-xs font-semibold text-slate-200">
-                  Virtual Space
+                  3D Gallery
                 </div>
                 <div className="text-xs text-slate-400">Immersive Mode</div>
               </div>
@@ -134,15 +148,15 @@ export function MetaverseAnimation() {
             </div>
 
             {/* Particles */}
-            {[...Array(15)].map((_, i) => (
+            {particles.map((particle) => (
               <div
-                key={i}
+                key={particle.id}
                 className="absolute w-0.5 h-0.5 bg-white rounded-full animate-float"
                 style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 3}s`,
-                  animationDuration: `${3 + Math.random() * 2}s`,
+                  left: `${particle.left}%`,
+                  top: `${particle.top}%`,
+                  animationDelay: `${particle.animationDelay}s`,
+                  animationDuration: `${particle.animationDuration}s`,
                 }}
               />
             ))}
@@ -161,18 +175,18 @@ export function MetaverseAnimation() {
             </div>
           </div>
 
-          {/* VR Controls */}
+          {/* Controls */}
           <div className="mt-1.5 grid grid-cols-3 gap-1">
             {[
-              { icon: "🎮", label: "Control" },
-              { icon: "👁️", label: "Track" },
-              { icon: "🎵", label: "Audio" },
+              { label: "WASD" },
+              { label: "Gallery" },
+              { label: "Profiles" },
             ].map((control, i) => (
               <div
                 key={i}
                 className="bg-slate-800/50 rounded-lg p-1 text-center border border-slate-700/50 hover:border-indigo-500/50 transition-colors"
               >
-                <div className="text-xs mb-0.5">{control.icon}</div>
+                <div className="mx-auto mb-1 h-1 w-5 rounded-full bg-indigo-400/70" />
                 <div className="text-xs text-slate-400">{control.label}</div>
               </div>
             ))}
@@ -182,13 +196,11 @@ export function MetaverseAnimation() {
           <div className="mt-1.5 flex items-center justify-between text-xs">
             <div className="flex items-center gap-1.5">
               <span className="px-1.5 py-0.5 bg-indigo-500/20 text-indigo-400 rounded-full border border-indigo-500/30 text-xs">
-                VR Active
+                3D Active
               </span>
-              <span className="text-slate-400">FPS: 90</span>
+              <span className="text-slate-400">60 FPS</span>
             </div>
-            <div className="text-slate-400">
-              Users: {Math.floor(100 + Math.random() * 50)}
-            </div>
+            <div className="text-slate-400">Members: {userCount}</div>
           </div>
         </div>
       </div>

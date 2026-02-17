@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "build:metaverse": "node ./scripts/sync-metaverse.mjs",
+    "prebuild": "npm run build:metaverse",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -51,7 +53,7 @@
     "dotenv": "^16.4.5",
     "embla-carousel-react": "8.5.1",
     "express": "^4.21.2",
-    "framer-motion": "^12.23.24",
+    "framer-motion": "^12.34.0",
     "input-otp": "1.4.1",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.454.0",

@@ -114,7 +114,7 @@ export function WebDevelopmentAnimation() {
                 {"<"}
                 <span className="text-green-400">div</span>{" "}
                 <span className="text-cyan-400">className</span>=
-                <span className="text-yellow-300">"container"</span>
+                <span className="text-yellow-300">&quot;container&quot;</span>
                 {">"}
               </div>
               <div className="pl-3 text-slate-500">

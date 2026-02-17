@@ -1,0 +1,127 @@
+/* Gravity Mode Toggle Button */
+.gravity-btn {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 24px rgba(124, 92, 255, 0.4), 0 0 60px rgba(124, 92, 255, 0.15);
+  background: linear-gradient(135deg, #7c5cff 0%, #c84bfa 50%, #ff6bc1 100%);
+  color: #fff;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.gravity-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 32px rgba(124, 92, 255, 0.6), 0 0 80px rgba(200, 75, 250, 0.3);
+}
+
+.gravity-btn.active {
+  background: linear-gradient(135deg, #ff6bc1 0%, #ff4444 50%, #ff9500 100%);
+  box-shadow: 0 4px 24px rgba(255, 68, 68, 0.4), 0 0 60px rgba(255, 107, 193, 0.2);
+  animation: gravity-btn-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gravity-btn-pulse {
+  0%, 100% { box-shadow: 0 4px 24px rgba(255, 68, 68, 0.4), 0 0 60px rgba(255, 107, 193, 0.2); }
+  50% { box-shadow: 0 6px 36px rgba(255, 68, 68, 0.6), 0 0 90px rgba(255, 107, 193, 0.35); }
+}
+
+/* Ghost outlines at original positions */
+.gravity-ghost {
+  position: fixed;
+  border: 2px dashed rgba(124, 92, 255, 0.35);
+  border-radius: 12px;
+  pointer-events: none;
+  z-index: 998;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background: rgba(124, 92, 255, 0.03);
+}
+
+.gravity-ghost.magnetic-active {
+  border-color: rgba(124, 92, 255, 0.8);
+  box-shadow: 0 0 30px rgba(124, 92, 255, 0.4), inset 0 0 20px rgba(124, 92, 255, 0.1);
+  animation: ghost-glow 1s ease-in-out infinite;
+}
+
+.gravity-ghost.snapped {
+  border-color: rgba(80, 220, 100, 0.6);
+  box-shadow: 0 0 20px rgba(80, 220, 100, 0.3);
+  animation: none;
+}
+
+@keyframes ghost-glow {
+  0%, 100% { box-shadow: 0 0 30px rgba(124, 92, 255, 0.4), inset 0 0 20px rgba(124, 92, 255, 0.1); }
+  50% { box-shadow: 0 0 50px rgba(124, 92, 255, 0.6), inset 0 0 30px rgba(124, 92, 255, 0.2); }
+}
+
+/* Gravity-affected element */
+.gravity-element {
+  cursor: grab;
+  user-select: none;
+  z-index: 1000;
+  transition: box-shadow 0.2s;
+}
+
+.gravity-element:hover {
+  box-shadow: 0 0 25px rgba(124, 92, 255, 0.3);
+}
+
+.gravity-element.dragging {
+  cursor: grabbing;
+  z-index: 1001;
+  box-shadow: 0 8px 40px rgba(124, 92, 255, 0.5), 0 0 80px rgba(124, 92, 255, 0.2);
+  transform: scale(1.02);
+}
+
+.gravity-element.snapped {
+  cursor: grab;
+  box-shadow: 0 0 15px rgba(80, 220, 100, 0.3);
+}
+
+/* Snap animation */
+@keyframes snap-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+.gravity-element.just-snapped {
+  animation: snap-pulse 0.4s ease-out;
+}
+
+/* Gravity mode overlay hint */
+.gravity-overlay-hint {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9998;
+  padding: 10px 24px;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(124, 92, 255, 0.3);
+  border-radius: 50px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  font-weight: 500;
+  pointer-events: none;
+  animation: hint-fade 3s ease-in-out forwards;
+}
+
+@keyframes hint-fade {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  75% { opacity: 1; }
+  100% { opacity: 0; }
+}

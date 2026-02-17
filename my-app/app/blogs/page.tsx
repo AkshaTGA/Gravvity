@@ -16,7 +16,17 @@ export default function BlogsPage() {
     });
 
   const [open, setOpen] = useState(false);
-  const [approved, setApproved] = useState(() => [] as any[]);
+  const [approved, setApproved] = useState(() => {
+    try {
+      if (typeof window === "undefined") return [] as any[];
+      const raw = localStorage.getItem("gravity_approved_blogs");
+      if (!raw) return [] as any[];
+      const cached = JSON.parse(raw);
+      return Array.isArray(cached) ? cached : ([] as any[]);
+    } catch {
+      return [] as any[];
+    }
+  });
   const [query, setQuery] = useState("");
 
   useEffect(() => {
@@ -24,17 +34,7 @@ export default function BlogsPage() {
     let mounted = true;
     const KEY = "gravity_approved_blogs";
 
-    // 1) Seed from localStorage
-    try {
-      const raw =
-        typeof window !== "undefined" ? localStorage.getItem(KEY) : null;
-      if (raw) {
-        const cached = JSON.parse(raw);
-        if (Array.isArray(cached)) setApproved(cached);
-      }
-    } catch {}
-
-    // 2) Fetch fresh
+    // Fetch fresh
     async function fetchApproved() {
       try {
         const res = await fetch("/api/public/blogs");
@@ -120,7 +120,7 @@ export default function BlogsPage() {
                     // normalize query to trigger any filtering and remove focus
                     setQuery((q) => q.trim());
                     const el = document.querySelector(
-                      "#blog-search-input"
+                      "#blog-search-input",
                     ) as HTMLInputElement | null;
                     if (el) el.blur();
                   }}
@@ -215,12 +215,12 @@ export default function BlogsPage() {
 
           {filteredApproved.length === 0 && query.length > 0 && (
             <div className="mt-8 text-center text-foreground/60">
-              No results found for "{query}"
+              No results found for &quot;{query}&quot;
             </div>
           )}
           {filteredApproved.length === 0 && query.length === 0 && (
             <div className="mt-8 text-center text-foreground/60">
-             No blogs have been approved yet. Be the first to submit one!
+              No blogs have been approved yet. Be the first to submit one!
             </div>
           )}
 

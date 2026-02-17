@@ -7,7 +7,7 @@ const Galaxy = dynamic(() => import("./Galaxy"), {
   ssr: false,
   loading: () => <div className="absolute inset-0 z-0" />,
 });
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import MagicButton from "@/components/magic-button";
 import { LettersPullUp } from "@/components/Text-Effect";
 import { motion, useAnimation } from "framer-motion";
@@ -43,28 +43,45 @@ export function HeroSection() {
   const [_fm, _sfm] = useState(false);
   const _controls = useAnimation();
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mobileStars = useMemo(
+    () =>
+      Array.from({ length: 15 }, (_, index) => {
+        const seed = index + 1;
+        return {
+          id: index,
+          top: (seed * 23) % 100,
+          left: (seed * 47) % 100,
+          animationDelay: ((seed * 13) % 30) / 10,
+          animationDuration: 2 + ((seed * 19) % 20) / 10,
+          opacity: 0.3 + ((seed * 11) % 5) / 10,
+        };
+      }),
+    [],
+  );
 
-  const scheduleReset = (delay = 2000) => {
-    if (resetTimer.current) {
-      clearTimeout(resetTimer.current);
-    }
-    resetTimer.current = setTimeout(() => {
-      _controls.start({
-        x: 0,
-        y: 0,
-        transition: { duration: 0.2, ease: "easeOut" },
-      });
-      resetTimer.current = null;
-    }, delay);
-  };
-
+  const scheduleReset = useCallback(
+    (delay = 2000) => {
+      if (resetTimer.current) {
+        clearTimeout(resetTimer.current);
+      }
+      resetTimer.current = setTimeout(() => {
+        _controls.start({
+          x: 0,
+          y: 0,
+          transition: { duration: 0.2, ease: "easeOut" },
+        });
+        resetTimer.current = null;
+      }, delay);
+    },
+    [_controls],
+  );
 
   useEffect(() => {
     console.log(
       "%cCTRL+SPACE ^_^ ",
       "color: rgb(255,255,255); background: BLACK; font-size: 24px;border-radius:100px; font-weight: bold; padding: 10px;",
     );
-  }, []);
+  }, [_controls, scheduleReset]);
 
   useEffect(() => {
     const _h = (e: KeyboardEvent) => {
@@ -139,7 +156,7 @@ export function HeroSection() {
         window.removeEventListener("keydown", _togg);
       }
     };
-  }, []);
+  }, [_controls, scheduleReset]);
 
   useEffect(() => {
     return () => {
@@ -193,16 +210,16 @@ export function HeroSection() {
             style={{ animationDelay: "4s" }}
           />
           {/* Lightweight particle stars */}
-          {[...Array(15)].map((_, i) => (
+          {mobileStars.map((star) => (
             <div
-              key={i}
+              key={star.id}
               className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
               style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
-                opacity: 0.3 + Math.random() * 0.4,
+                top: `${star.top}%`,
+                left: `${star.left}%`,
+                animationDelay: `${star.animationDelay}s`,
+                animationDuration: `${star.animationDuration}s`,
+                opacity: star.opacity,
               }}
             />
           ))}

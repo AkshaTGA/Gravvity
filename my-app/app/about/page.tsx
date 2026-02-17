@@ -3,12 +3,28 @@
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import MagicButton from "@/components/magic-button";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function AboutPage() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [cardSize, setCardSize] = useState({ width: 400, height: 300 });
   const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!cardRef.current) return;
+    const element = cardRef.current;
+
+    const updateSize = () => {
+      setCardSize({ width: element.offsetWidth, height: element.offsetHeight });
+    };
+
+    updateSize();
+    const observer = new ResizeObserver(updateSize);
+    observer.observe(element);
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -128,8 +144,8 @@ export default function AboutPage() {
                     const midY = (from.y + to.y) / 2;
 
                     // Calculate distance from cursor to line midpoint
-                    const cardWidth = cardRef.current?.offsetWidth || 400;
-                    const cardHeight = cardRef.current?.offsetHeight || 300;
+                    const cardWidth = cardSize.width;
+                    const cardHeight = cardSize.height;
                     const lineMidPx = {
                       x: (midX / 100) * cardWidth,
                       y: (midY / 100) * cardHeight,
@@ -162,8 +178,8 @@ export default function AboutPage() {
 
                   {/* Network nodes */}
                   {nodes.map((node, idx) => {
-                    const cardWidth = cardRef.current?.offsetWidth || 400;
-                    const cardHeight = cardRef.current?.offsetHeight || 300;
+                    const cardWidth = cardSize.width;
+                    const cardHeight = cardSize.height;
                     const nodePx = {
                       x: (node.x / 100) * cardWidth,
                       y: (node.y / 100) * cardHeight,
@@ -238,7 +254,7 @@ export default function AboutPage() {
                     domains to create, learn, and grow together.
                   </p>
                   <p className="text-foreground/70 leading-relaxed">
-                    Whether you're into competitive programming, web
+                    Whether you’re into competitive programming, web
                     development, design, open-source, AI, blockchain, or the
                     metaverse, Gravity provides the platform and community to
                     achieve your goals.
@@ -255,7 +271,7 @@ export default function AboutPage() {
                   </p>
                   <p className="text-foreground/70 leading-relaxed">
                     We believe in the power of community, continuous learning,
-                    and practical application of knowledge. Together, we're
+                    and practical application of knowledge. Together, we’re
                     shaping the future of technology.
                   </p>
                 </div>
@@ -520,7 +536,7 @@ export default function AboutPage() {
               <div className="md:w-[70%] w-full p-8 flex flex-col items-center md:items-start justify-center text-center md:text-left">
                 <h2 className="text-3xl font-bold mb-4">Join Our Community</h2>
                 <p className="text-foreground/70 mb-6 max-w-2xl">
-                  Whether you're a beginner just starting your tech journey or
+                  Whether you’re a beginner just starting your tech journey or
                   an experienced developer, Gravity welcomes you. Join us in
                   building an amazing tech community!
                 </p>
