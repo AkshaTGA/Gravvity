@@ -1,0 +1,845 @@
+/* ═══════════════════════════════════════════════════════════════
+   Fun Mode – Phase 1 & 2: Vintage Google 1999 aesthetic
+              Phase 3: Geocities / Web 1.0 / Win98 aesthetic
+   All classes are prefixed webd- to avoid leaking into Simple Mode
+   ═══════════════════════════════════════════════════════════════ */
+
+.webd-fun-overlay {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 16px;
+  /* Slightly larger for easier reading of serif */
+  color: #000;
+}
+
+/* ── Multicolour logo (Gravity!) ── */
+.webd-glogo {
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 400;
+  /* Regular weight for old Google logo feel */
+  letter-spacing: -2px;
+  /* Tighter spacing */
+  line-height: 1;
+}
+
+/* ── Search input – classic inset shadow ── */
+/* ── Search input – classic flat 90s ── */
+.webd-search-input {
+  height: 32px;
+  border: 1px solid #777;
+  /* Simple dark border */
+  border-radius: 0;
+  /* No radius */
+  box-shadow: none;
+  /* No shadow */
+  padding: 0 4px;
+  font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
+  /* Tech vibe */
+  background: #fff;
+  color: #000;
+  outline: none;
+}
+
+.webd-search-input:focus {
+  border: 2px solid #000;
+  /* Thicker border on focus */
+}
+
+/* ── Buttons – standard HTML gray buttons ── */
+.webd-btn {
+  display: inline-block;
+  border: 2px outset #eee;
+  /* Classic 3D outset */
+  border-right-color: #666;
+  border-bottom-color: #666;
+  border-radius: 0;
+  padding: 2px 12px;
+  font-size: 13px;
+  font-family: Arial, sans-serif;
+  /* Standard GUI font */
+  background: #ccc;
+  color: #000;
+  cursor: pointer;
+  min-width: 110px;
+  text-align: center;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.webd-btn:hover {
+  background: #ddd;
+}
+
+.webd-btn:active {
+  border: 2px inset #eee;
+  border-right-color: #fff;
+  border-bottom-color: #fff;
+  background: #bbb;
+  transform: translate(1px, 1px);
+  box-shadow: none;
+}
+
+/* ── Results page ── */
+.webd-results-bar {
+  background: #efe8df;
+  border-top: 1px solid #d4b89c;
+  border-bottom: 1px solid #d4b89c;
+  font-size: 13px;
+  color: #444;
+  padding: 3px 8px;
+  margin-bottom: 18px;
+}
+
+.webd-result-title {
+  font-size: 20px;
+  font-weight: normal;
+  font-family: "Times New Roman", Times, serif;
+  color: #0000cc;
+  /* Classic blue link */
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.webd-result-title:hover {
+  color: #cc0000;
+}
+
+.webd-result-url {
+  color: #006621;
+  font-size: 13px;
+  margin-bottom: 3px;
+}
+
+.webd-result-desc {
+  color: #000;
+  font-size: 13px;
+  line-height: 1.54;
+}
+
+.webd-similar {
+  color: #1a0dab;
+  font-size: 13px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ── Showcase toolbar ── */
+.webd-showcase-top {
+  background: #fff;
+  border-bottom: 1px solid #bbb;
+  padding: 7px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* ── Vintage card (team member) ── */
+.webd-card {
+  background: #fff;
+  border: 1px solid #aaa;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.webd-card.webd-card-snapped {
+  border-color: #34a853;
+  box-shadow: 0 0 0 2px rgba(52, 168, 83, 0.25), 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.webd-card-header {
+  background: linear-gradient(to bottom, #f2f2f2 0%, #e4e4e4 100%);
+  border-bottom: 1px solid #ccc;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.webd-card-name {
+  font-size: 13px;
+  font-weight: bold;
+  color: #1a0dab;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.webd-badge-coord {
+  font-size: 9px;
+  font-weight: bold;
+  color: #7a4000;
+  background: #fff3cd;
+  border: 1px solid #c8960c;
+  padding: 1px 5px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.webd-badge-member {
+  font-size: 9px;
+  font-weight: bold;
+  color: #08397c;
+  background: #dce9fb;
+  border: 1px solid #4285f4;
+  padding: 1px 5px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.webd-card-body {
+  padding: 8px;
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+}
+
+.webd-card-photo {
+  width: 60px;
+  height: 60px;
+  border: 1px solid #ccc;
+  object-fit: cover;
+  flex-shrink: 0;
+  align-self: flex-start;
+}
+
+.webd-card-info {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.webd-card-wing {
+  font-size: 11px;
+  color: #888;
+  font-style: italic;
+}
+
+.webd-card-bio {
+  font-size: 11px;
+  color: #444;
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.webd-card-socials {
+  padding: 0 8px 7px;
+  font-size: 11px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  border-top: 1px solid #ececec;
+  padding-top: 5px;
+  flex-shrink: 0;
+}
+
+.webd-card-socials a {
+  color: #1a0dab;
+  text-decoration: underline;
+}
+
+.webd-card-socials a:hover {
+  color: #cc0000;
+}
+
+.webd-card-socials-sep {
+  color: #aaa;
+  user-select: none;
+}
+
+/* ── Logo card in showcase ── */
+.webd-logo-card {
+  background: #fff;
+  border: 1px solid #aaa;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  color: #666;
+}
+
+.webd-logo-card.webd-card-snapped {
+  border-color: #34a853;
+  box-shadow: 0 0 0 2px rgba(52, 168, 83, 0.25), 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Heading card in showcase ── */
+.webd-heading-card {
+  background: #fff;
+  border: 1px solid #aaa;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px 12px;
+}
+
+.webd-heading-card.webd-card-snapped {
+  border-color: #34a853;
+  box-shadow: 0 0 0 2px rgba(52, 168, 83, 0.25), 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Ghost zone ── */
+.webd-ghost {
+  border: 1px dashed #aaa;
+  background: rgba(0, 0, 0, 0.025);
+}
+
+/* ── Back button ── */
+.webd-back-btn {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  background: linear-gradient(to bottom, #f8f8f8 0%, #e8e8e8 100%);
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  color: #333;
+  padding: 5px 14px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+}
+
+.webd-back-btn:hover {
+  border-color: #aaa;
+  background: linear-gradient(to bottom, #f2f2f2 0%, #dcdcdc 100%);
+}
+
+/* ── Physics action buttons ── */
+.webd-physics-btn {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  border: 1px solid #999;
+  padding: 4px 12px;
+  cursor: pointer;
+  background: linear-gradient(to bottom, #f5f5f5 0%, #e5e5e5 100%);
+  color: #333;
+  white-space: nowrap;
+}
+
+.webd-physics-btn:hover {
+  background: linear-gradient(to bottom, #ececec 0%, #d8d8d8 100%);
+  border-color: #888;
+}
+
+.webd-physics-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.webd-physics-btn-primary {
+  background: linear-gradient(to bottom, #4d90fe 0%, #3175e0 100%);
+  border-color: #2a65cc;
+  color: #fff;
+}
+
+.webd-physics-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(to bottom, #5a9aff 0%, #3d80ed 100%);
+}
+
+/* ── Loading dots ── */
+.webd-dot-loader {
+  display: inline-block;
+  width: 1.5ch;
+  overflow: hidden;
+  vertical-align: bottom;
+  animation: webd-dots 1.2s steps(4, end) infinite;
+}
+
+@keyframes webd-dots {
+  0% {
+    width: 0;
+  }
+
+  100% {
+    width: 1.5ch;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   PHASE 3 – GEOCITIES / WEB 1.0 / WIN98 SHOWCASE
+   Strictly scoped under .webd-gc-* so zero leakage into Simple Mode
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Board canvas: dark navy with tiled star dots ── */
+.webd-gc-board {
+  position: relative;
+  width: 100%;
+  background-color: #000066;
+  background-image:
+    radial-gradient(ellipse 1px 1px at 25px 25px, rgba(255, 255, 255, 0.6) 100%, transparent 100%),
+    radial-gradient(ellipse 1px 1px at 75px 60px, rgba(255, 255, 255, 0.35) 100%, transparent 100%),
+    radial-gradient(ellipse 1px 1px at 10px 70px, rgba(255, 255, 255, 0.45) 100%, transparent 100%),
+    radial-gradient(ellipse 1px 1px at 55px 10px, rgba(255, 255, 255, 0.3) 100%, transparent 100%),
+    radial-gradient(ellipse 1px 1px at 90px 45px, rgba(255, 255, 255, 0.5) 100%, transparent 100%),
+    radial-gradient(ellipse 1px 1px at 40px 90px, rgba(255, 255, 255, 0.25) 100%, transparent 100%),
+    radial-gradient(ellipse 1px 1px at 60px 30px, rgba(255, 255, 255, 0.4) 100%, transparent 100%),
+    radial-gradient(ellipse 1px 1px at 15px 50px, rgba(255, 255, 255, 0.2) 100%, transparent 100%);
+  background-size: 100px 100px;
+  font-family: "Times New Roman", Times, serif;
+}
+
+/* ── Ghost scar: shown while physics is active ── */
+.webd-gc-ghost {
+  position: absolute;
+  border: 2px dashed rgba(255, 255, 0, 0.5);
+  background: rgba(255, 255, 0, 0.03);
+  pointer-events: none;
+}
+
+/* ── Toolbar strip ── */
+.webd-gc-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 8px;
+  background: #c0c0c0;
+  border-bottom: 2px solid #808080;
+  border-top: 2px solid #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  flex-wrap: wrap;
+}
+
+.webd-gc-toolbar-title {
+  font-weight: bold;
+  font-size: 12px;
+  color: #000080;
+  flex: 1;
+  font-family: "Times New Roman", Times, serif;
+  white-space: nowrap;
+}
+
+/* ── Old-school Win98 outset button ── */
+.webd-gc-btn {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  background: #c0c0c0;
+  border: 2px outset #ffffff;
+  color: #000000;
+  padding: 3px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+.webd-gc-btn:hover {
+  background: #d0d0d0;
+}
+
+.webd-gc-btn:active {
+  border-style: inset;
+  background: #b8b8b8;
+}
+
+.webd-gc-btn:disabled {
+  color: #888;
+  cursor: not-allowed;
+}
+
+.webd-gc-btn-primary {
+  background: #000080;
+  color: #ffff00;
+  border-color: #4444ff;
+  font-weight: bold;
+}
+
+.webd-gc-btn-primary:hover:not(:disabled) {
+  background: #0000aa;
+}
+
+.webd-gc-btn-primary:active {
+  border-style: inset;
+}
+
+/* ── Marquee banner card ── */
+.webd-gc-marquee-card {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background: #000000;
+  border: 3px ridge #ffff00;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.webd-gc-marquee-card.gc-snapped {
+  border-color: #00ff00;
+  box-shadow: 0 0 8px #00ff00;
+}
+
+.webd-gc-marquee-text {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 13px;
+  font-weight: bold;
+  color: #ffff00;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* ── Under-construction heading card ── */
+.webd-gc-uc-card {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  background: #c0c0c0;
+  border: 4px ridge #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.webd-gc-uc-card.gc-snapped {
+  border-color: #00ff00;
+  box-shadow: 0 0 8px #00ff00;
+}
+
+.webd-gc-uc-title {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #000080;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.webd-gc-uc-sub {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 10px;
+  color: #444;
+  text-align: center;
+}
+
+/* ── Member fieldset card ── */
+.webd-gc-fieldset {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 4px ridge #ffffff;
+  background: #c0c0c0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.webd-gc-fieldset.gc-snapped {
+  border-color: #00ff00;
+  box-shadow: 0 0 10px #00ff00, 0 0 3px #00ff00;
+}
+
+.webd-gc-legend {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 12px;
+  font-weight: bold;
+  color: #000080;
+  padding: 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 85%;
+  background: #c0c0c0;
+}
+
+.webd-gc-role-coord {
+  display: inline-block;
+  font-size: 9px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  color: #804000;
+  background: #ffffc0;
+  border: 1px solid #c07000;
+  padding: 0 3px;
+  margin-left: 4px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.webd-gc-role-member {
+  display: inline-block;
+  font-size: 9px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  color: #000080;
+  background: #c0c0ff;
+  border: 1px solid #000080;
+  padding: 0 3px;
+  margin-left: 4px;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+/* fieldset content layout */
+.webd-gc-card-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  gap: 6px;
+  padding: 4px 6px 4px;
+  overflow: hidden;
+  background: #c0c0c0;
+}
+
+.webd-gc-photo {
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  border: 3px inset #888888;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(25%) contrast(1.1) brightness(0.96);
+  image-rendering: pixelated;
+  align-self: flex-start;
+}
+
+.webd-gc-info {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.webd-gc-wing {
+  font-size: 10px;
+  font-style: italic;
+  color: #555;
+}
+
+.webd-gc-bio {
+  font-size: 11px;
+  color: #111;
+  line-height: 1.35;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+/* social links */
+.webd-gc-socials {
+  flex-shrink: 0;
+  border-top: 2px inset #999999;
+  background: #d4d4d4;
+  padding: 3px 6px;
+  font-size: 10px;
+  font-family: "Courier New", Courier, monospace;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+}
+
+.webd-gc-socials a {
+  color: #0000cc;
+  text-decoration: underline;
+}
+
+.webd-gc-socials a:hover {
+  color: #cc0000;
+}
+
+.webd-gc-socials-sep {
+  color: #888;
+  user-select: none;
+}
+
+/* ── Hit counter at bottom ── */
+.webd-gc-counter {
+  text-align: center;
+  padding: 16px 0 24px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  color: #aaaaff;
+  pointer-events: none;
+}
+
+.webd-gc-counter-digits {
+  display: inline-block;
+  background: #000000;
+  color: #00ff00;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 0.2em;
+  border: 3px inset #444444;
+  padding: 2px 12px;
+  font-family: "Courier New", Courier, monospace;
+  margin: 0 6px;
+  vertical-align: middle;
+}
+
+/* ── Back / exit button (Win98) ── */
+.webd-back-btn {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  background: #c0c0c0;
+  border: 2px outset #ffffff;
+  color: #000000;
+  padding: 4px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.webd-back-btn:hover {
+  background: #d0d0d0;
+}
+
+.webd-back-btn:active {
+  border-style: inset;
+}
+
+/* ── Blinking text ── */
+@keyframes webd-blink {
+
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.webd-blink {
+  animation: webd-blink 1s step-end infinite;
+}
+
+/* ── Designer Vintage Banner ── */
+.webd-designer-banner {
+  width: 100%;
+  margin-bottom: 2.5rem;
+  padding: 20px 32px;
+  background: #000;
+  border: 2px solid #a78bfa;
+  box-shadow: 4px 4px 0px rgba(167, 139, 250, 0.5);
+  /* Retro hard shadow */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  /* Simple scanline */
+  background-image: repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      rgba(167, 139, 250, 0.05) 3px);
+  font-family: "Courier New", Courier, monospace;
+  position: relative;
+  overflow: hidden;
+}
+
+.webd-designer-banner:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 6px 6px 0px rgba(167, 139, 250, 0.7);
+}
+
+.webd-db-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.webd-db-title {
+  font-size: 20px;
+  /* Bigger */
+  font-weight: bold;
+  color: #a78bfa;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.webd-db-sub {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 2px;
+}
+
+.webd-db-btn {
+  background: #a78bfa;
+  border: 2px solid #a78bfa;
+  color: #000;
+  padding: 10px 24px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 900;
+  font-size: 14px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 2px 2px 0px #fff;
+  transition: all 0.1s;
+}
+
+.webd-db-btn:hover {
+  background: #fff;
+  border-color: #fff;
+  color: #000;
+  box-shadow: 2px 2px 0px #a78bfa;
+}
+
+.webd-db-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px transparent;
+}
+
+.webd-scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  animation: webd-scan 3s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes webd-scan {
+  0% {
+    top: 0%;
+  }
+
+  100% {
+    top: 100%;
+  }
+}

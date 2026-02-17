@@ -1,5 +1,5 @@
-import { MembersPageContent } from "@/components/members-page-content";
+import { WebDMembersPage } from "@/components/webd-members-page";
 
 export default function WebDevelopmentMembersPage() {
-  return <MembersPageContent wingFilter="Web Development" />;
+  return <WebDMembersPage />;
 }
