@@ -15,6 +15,7 @@ import { clickHandling } from "./modules/clickHandling.js";
 import { loadBenchModel } from "./modules/bench.js";
 import { setupFppHand } from "./modules/fppHand.js";
 import { loadDecor } from "./modules/decor.js";
+import { createWallHeading } from "./modules/wallHeading.js";
 
 
 const baseUrl = import.meta.env.BASE_URL || "/";
@@ -59,6 +60,7 @@ const textureLoader = new THREE.TextureLoader();
 const walls = createWalls(scene, textureLoader);
 setupFloor(scene);
 createCeiling(scene, textureLoader);
+createWallHeading(scene, textureLoader);
 
 async function initMetaverseGallery() {
   try {
