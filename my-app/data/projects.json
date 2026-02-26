@@ -1,0 +1,27 @@
+[
+  {
+    "_id": "692b62f42a5e059716d5eec7",
+    "title": "Open Store",
+    "description": " g this project.",
+    "wing": "Web Developement",
+    "devfolioLink": "https://devfolio.co/projects/openstore-d467",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1764450872/Screenshot_2025-11-30_023811_hihokt.png",
+    "technologies": [
+      "Polygon",
+      "Next JS",
+      "Javascript",
+      "BootStrap",
+      "MetaMask"
+    ],
+    "tags": [
+      "Polygon",
+      "Next JS",
+      "Javascript",
+      "BootStrap",
+      "MetaMask"
+    ],
+    "createdAt": "2025-11-29T21:17:40.801Z",
+    "updatedAt": "2025-11-29T21:17:40.801Z",
+    "__v": 0
+  }
+]

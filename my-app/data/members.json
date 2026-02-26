@@ -1,0 +1,1007 @@
+[
+  {
+    "_id": "691dda218fca60433c55604a",
+    "name": "Kunal Khurana",
+    "role": "coordinator",
+    "wing": "Web Development",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494770/r7qqp9tbjkxtfqewxe3c.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556054",
+    "name": "Archee Jaiswal",
+    "role": "member",
+    "wing": "Design",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495152/jvcj1g50lyv0luasqxoz.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/archee-jaiswal-239774312/",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/archee_.ee/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556066",
+    "name": "Karthikeyan Pakeer",
+    "role": "coordinator",
+    "wing": "Blockchain",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495998/frhwdfmfq1guaoehqxfv.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c55606a",
+    "name": "Parth Khatri",
+    "role": "member",
+    "wing": "Blockchain",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763496132/n0g7bjyvhvsovaehhglx.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/parthkhatri2611",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/parthkhatri2611/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c55604c",
+    "name": "Kunal Khandelwal",
+    "role": "member",
+    "wing": "Web Development",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494833/grppszzjj7rfgkghszpq.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/kunal-khandelwal-794aa7332/",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c55605d",
+    "name": "Rajan Patil",
+    "role": "member",
+    "wing": "FOSS",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495371/hgqsrj7xq1gjebiohihd.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/rajan-patil-6b3a841b4/",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/rajanpatil2005/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c55606b",
+    "name": "Dinesh",
+    "role": "member",
+    "wing": "Blockchain",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763496151/tx1bwxt5lwiz1vrjcj3a.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/dinesh-maila-b185a6325?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/din3sh.h/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c55603f",
+    "name": "Ankit Garg",
+    "role": "coordinator",
+    "wing": "",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494243/l1dbvnpms9iktfv6eonl.jpg",
+    "isOverallCoordinator": true,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/ankitgarg21/",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/ankit_g.04/?next=%2F"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.667Z",
+    "updatedAt": "2025-11-19T14:54:25.667Z"
+  },
+  {
+    "_id": "691dda218fca60433c556043",
+    "name": "Vedant Soni",
+    "role": "coordinator",
+    "wing": "Competitive Coding",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494344/ewo9ozj681xcb7rdaa2f.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.667Z",
+    "updatedAt": "2025-11-19T14:54:25.667Z"
+  },
+  {
+    "_id": "691dda218fca60433c55604d",
+    "name": "Himanshu",
+    "role": "member",
+    "wing": "Web Development",
+    "bio": "",
+    "image": "/gravity-logo.png",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/himanshu-grewal-2a322232b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/ihimanshugrewal?igsh=bDRkNTR3bnFmaGN4"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c55604e",
+    "name": "Akshat Parmar",
+    "role": "member",
+    "wing": "Web Development",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494883/jlrso0oedriqfxioqogo.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/akshat-parmar-29a987327?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BsnuCGQi7RuCee5Lh7HHMIA%3D%3D",
+      "twitter": "https://x.com/DEaDshOt0o7",
+      "instagram": "https://www.instagram.com/paper00017/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556050",
+    "name": "Anshu Kumar",
+    "role": "coordinator",
+    "wing": "Design",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495032/srlzrwwwymhyglkiovlr.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556048",
+    "name": "Kunal V K",
+    "role": "member",
+    "wing": "Competitive Coding",
+    "bio": "",
+    "image": "/gravity-logo.png",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c55604b",
+    "name": "Raman Gautam",
+    "role": "coordinator",
+    "wing": "Web Development",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494798/eguroy4udirdifrmatzd.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556062",
+    "name": "Shreyas Tirwadkar",
+    "role": "member",
+    "wing": "Private AI",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495889/n4hwbv5lqyjbjkvhsjpp.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": "https://instagram.com/shreyass_1912"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556072",
+    "name": "Sneha yadav",
+    "role": "member",
+    "wing": "Metaverse",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763496340/a1i7nikehlsd0pwc642d.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/sneha-yadav-ab411b327?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/sneha6238yad?igsh=bWQ5bDNuZGFydzhr"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556045",
+    "name": "Chanderkant",
+    "role": "member",
+    "wing": "Competitive Coding",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494457/xvycuq9ixpjzlv92pg3g.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/chanderkant-jhorar-079262323?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/chanderkant_547/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.667Z",
+    "updatedAt": "2025-11-19T14:54:25.667Z"
+  },
+  {
+    "_id": "691dda218fca60433c556051",
+    "name": "Lovish Kansal",
+    "role": "coordinator",
+    "wing": "Competitive Coding",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495068/gyfgigu8z4wa06pzrds9.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556049",
+    "name": "Krish Patel",
+    "role": "coordinator",
+    "wing": "Web Development",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494737/om0gtejab4rsxwcwngot.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556064",
+    "name": "Mayank Kr Jha",
+    "role": "member",
+    "wing": "Private AI",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495947/yy00gxprbqjm1qbzmo9a.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T17:35:38.875Z"
+  },
+  {
+    "_id": "691dda218fca60433c556070",
+    "name": "Ayush Anand",
+    "role": "member",
+    "wing": "Metaverse",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763496263/ii8vgpqyhwmxrxalevew.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/ayush-anand-246419330/",
+      "twitter": "-",
+      "instagram": "https://www.instagram.com/ayuussh11/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556046",
+    "name": "Karan Kandhare",
+    "role": "member",
+    "wing": "Competitive Coding",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494489/ho62kdm5zb407xlr1h2y.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/karan-kandhare-281b15332?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/karan_fluxy/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.667Z",
+    "updatedAt": "2025-11-19T14:54:25.667Z"
+  },
+  {
+    "_id": "691dda218fca60433c55606f",
+    "name": "Srishti",
+    "role": "member",
+    "wing": "Metaverse",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763496237/lnkgq3pufy0rgzvtfxoz.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "http://linkedin.com/in/srishti-goyal-03a682326",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/srishti.goyal_3786/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556055",
+    "name": "Jhanvi Bhatra",
+    "role": "member",
+    "wing": "Design",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495178/ewir0hkcphymj76frray.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/jhanvi-bhatra16",
+      "twitter": "",
+      "instagram": "https://www.linkedin.com/in/jhanvi-bhatra16"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c55605a",
+    "name": "Manik Chadgal",
+    "role": "coordinator",
+    "wing": "FOSS",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495297/lnl0mut8lwxn7yjhmz0t.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c55605b",
+    "name": "Mridankan",
+    "role": "member",
+    "wing": "FOSS",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495329/y5qyu5fii2j0zvlzefep.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/mridankan-mandal-38065a332?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c55606e",
+    "name": "Lucky Raut",
+    "role": "member",
+    "wing": "Metaverse",
+    "bio": "",
+    "image": "/gravity-logo.png",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c55604f",
+    "name": "Raghav Vohra",
+    "role": "member",
+    "wing": "Web Development",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1765453778/fijiiubjljkbfrzddhjg.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/raghav-vohra-250516388/",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/raghav_6753/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-12-11T11:49:43.680Z",
+    "instagram": "https://www.instagram.com/raghav_6753/"
+  },
+  {
+    "_id": "691dda218fca60433c556053",
+    "name": "Jashan Goyal",
+    "role": "member",
+    "wing": "Design",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495128/olg2iqvozrwpfrgjwg49.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/jashan-goyal-9946a9313?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "https://x.com/jashangoyal85?t=9A2lyBzzoj2UEQ9yB8boMg&s=09",
+      "instagram": "https://www.instagram.com/jashan_85goyal?igsh=eWhrNWNmemZmeHEw"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c55606d",
+    "name": "Yash Farakate",
+    "role": "coordinator",
+    "wing": "Metaverse",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763496196/w4sny7c1uydnyzzw6r1k.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c55603e",
+    "name": "Bibhas Ghoshal",
+    "role": "coordinator",
+    "wing": "",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763493994/bnofkay62p1ahumgvfgf.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": true,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.664Z",
+    "updatedAt": "2025-11-19T19:45:41.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556060",
+    "name": "Avaneesh Karthik",
+    "role": "coordinator",
+    "wing": "Private AI",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495455/jx9cjlkstdmmewrlfklc.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556069",
+    "name": "Gauri Joshi",
+    "role": "member",
+    "wing": "Blockchain",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763496108/buzbeocigqh03hih9a8i.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/gauri-joshi-08b247326?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/gaurijoshii_?igsh=MThtb3V4NHo4Y3p3NQ%3D%3D&utm_source=qr"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556040",
+    "name": "Amit Bansal",
+    "role": "coordinator",
+    "wing": "",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763498804/kdvpqsniztufi7dgpuaf.jpg",
+    "isOverallCoordinator": true,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/amitbansal2ooo",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.667Z",
+    "updatedAt": "2025-11-19T14:54:25.667Z"
+  },
+  {
+    "_id": "691dda218fca60433c55605e",
+    "name": "Krishna",
+    "role": "member",
+    "wing": "FOSS",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495402/iurptdtfu4vpuyphtxfa.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/krishna-sah-568515327?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/krishna_sah_01/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556071",
+    "name": "Mahavir",
+    "role": "member",
+    "wing": "Metaverse",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763909447/ux2f249fhbfmepk5hocn.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/dodiya-mahavirsinh-vikrambhai-645795343?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "https://x.com/MVD0001?t=Ca_JDNCtIJXK9jXbARAa7A&s=09"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-23T14:50:50.319Z"
+  },
+  {
+    "_id": "691dda218fca60433c556042",
+    "name": "Arshdeep Singh",
+    "role": "coordinator",
+    "wing": "Competitive Coding",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494319/rmddeuc4yt5psaxhjrta.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.667Z",
+    "updatedAt": "2025-11-19T14:54:25.667Z"
+  },
+  {
+    "_id": "691dda218fca60433c556065",
+    "name": "Chandan Sapkale",
+    "role": "member",
+    "wing": "Private AI",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495965/wxaqbstiy4jzbnbep4pe.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/chandan-sapkale-72736a326?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/chandansapkale_1801?igsh=endsZzZneW4xdjBw"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556068",
+    "name": "Mayank Dubey",
+    "role": "coordinator",
+    "wing": "Blockchain",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763496090/u57l41bh5szmjmzalqaf.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556044",
+    "name": "Naveen Patidar",
+    "role": "coordinator",
+    "wing": "Competitive Coding",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494371/mptsyhdyzi00rwjbkkfr.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.667Z",
+    "updatedAt": "2025-11-19T14:54:25.667Z"
+  },
+  {
+    "_id": "691dda218fca60433c556056",
+    "name": "Divyansh Gupta",
+    "role": "member",
+    "wing": "Design",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495198/wco7lndvnjvr5wpci6z3.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/divyansh-gupta-503264333?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/divyanshgupta_0616?igsh=MXZkcDRqNHk0aXd2aA=="
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556061",
+    "name": "Gautam Khokhar",
+    "role": "coordinator",
+    "wing": "Private AI",
+    "bio": "",
+    "image": "/gravity-logo.png",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c55605c",
+    "name": "Jash Shah",
+    "role": "member",
+    "wing": "FOSS",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495350/h10qiyyxhaxssebuxrfn.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/jash-shah-94b10b333",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/_jash_shah._/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556063",
+    "name": "Surbhi Sah",
+    "role": "member",
+    "wing": "Private AI",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495916/emfpevpiukk8wdawdziv.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/surbhi-kumari-sah-a96686326?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
+      "twitter": "",
+      "instagram": "https://instagram.com/surbhisah07"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c556041",
+    "name": "Divyansh Aggarwal",
+    "role": "coordinator",
+    "wing": "",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763498598/kzsmpmcjzicinyxntoiq.jpg",
+    "isOverallCoordinator": true,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.667Z",
+    "updatedAt": "2025-11-19T14:54:25.667Z"
+  },
+  {
+    "_id": "691dda218fca60433c556057",
+    "name": "Purvi Jangde",
+    "role": "member",
+    "wing": "Design",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495227/w2it8jfxm5wkpjf3ojkn.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "www.linkedin.com/in/purvi-jangde-45b402329",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/purvi_jangde04/"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556059",
+    "name": "Snehal Gupta",
+    "role": "coordinator",
+    "wing": "FOSS",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495272/t0jhknrm85jbkupa5iiq.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556047",
+    "name": "Abhijeet Jain",
+    "role": "member",
+    "wing": "Competitive Coding",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763494520/fuv25dlhsob7oj6kdptn.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/abhijeet-jain-84486a313",
+      "twitter": "",
+      "instagram": "https://www.instagram.com/abhijeet_jain22"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.667Z",
+    "updatedAt": "2025-11-19T14:54:25.667Z"
+  },
+  {
+    "_id": "691dda218fca60433c556052",
+    "name": "Gunjan Thakur",
+    "role": "coordinator",
+    "wing": "Design",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495104/upc7ym5g98szuyhxt3pu.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c556058",
+    "name": "Samandeep",
+    "role": "coordinator",
+    "wing": "FOSS",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495251/c3vtfqkjtzp6vzw9bzhu.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.668Z",
+    "updatedAt": "2025-11-19T14:54:25.668Z"
+  },
+  {
+    "_id": "691dda218fca60433c55605f",
+    "name": "Harshita",
+    "role": "member",
+    "wing": "FOSS",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763495425/lznxarrzmrcz8bmzjtrz.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/harshita-b-385030261?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+      "twitter": "-",
+      "instagram": "https://www.instagram.com/harshita_076_?igsh=bmEycnloeXVpdTIw"
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691dda218fca60433c55606c",
+    "name": "Krishna Sikheriya",
+    "role": "coordinator",
+    "wing": "Metaverse",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763496175/rfzsr1ortb2ly3603nvr.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "",
+      "twitter": "",
+      "instagram": ""
+    },
+    "__v": 0,
+    "createdAt": "2025-11-19T14:54:25.669Z",
+    "updatedAt": "2025-11-19T14:54:25.669Z"
+  },
+  {
+    "_id": "691df645ae2f3fa1dccb0e3d",
+    "name": "Nikhil Goyal",
+    "role": "member",
+    "wing": "Competitive Coding",
+    "bio": "",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1763571448/Nikhil_goyal_hl0wa7.jpg",
+    "isOverallCoordinator": false,
+    "isFacultyCoordinator": false,
+    "socials": {
+      "github": "",
+      "linkedin": "https://www.linkedin.com/in/nikhil-goyal-062a00314?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app",
+      "twitter": "https://x.com/cteznik06?s=21",
+      "instagram": "https://www.instagram.com/ctez_nik06?igsh=MWhwZTdlOWl6NDNvaQ%3D%3D&utm_source=qr"
+    },
+    "createdAt": "2025-11-19T16:54:00.000Z",
+    "updatedAt": "2025-11-19T16:54:00.000Z",
+    "__v": 0
+  }
+]

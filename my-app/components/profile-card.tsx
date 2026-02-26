@@ -11,6 +11,7 @@ interface ProfileCardProps {
   behindGlowColor?: string;
   behindGlowSize?: string;
   className?: string;
+  styleOverrides?: React.CSSProperties;
   enableTilt?: boolean;
   enableMobileTilt?: boolean;
   mobileTiltSensitivity?: number;
@@ -74,6 +75,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   behindGlowColor,
   behindGlowSize,
   className = "",
+  styleOverrides,
   enableTilt = true,
   enableMobileTilt = false,
   mobileTiltSensitivity = 5,
@@ -411,8 +413,16 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
         "--inner-gradient": innerGradient ?? DEFAULT_INNER_GRADIENT,
         "--behind-glow-color": behindGlowColor ?? "rgba(125, 190, 255, 0.35)",
         "--behind-glow-size": behindGlowSize ?? "50%",
+        ...(styleOverrides ?? {}),
       }) as React.CSSProperties,
-    [iconUrl, grainUrl, innerGradient, behindGlowColor, behindGlowSize],
+    [
+      iconUrl,
+      grainUrl,
+      innerGradient,
+      behindGlowColor,
+      behindGlowSize,
+      styleOverrides,
+    ],
   );
 
   const handleContactClick = useCallback(() => {

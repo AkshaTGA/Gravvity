@@ -1,0 +1,35 @@
+[
+  {
+    "_id": "691dec779d6bf8fb018fcba0",
+    "title": "MAD-WEB",
+    "date": "2024-04-06",
+    "description": "<!--gravity:desc=html-->\n<p style=\"color: #e5e7eb; font-size: 16px; line-height: 1.5; padding: 12px; text-align: left;\">\n  <strong style=\"color: #60a5fa;\">Gather 'round, fellow coders and tech enthusiasts!</strong> Prepare yourselves for the ultimate coding showdown at the <strong style=\"color: #60a5fa;\">MadWeb Hackathon</strong>!\n</p>\n<p style=\"color: #e5e7eb; font-size: 16px; line-height: 1.5; padding: 12px; text-align: left;\">\n  Mark your calendars from <strong style=\"color: #818cf8;\">April 6th to April 8th, 2024</strong>, for an exhilarating <strong>36-hour marathon</strong> of non-stop innovation and coding prowess. Hurry up as we'll unravel a theme that'll set your creativity ablaze and propel your skills to unprecedented heights.\n</p>\n<p style=\"color: #e5e7eb; font-size: 16px; line-height: 1.5; padding: 12px; text-align: left;\">\n  With prizes worth a staggering <strong style=\"color: #a5b4fc;\">40k+</strong> up for grabs, you wouldn't want to miss out!\n</p>\n<p style=\"color: #e5e7eb; font-size: 16px; line-height: 1.5; padding: 12px; text-align: left;\">\n  Register before <strong style=\"color: #818cf8;\">April 6th, 2024, at 12 noon</strong>, to secure your spot in this monumental event.\n</p>\n<p style=\"color: #e5e7eb; font-size: 16px; line-height: 1.5; padding: 12px; text-align: left;\">\n  <a href=\"https://docs.google.com/forms/d/e/1FAIpQLSceKtxfk-7TCYwPkEcKZ8w3z0-z68X9IqFF8yc6Xa1chYj1TA/viewform\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color: #60a5fa; text-decoration: underline;\">Registration link</a> (LINK EXPIRED)\n</p>\n<p style=\"color: #e5e7eb; font-size: 16px; line-height: 1.5; padding: 12px; text-align: left;\">\n  <strong style=\"color: #60a5fa;\">#MadWebHackathon #CodeToCreate</strong><br>\n  <strong style=\"color: #60a5fa;\">#Aparoksha #codetovictory</strong>\n</p>",
+    "wing": "Web Development",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1768850230/porzemvv0xtjxyvxs04i.png",
+    "createdAt": "2025-11-19T16:12:39.587Z",
+    "updatedAt": "2026-01-21T16:11:58.060Z",
+    "__v": 0
+  },
+  {
+    "_id": "691decab9d6bf8fb018fcba2",
+    "title": "INQUIZITO",
+    "date": "2024-03-02",
+    "description": "<!--gravity:desc=html-->\n<p style=\"color: #e5e7eb; font-size: 16px; line-height: 1.5; padding: 12px 0;\">\n  <strong style=\"color: #60a5fa; font-size: 18px;\">Embark on an innovative quest at Inquizito during III Hackathon!</strong>\n</p>\n<p style=\"color: #e5e7eb; font-size: 16px; line-height: 1.5; padding: 12px 0;\">\n  Challenge your <strong style=\"color: #818cf8;\">knowledge</strong>, ignite your <strong style=\"color: #a5b4fc;\">creativity</strong>, and explore the latest <strong style=\"color: #c7d2fe;\">innovations</strong> shaping our world. Join us for an unforgettable experience of <strong style=\"color: #ddd6fe;\">discovery</strong> and <strong style=\"color: #f5e8ff;\">collaboration</strong>!\n</p>\n<p style=\"color: #e5e7eb; font-size: 16px; line-height: 1.5; padding: 12px 0;\">\n  <strong style=\"color: #38bdf8;\">#InnovationQuest</strong> <strong style=\"color: #06b6d4;\">#IIIHackathon</strong> <strong style=\"color: #0891b2;\">#gravity</strong> <strong style=\"color: #0e7490;\">#hackathon</strong>\n</p>",
+    "wing": "Design",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1768850211/xftokqtqrwrp8dyphjbk.png",
+    "createdAt": "2025-11-19T16:13:31.929Z",
+    "updatedAt": "2026-01-21T21:07:23.417Z",
+    "__v": 0
+  },
+  {
+    "_id": "691decd39d6bf8fb018fcba4",
+    "title": "METADIVE",
+    "date": "2024-02-07",
+    "description": "<!--gravity:desc=html-->\n<p style=\"color: #e5e7eb; font-size: 16px; font-weight: 400; line-height: 1.5; padding: 12px 0; text-align: left;\">\n  Get ready to put your knowledge to the test at the <strong style=\"color: #60a5fa;\">Metadive Quiz</strong> hosted by Gravity! Whether you’re a seasoned metaverse enthusiast or just dipping your toes into the virtual waters, this quiz promises an engaging challenge for all interested in the basics of the metaverse.\n</p>",
+    "wing": "Metaverse",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1768850175/jubzqpvlbkdq3fridkj6.png",
+    "createdAt": "2025-11-19T16:14:11.206Z",
+    "updatedAt": "2026-01-21T21:07:58.730Z",
+    "__v": 0
+  }
+]
