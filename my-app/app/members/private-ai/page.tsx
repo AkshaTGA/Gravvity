@@ -1,5 +1,5 @@
-import { MembersPageContent } from "@/components/members-page-content";
+import { PrivateAIMembersPage } from "@/components/private-ai-members-page";
 
-export default function PrivateAIMembersPage() {
-  return <MembersPageContent wingFilter="Private AI" />;
+export default function PrivateAIWingPage() {
+  return <PrivateAIMembersPage />;
 }
