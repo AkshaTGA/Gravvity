@@ -247,7 +247,7 @@
   }
 
   .float-animation {
-    animation: float calc(10s * var(--anim-scale)) ease-in-out infinite;
+    animation: float calc(5s * var(--anim-scale)) ease-in-out infinite;
   }
 
   @keyframes float {
@@ -258,6 +258,30 @@
     50% {
       transform: translateY(-2px);
     }
+  }
+
+  .hero-g-float {
+    animation: hero-g-float calc(14s * var(--anim-scale)) ease-in-out infinite;
+  }
+
+  @keyframes hero-g-float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .hero-g-hover img {
+    transition: transform 300ms ease-out, filter 300ms ease-out;
+    will-change: transform, filter;
+  }
+
+  .hero-g-hover:hover img {
+    transform: scale(1.03) rotate(-1deg);
+    filter: drop-shadow(0 0 14px rgba(124, 92, 255, 0.45));
   }
 
   .pulse-glow {

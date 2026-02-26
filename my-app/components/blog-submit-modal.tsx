@@ -1,7 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckCircle, X, FileText, Link, User, Hash, Tag, Calendar, Image as ImageIcon, AlignLeft } from "lucide-react";
+import {
+  CheckCircle,
+  X,
+  FileText,
+  Link,
+  User,
+  Hash,
+  Tag,
+  Calendar,
+  Image as ImageIcon,
+  AlignLeft,
+  type LucideIcon,
+} from "lucide-react";
 import MagicButton from "@/components/magic-button";
 import { uploadToCloudinary } from "@/lib/cloudinary";
 import { submitBlog } from "@/lib/blog-store";
@@ -13,7 +25,7 @@ function InputField({
   children,
 }: {
   label: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   optional?: boolean;
   children: React.ReactNode;
 }) {
@@ -23,7 +35,9 @@ function InputField({
         <Icon size={13} className="text-purple-400" />
         {label}
         {optional && (
-          <span className="text-xs text-foreground/40 font-normal ml-1">optional</span>
+          <span className="text-xs text-foreground/40 font-normal ml-1">
+            optional
+          </span>
         )}
       </label>
       {children}
@@ -102,7 +116,10 @@ export default function BlogSubmitModal({
         role="dialog"
         aria-modal="true"
         className="relative z-10 w-full max-w-xl bg-[#0d0d14] border border-white/10 rounded-2xl shadow-2xl max-h-[90vh] overflow-hidden flex flex-col"
-        style={{ boxShadow: "0 0 60px rgba(139,92,246,0.12), 0 25px 50px rgba(0,0,0,0.6)" }}
+        style={{
+          boxShadow:
+            "0 0 60px rgba(139,92,246,0.12), 0 25px 50px rgba(0,0,0,0.6)",
+        }}
       >
         {/* Header */}
         <div className="relative flex items-center justify-between px-6 py-5 border-b border-white/8">
@@ -118,8 +135,12 @@ export default function BlogSubmitModal({
               <FileText size={16} className="text-purple-300" />
             </div>
             <div>
-              <h3 className="font-semibold text-base text-white">Submit Your Article</h3>
-              <p className="text-xs text-foreground/50 mt-0.5">Share your Medium post with the community</p>
+              <h3 className="font-semibold text-base text-white">
+                Submit Your Article
+              </h3>
+              <p className="text-xs text-foreground/50 mt-0.5">
+                Share your Medium post with the community
+              </p>
             </div>
           </div>
           <button
@@ -138,7 +159,9 @@ export default function BlogSubmitModal({
                 <CheckCircle size={30} className="text-green-400" />
               </div>
               <div>
-                <p className="font-semibold text-green-300 text-base">{submittedMsg}</p>
+                <p className="font-semibold text-green-300 text-base">
+                  {submittedMsg}
+                </p>
                 <p className="text-sm text-foreground/50 mt-1">
                   An admin will review your submission shortly.
                 </p>
@@ -149,7 +172,12 @@ export default function BlogSubmitModal({
               onSubmit={async (e) => {
                 e.preventDefault();
                 const trimmed = link.trim();
-                if (!title.trim() || !author.trim() || !roll.trim() || !trimmed) {
+                if (
+                  !title.trim() ||
+                  !author.trim() ||
+                  !roll.trim() ||
+                  !trimmed
+                ) {
                   setError("Please fill in all required fields.");
                   return;
                 }
@@ -180,7 +208,9 @@ export default function BlogSubmitModal({
 
                   if (!res.ok) {
                     const errorData = await res.json().catch(() => ({}));
-                    throw new Error(errorData?.error || `Server error (${res.status})`);
+                    throw new Error(
+                      errorData?.error || `Server error (${res.status})`,
+                    );
                   }
 
                   submitBlog({
@@ -200,7 +230,8 @@ export default function BlogSubmitModal({
                     onClose();
                   }, 2500);
                 } catch (err) {
-                  const message = err instanceof Error ? err.message : "Submission failed";
+                  const message =
+                    err instanceof Error ? err.message : "Submission failed";
                   setError(message);
                 }
               }}
@@ -289,7 +320,9 @@ export default function BlogSubmitModal({
                 <div className="space-y-2">
                   <label className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border border-dashed border-white/15 bg-white/3 hover:bg-white/6 hover:border-purple-500/40 transition-all duration-200 cursor-pointer text-sm text-foreground/50 hover:text-foreground/80">
                     <ImageIcon size={14} />
-                    <span>{uploading ? "Uploading…" : "Click to upload image"}</span>
+                    <span>
+                      {uploading ? "Uploading…" : "Click to upload image"}
+                    </span>
                     <input
                       type="file"
                       accept="image/*"
@@ -353,7 +386,11 @@ export default function BlogSubmitModal({
 
               {/* Actions */}
               <div className="flex flex-col sm:flex-row gap-3 pt-1 pb-1">
-                <MagicButton type="submit" className="sm:flex-1" heightClass="h-11">
+                <MagicButton
+                  type="submit"
+                  className="sm:flex-1"
+                  heightClass="h-11"
+                >
                   Submit Article
                 </MagicButton>
                 <button

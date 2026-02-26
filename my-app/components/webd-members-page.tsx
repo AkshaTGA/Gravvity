@@ -14,7 +14,9 @@ import Matter from "matter-js";
 import { MembersPageContent } from "@/components/members-page-content";
 import { useMembers } from "@/hooks/use-members";
 import type { Member } from "@/lib/types";
+import { WebDHeroVisual } from "@/components/webd-hero-visual";
 import "@/components/webd-vintage-fun-mode.css";
+import "@/components/webd-hero-visual.css";
 
 type Phase = "search" | "results" | "showcase";
 
@@ -1168,22 +1170,33 @@ export function WebDMembersPage() {
         wingFilter="Web Development"
         topBanner={
           isDesktop ? (
-            <div className="webd-designer-banner hidden md:flex">
-              <div className="webd-scan-line"></div>
-              <div className="webd-db-content">
-                <div className="webd-db-title">
-                  <span>✨</span> SYSTEM OVERRIDE AVAILABLE
-                </div>
-                <div className="webd-db-sub">
-                  gravity_module.exe found // click to initialize vintage mode
+            <div className="webd-hero-split hidden md:flex">
+              {/* Left: animated web development visual */}
+              <div className="webd-hero-split-left">
+                <WebDHeroVisual />
+              </div>
+
+              {/* Right: fun mode banner */}
+              <div className="webd-hero-split-right">
+                <div className="webd-designer-banner flex">
+                  <div className="webd-scan-line"></div>
+                  <div className="webd-db-content">
+                    <div className="webd-db-title">
+                      <span>✨</span> SYSTEM OVERRIDE AVAILABLE
+                    </div>
+                    <div className="webd-db-sub">
+                      gravity_module.exe found // click to initialize vintage
+                      mode
+                    </div>
+                  </div>
+                  <button
+                    className="webd-db-btn"
+                    onClick={() => setFunModeOpen(true)}
+                  >
+                    INITIALIZE
+                  </button>
                 </div>
               </div>
-              <button
-                className="webd-db-btn"
-                onClick={() => setFunModeOpen(true)}
-              >
-                INITIALIZE
-              </button>
             </div>
           ) : null
         }

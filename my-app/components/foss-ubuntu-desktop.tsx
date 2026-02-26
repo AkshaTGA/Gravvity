@@ -1671,7 +1671,7 @@ export function FossUbuntuDesktop({ onExit }: { onExit?: () => void }) {
     active: boolean;
     action: () => void;
   }> = [
-    { id: "firefox", icon: <FirefoxIcon />, label: "Firefox Web Browser", active: windows.some((w) => w.type === "firefox"), action: () => openWindow("firefox", "Firefox", undefined, 920, 620) },
+    { id: "firefox", icon: <img src="/Firefox.png"/>, label: "Firefox Web Browser", active: windows.some((w) => w.type === "firefox"), action: () => openWindow("firefox", "Firefox", undefined, 920, 620) },
     { id: "files", icon: <FilesIcon />, label: "Files", active: windows.some((w) => w.type === "member"), action: () => { if (fossMembers.length > 0) openWindow("member", fossMembers[0].name, fossMembers[0], 700, 500); } },
     { id: "terminal", icon: <TerminalIcon />, label: "Terminal", active: windows.some((w) => w.type === "terminal"), action: () => openWindow("terminal", "Terminal", undefined, 620, 440) },
     { id: "notepad", icon: <NotepadIcon />, label: "Text Editor", active: windows.some((w) => w.type === "notepad"), action: () => openWindow("notepad", "Text Editor", undefined, 620, 480) },

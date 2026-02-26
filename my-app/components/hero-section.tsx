@@ -228,46 +228,48 @@ export function HeroSection() {
 
       <div className="relative z-10 max-w-5xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
         <div className="pt-8 flex justify-center">
-          <motion.div
-            className={`${
-              !_fm ? "cursor-pointer" : "cursor-grab"
-            } z-100 active:cursor-grabbing inline-flex mb-2 `}
-            drag={!isMobile}
-            animate={isMobile ? { scale: [1, 1.008, 1] } : _controls}
-            initial={{ x: 0, y: 0 }}
-            transition={
-              isMobile
-                ? { duration: 6, repeat: Infinity, ease: "easeInOut" }
-                : undefined
-            }
-            dragElastic={0.5}
-            dragTransition={{ bounceStiffness: 500, bounceDamping: 10 }}
-            dragConstraints={{
-              top: -70,
-              left: -500,
-              right: 500,
-              bottom: 350,
-            }}
-            dragListener={isMobile ? false : _fm}
-            onDragStart={() => {
-              if (resetTimer.current) {
-                clearTimeout(resetTimer.current);
-                resetTimer.current = null;
-              }
-              _controls.stop();
-            }}
-            onDragEnd={() => {
-              scheduleReset(100);
-            }}
-            onPointerDown={() => {
-              if (resetTimer.current) {
-                clearTimeout(resetTimer.current);
-                resetTimer.current = null;
-              }
-            }}
+          <div
+            className="flex items-center gap-1"
+            role="img"
+            aria-label="Gravity Logo"
           >
-            <div
-              className={"inline-flex items-center justify-center ".trim()}
+            <motion.div
+              className={`${
+                !_fm ? "cursor-pointer" : "cursor-grab"
+              } z-100 active:cursor-grabbing inline-flex mb-2 hero-g-hover`}
+              drag={!isMobile}
+              animate={isMobile ? { scale: [1, 1.008, 1] } : _controls}
+              initial={{ x: 0, y: 0 }}
+              transition={
+                isMobile
+                  ? { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                  : undefined
+              }
+              dragElastic={0.5}
+              dragTransition={{ bounceStiffness: 500, bounceDamping: 10 }}
+              dragConstraints={{
+                top: -70,
+                left: -500,
+                right: 500,
+                bottom: 350,
+              }}
+              dragListener={isMobile ? false : _fm}
+              onDragStart={() => {
+                if (resetTimer.current) {
+                  clearTimeout(resetTimer.current);
+                  resetTimer.current = null;
+                }
+                _controls.stop();
+              }}
+              onDragEnd={() => {
+                scheduleReset(100);
+              }}
+              onPointerDown={() => {
+                if (resetTimer.current) {
+                  clearTimeout(resetTimer.current);
+                  resetTimer.current = null;
+                }
+              }}
               onClick={handleLogoClick}
               ref={logoRef}
               onAnimationEnd={(e) => {
@@ -275,28 +277,30 @@ export function HeroSection() {
                   "logo-spin-once",
                 );
               }}
-              role="img"
-              aria-label="Gravity Logo"
             >
               <img
                 src="/gravity-logo.ico"
-                alt="Gravity Logo"
-                className="sm:w-25 sm:h-25 h-20 w-20 object-contain drop-shadow-[0_0_12px_rgba(124,92,255,0.35)] float-animation transition-all duration-300 ease-out hover:scale-105 hover:-rotate-2 hover:drop-shadow-[0_0_18px_rgba(124,92,255,0.6)] select-none pointer-events-none opacity-100!"
+                alt="Gravity G"
+                className="h-16 w-16 sm:h-20 sm:w-20 object-contain drop-shadow-[0_0_12px_rgba(124,92,255,0.35)] hero-g-float select-none opacity-100!"
                 loading="lazy"
                 decoding="async"
                 draggable={false}
                 style={{ opacity: 1 }}
               />
-            </div>
-          </motion.div>
+            </motion.div>
+            <img
+              src="/GRAVITY_Cover_No_BG.png"
+              alt="Gravity"
+              className="h-12 sm:h-30 w-auto object-contain drop-shadow-[0_0_16px_rgba(124,92,255,0.35)] select-none pointer-events-none"
+              loading="lazy"
+              decoding="async"
+              draggable={false}
+            />
+          </div>
         </div>
 
         {/* Main Heading */}
         <div className={isMobile ? "animate-fade-in-up" : ""}>
-          <LettersPullUp
-            text={`GRAVITY`}
-            className="gradient-text  select-none"
-          />
           <LettersPullUp text={`TECHNICAL SOCIETY`} className="select-none" />
         </div>
 

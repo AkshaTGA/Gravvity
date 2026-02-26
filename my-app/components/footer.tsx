@@ -36,7 +36,11 @@ export function Footer() {
                   alt="Gravity Logo"
                   className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.3)] transition-transform duration-200 ease-out hover:scale-105"
                 />
-                <span className="font-bold text-xl gradient-text">GRAVITY</span>
+                <img
+                  src="/GRAVITY_Cover_No_BG.png"
+                  alt="Gravity"
+                  className="h-8 w-auto object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.35)]"
+                />
               </Link>
             </div>
             <p className="text-foreground/60 text-sm">

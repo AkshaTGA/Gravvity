@@ -151,12 +151,9 @@ export function CPMembersPageContent() {
   return (
     <>
       <Navigation />
-      <main className="min-h-screen m-10 bg-background text-foreground">
+      <main className="min-h-screen mt-10 bg-background text-foreground">
         <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="text-center mb-10 slide-in-up">
-            <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-              Competitive Coding Wing
-            </h1>
+          <div className="text-center mb-10 mt-10 slide-in-up">
             <p className="text-md md:text-xl text-foreground/70">
               Visualize sorting algorithms on our CP team by name or role-priority.
             </p>
