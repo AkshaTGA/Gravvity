@@ -7,6 +7,7 @@ import { ReactNode, useMemo } from "react";
 import ProfileCard from "@/components/profile-card";
 import "@/components/ProfileCard.css";
 import MagicButton from "@/components/magic-button";
+import { isSameWing } from "@/lib/wing-match";
 
 type MembersPageContentProps = {
   wingFilter?: string;
@@ -34,7 +35,7 @@ export function MembersPageContent({
       pageSubheading = `Coordinators and members from the ${wingFilter} wing`;
       list = members.filter(
         (m) =>
-          m.wing === wingFilter &&
+          isSameWing(m.wing, wingFilter) &&
           !m.isOverallCoordinator &&
           !m.isFacultyCoordinator,
       );

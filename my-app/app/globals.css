@@ -427,6 +427,47 @@
   }
 }
 
+/* ═══════════════════════════════════════════════════════
+ *  ALGORITHM LAB — Card Effects
+ * ═══════════════════════════════════════════════════════ */
+
+/* CRT scanline overlay */
+.algo-scanline {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 2px,
+    rgba(255, 255, 255, 0.03) 4px
+  );
+  animation: algo-scanline-move 10s linear infinite;
+}
+
+@keyframes algo-scanline-move {
+  from { background-position: 0 0; }
+  to { background-position: 0 120px; }
+}
+
+/* Status LED blink */
+.algo-status-blink {
+  animation: algo-blink 2s ease-in-out infinite;
+}
+
+@keyframes algo-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* Cursor blink for terminal filter */
+.algo-cursor-blink {
+  animation: algo-cursor 1s step-end infinite;
+}
+
+@keyframes algo-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 @keyframes shimmer {
   0%,
   100% {

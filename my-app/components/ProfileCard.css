@@ -33,6 +33,9 @@
   --avatar-width: 80%;
   --avatar-bottom: 96px; /* keeps image above the info bar */
   --avatar-radius: 16px; /* default image corner radius */
+  --avatar-crop-x: 50%;
+  --avatar-crop-y: 50%;
+  --avatar-zoom: 1;
 }
 
 .pc-card-wrapper {
@@ -236,7 +239,7 @@
 
 .pc-avatar-content {
   mix-blend-mode: normal; /* keep original image colors */
-  overflow: visible;
+  overflow: hidden;
   transform: translateZ(2);
   backface-visibility: hidden;
 }
@@ -249,27 +252,30 @@
   pointer-events: auto;
   cursor: pointer;
   z-index: 2;
+  overflow: hidden;
 }
 
 .avatar-hover-zone .avatar {
   pointer-events: none; /* hover zone handles interactions */
-  width: var(--avatar-width);
-  max-height: 80%;
-  height: 63%;
+  width: calc(var(--avatar-width) / var(--avatar-zoom, 1));
+  max-height: calc(80% / var(--avatar-zoom, 1));
+  height: calc(63% / var(--avatar-zoom, 1));
   position: absolute;
   left: 50%;
-  transform-origin: 50% 100%;
+  transform-origin: 50% 50%;
   transform: translateX(calc(-50% + (var(--pointer-from-left) - 0.5) * 4px))
     translateZ(0) scaleY(calc(1 + (var(--pointer-from-top) - 0.5) * 0.015))
-    scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.008));
+    scaleX(calc(1 + (var(--pointer-from-left) - 0.5) * 0.008))
+    scale(var(--avatar-zoom, 1));
   bottom: var(--avatar-bottom);
   object-fit: cover;
+  object-position: var(--avatar-crop-x) var(--avatar-crop-y);
   border-radius: var(--avatar-radius);
   backface-visibility: hidden;
   will-change: transform;
   transition: transform 140ms ease-out, width 380ms ease, height 380ms ease,
     left 380ms ease, bottom 380ms ease, border-radius 380ms ease,
-    opacity 280ms ease, filter 280ms ease;
+    opacity 280ms ease, filter 280ms ease, object-position 200ms ease;
 }
 
 /* Hover effect: only when hovering image itself */

@@ -1,0 +1,48 @@
+[
+  {
+    "_id": "69373dffb4672342a387b4e5",
+    "title": "Ultimate Graphs Guide for Competitive Programming",
+    "author": "Kunal Khandelwal",
+    "rollNumber": "IIT2024162",
+    "mediumUrl": "https://medium.com/@kunalkhandelwal5604/ultimate-graphs-guide-for-competitive-programming-020f176bb424",
+    "category": "Competitive Coding",
+    "content": "This guide collects everything you need if you’re practicing graph theory for competitive programming.",
+    "date": "2025-11-19",
+    "approved": true,
+    "schemaVersion": 3,
+    "createdAt": "2025-12-08T21:07:11.807Z",
+    "updatedAt": "2025-12-08T21:07:28.872Z",
+    "__v": 0,
+    "status": "approved"
+  },
+  {
+    "_id": "6941ba95a20de5f09832fa52",
+    "title": "Spatial Computing",
+    "author": "Ayush Anand",
+    "rollNumber": "IIT2024246",
+    "mediumUrl": "https://medium.com/@2019ayushanand/spatial-computing-the-alignment-of-virtual-and-real-worlds-64710e3105b9",
+    "image": "https://res.cloudinary.com/ds5fygnew/image/upload/v1765915108/qzswzvsg2xmgqtsnzvv9.png",
+    "category": "Metaverse",
+    "content": "Understanding the alignment of virtual and real worlds",
+    "date": "2025-12-17",
+    "approved": true,
+    "schemaVersion": 3,
+    "createdAt": "2025-12-16T20:01:25.908Z",
+    "updatedAt": "2025-12-16T20:04:32.686Z",
+    "__v": 0
+  },
+  {
+    "_id": "6943b75914681123fd560ea4",
+    "title": "Google’s ASD STEP Intern Interview Experience",
+    "author": "Aayush Goyal",
+    "rollNumber": "IIT2023065",
+    "mediumUrl": "https://medium.com/@aayushcipher07/from-silence-to-offer-letter-my-journey-to-becoming-a-google-asdi-intern-38494e2deb3d?postPublishedType=repub",
+    "category": "General",
+    "date": "2025-12-17",
+    "approved": true,
+    "schemaVersion": 3,
+    "createdAt": "2025-12-18T08:12:09.900Z",
+    "updatedAt": "2025-12-18T08:15:20.421Z",
+    "__v": 0
+  }
+]

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { Calendar, MapPin, X } from "lucide-react";
@@ -14,6 +14,154 @@ type EventCardProps = {
   index: number;
   setSelected: (e: Event | null) => void;
 };
+
+function useWebEffect() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+  const [hovering, setHovering] = useState(false);
+  const [size, setSize] = useState({ w: 400, h: 260 });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const sync = () => setSize({ w: el.offsetWidth, h: el.offsetHeight });
+    sync();
+    const ro = new ResizeObserver(sync);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  const onMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = ref.current?.getBoundingClientRect();
+    if (!rect) return;
+    setPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  }, []);
+
+  return { ref, pos, hovering, setHovering, size, onMove };
+}
+
+const WEB_NODES = [
+  { x: 10, y: 15 }, { x: 30, y: 8 },  { x: 50, y: 20 }, { x: 70, y: 12 },
+  { x: 90, y: 18 }, { x: 15, y: 35 }, { x: 40, y: 40 }, { x: 65, y: 32 },
+  { x: 85, y: 38 }, { x: 8, y: 55 },  { x: 25, y: 60 }, { x: 55, y: 52 },
+  { x: 75, y: 58 }, { x: 92, y: 50 }, { x: 20, y: 78 }, { x: 45, y: 72 },
+  { x: 60, y: 82 }, { x: 80, y: 75 }, { x: 95, y: 85 }, { x: 12, y: 92 },
+  { x: 35, y: 88 }, { x: 68, y: 95 }, { x: 88, y: 90 },
+];
+
+const WEB_CONNECTIONS: { f: number; t: number }[] = [];
+WEB_NODES.forEach((a, i) =>
+  WEB_NODES.forEach((b, j) => {
+    if (i < j && Math.hypot(a.x - b.x, a.y - b.y) < 30) {
+      WEB_CONNECTIONS.push({ f: i, t: j });
+    }
+  }),
+);
+
+function NetworkBg({
+  pos,
+  hovering,
+  size,
+}: {
+  pos: { x: number; y: number };
+  hovering: boolean;
+  size: { w: number; h: number };
+}) {
+  return (
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      <div
+        className="absolute -top-[20%] -right-[20%] w-[70%] h-[70%] rounded-full opacity-30"
+        style={{
+          background:
+            "radial-gradient(ellipse at center,rgba(139,92,246,.2) 0%,rgba(124,58,237,.08) 40%,transparent 70%)",
+        }}
+      />
+      <div
+        className="absolute -bottom-[15%] -left-[15%] w-[60%] h-[60%] rounded-full opacity-25"
+        style={{
+          background:
+            "radial-gradient(ellipse at center,rgba(167,139,250,.18) 0%,rgba(139,92,246,.06) 45%,transparent 70%)",
+        }}
+      />
+
+      <svg
+        className="absolute inset-0 w-full h-full"
+        style={{ opacity: hovering ? 0.86 : 0.28, transition: "opacity .5s ease" }}
+      >
+        {WEB_CONNECTIONS.map((connection, idx) => {
+          const from = WEB_NODES[connection.f];
+          const to = WEB_NODES[connection.t];
+          const midX = ((from.x + to.x) / 200) * size.w;
+          const midY = ((from.y + to.y) / 200) * size.h;
+          const dist = Math.hypot(pos.x - midX, pos.y - midY);
+          const intensity = hovering ? Math.max(0, 1 - dist / 120) : 0;
+
+          return (
+            <line
+              key={idx}
+              x1={`${from.x}%`}
+              y1={`${from.y}%`}
+              x2={`${to.x}%`}
+              y2={`${to.y}%`}
+              stroke={`rgba(167,139,250,${0.05 + intensity * 0.3})`}
+              strokeWidth={0.55 + intensity * 0.9}
+              style={{ transition: "stroke .15s,stroke-width .15s" }}
+            />
+          );
+        })}
+
+        {WEB_NODES.map((node, idx) => {
+          const nodeX = (node.x / 100) * size.w;
+          const nodeY = (node.y / 100) * size.h;
+          const dist = Math.hypot(pos.x - nodeX, pos.y - nodeY);
+          const intensity = hovering ? Math.max(0, 1 - dist / 100) : 0;
+
+          return (
+            <g key={idx}>
+              {intensity > 0.1 && (
+                <circle
+                  cx={`${node.x}%`}
+                  cy={`${node.y}%`}
+                  r={5 + intensity * 10}
+                  fill={`rgba(167,139,250,${intensity * 0.18})`}
+                  style={{ transition: "all .2s" }}
+                />
+              )}
+              <circle
+                cx={`${node.x}%`}
+                cy={`${node.y}%`}
+                r={1.2 + intensity * 1.8}
+                fill={`rgba(196,181,253,${0.18 + intensity * 0.55})`}
+                style={{ transition: "all .15s" }}
+              />
+            </g>
+          );
+        })}
+      </svg>
+
+      {hovering && (
+        <div
+          className="absolute w-48 h-48 rounded-full pointer-events-none"
+          style={{
+            left: pos.x - 96,
+            top: pos.y - 96,
+            background:
+              "radial-gradient(circle at center,rgba(139,92,246,.06) 0%,rgba(167,139,250,.03) 40%,transparent 70%)",
+            opacity: 0.65,
+          }}
+        />
+      )}
+
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at center,transparent 50%,rgba(0,0,0,.1) 100%)",
+        }}
+      />
+    </div>
+  );
+}
 
 function EventCard({ event, index, setSelected }: EventCardProps) {
   return (
@@ -69,6 +217,7 @@ function EventCard({ event, index, setSelected }: EventCardProps) {
 
 export default function EventsPage() {
   const events = useEvents();
+  const stayUpdatedWeb = useWebEffect();
   const [selected, setSelected] = useState<Event | null>(null);
   const [email, setEmail] = useState("");
   const [subStatus, setSubStatus] = useState<
@@ -305,8 +454,19 @@ export default function EventsPage() {
           )}
 
           {/* Call to Action */}
-          <div className="mt-8 sm:mt-12 md:mt-16 card-glow overflow-hidden slide-in-up max-w-4xl mx-auto">
-            <div className="flex flex-col md:flex-row">
+          <div
+            ref={stayUpdatedWeb.ref}
+            className="mt-8 sm:mt-12 md:mt-16 card-glow overflow-hidden slide-in-up max-w-4xl mx-auto relative"
+            onMouseMove={stayUpdatedWeb.onMove}
+            onMouseEnter={() => stayUpdatedWeb.setHovering(true)}
+            onMouseLeave={() => stayUpdatedWeb.setHovering(false)}
+          >
+            <NetworkBg
+              pos={stayUpdatedWeb.pos}
+              hovering={stayUpdatedWeb.hovering}
+              size={stayUpdatedWeb.size}
+            />
+            <div className="relative z-10 flex flex-col md:flex-row">
               {/* Left Content — ~70% */}
               <div className="md:w-[70%] w-full p-5 sm:p-6 md:p-8 flex flex-col items-center justify-center text-center">
                 <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">

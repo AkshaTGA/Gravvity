@@ -16,9 +16,10 @@ import {
   getRolePriority,
 } from "@/lib/cp-sorting"
 import { LayoutGroup, motion, AnimatePresence } from "framer-motion"
+import { isSameWing } from "@/lib/wing-match"
 
 function isCompetitiveCodingMember(member: Member): boolean {
-  return member.wing?.trim().toLowerCase() === "competitive coding"
+  return isSameWing(member.wing, "Competitive Coding")
 }
 
 export function CPMembersPageContent() {
