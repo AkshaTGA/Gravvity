@@ -1,21 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { MembersPageContent } from "@/components/members-page-content";
 import { FossUbuntuDesktop } from "@/components/foss-ubuntu-desktop";
 import { FossHeroVisual } from "@/components/foss-hero-visual";
+import { useIsTrueDesktop } from "@/hooks/use-true-desktop";
 
 export default function FossMembersPage() {
   const [showDesktop, setShowDesktop] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia("(min-width: 768px)");
-    const handleChange = () => setIsDesktop(media.matches);
-    handleChange();
-    media.addEventListener("change", handleChange);
-    return () => media.removeEventListener("change", handleChange);
-  }, []);
+  const isDesktop = useIsTrueDesktop();
 
   if (showDesktop) {
     return <FossUbuntuDesktop onExit={() => setShowDesktop(false)} />;

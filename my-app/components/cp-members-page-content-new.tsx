@@ -2,7 +2,7 @@
 
 import { useMemo, useEffect, useState, useCallback } from "react";
 import { useMembers } from "@/hooks/use-members";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import { useIsTrueDesktop } from "@/hooks/use-true-desktop";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import ProfileCard from "@/components/profile-card";
@@ -276,7 +276,7 @@ export function CPMembersPageContent() {
     [cpMembers],
   );
 
-  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  const isDesktop = useIsTrueDesktop();
 
   return (
     <>

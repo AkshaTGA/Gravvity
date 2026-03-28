@@ -9,6 +9,7 @@ import "@/components/ProfileCard.css";
 import MagicButton from "@/components/magic-button";
 import { isSameWing } from "@/lib/wing-match";
 import "@/components/wing-headings.css";
+import { useIsTrueDesktop } from "@/hooks/use-true-desktop";
 
 type MembersPageContentProps = {
   wingFilter?: string;
@@ -25,6 +26,7 @@ export function MembersPageContent({
   topBanner,
   onMemberHover,
 }: MembersPageContentProps) {
+  const isTrueDesktop = useIsTrueDesktop();
   const members = useMembers();
 
   const { coordinators, regularMembers, heading, subheading } = useMemo(() => {
@@ -100,8 +102,8 @@ export function MembersPageContent({
           </div>
 
           <div className="mb-20">
-            {topBanner && (
-              <div className="hidden md:block mb-10">{topBanner}</div>
+            {topBanner && isTrueDesktop && (
+              <div className="mb-10">{topBanner}</div>
             )}
             <h2 className="text-3xl font-bold mb-8 flex items-center justify-center gap-2 text-center">
               <span className="text-2xl">

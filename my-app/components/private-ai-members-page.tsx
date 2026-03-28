@@ -15,6 +15,7 @@ import type { Member } from "@/lib/types";
 import { isSameWing } from "@/lib/wing-match";
 import ProfileCard from "@/components/profile-card";
 import "@/components/ProfileCard.css";
+import { useIsTrueDesktop } from "@/hooks/use-true-desktop";
 
 const GRAVITY_LOGO_SRC = "/gravity-logo.png";
 const WING_FILTER = "Private AI";
@@ -1217,18 +1218,13 @@ function ParticleViewport({
 // ─── Main export ─────────────────────────────────────────────────────────────
 export function PrivateAIMembersPage() {
   const allMembers = useMembers();
-  const [isDesktop, setIsDesktop] = useState(false);
+  const isDesktop = useIsTrueDesktop();
   const [mounted, setMounted] = useState(false);
   const [activeSrc, setActiveSrc] = useState<string>(GRAVITY_LOGO_SRC);
   const [activeMemberId, setActiveMemberId] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const handler = () => setIsDesktop(mq.matches);
-    handler();
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
   }, []);
 
   // Load JetBrains Mono font

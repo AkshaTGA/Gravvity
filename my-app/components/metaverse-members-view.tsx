@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { MetaverseAnimation } from "@/components/wing-animations/metaverse";
+import { useIsTrueDesktop } from "@/hooks/use-true-desktop";
 
 const MembersPageContent = dynamic(
   () =>
@@ -21,16 +22,8 @@ const MembersPageContent = dynamic(
 const SIMULATION_URL = "/metaverse-sim/index.html";
 
 export function MetaverseMembersView() {
-  const [isDesktop, setIsDesktop] = useState(false);
+  const isTrueDesktop = useIsTrueDesktop();
   const [mode, setMode] = useState<"simple" | "full">("simple");
-
-  useEffect(() => {
-    const media = window.matchMedia("(min-width: 768px)");
-    const handleChange = () => setIsDesktop(media.matches);
-    handleChange();
-    media.addEventListener("change", handleChange);
-    return () => media.removeEventListener("change", handleChange);
-  }, []);
 
   // Listen for back-to-home from the iframe
   useEffect(() => {
@@ -62,9 +55,9 @@ export function MetaverseMembersView() {
     <div className="relative">
       <MembersPageContent
         wingFilter="Metaverse"
-        lightweight={!isDesktop}
+        lightweight={!isTrueDesktop}
         topBanner={
-          isDesktop ? (
+          isTrueDesktop ? (
             <div className="w-full mb-8">
               <div className="w-full bg-[#020204] border border-white/5 rounded-2xl overflow-hidden relative group transition-all duration-1000" style={{ minHeight: '200px' }}>
 

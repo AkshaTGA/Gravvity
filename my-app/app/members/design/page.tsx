@@ -17,9 +17,11 @@ import {
 } from "@/lib/design-card-styles";
 import { Paintbrush } from "lucide-react";
 import "@/components/wing-headings.css";
+import { useIsTrueDesktop } from "@/hooks/use-true-desktop";
 
 export default function DesignMembersPage() {
   const [editorOpen, setEditorOpen] = useState(false);
+  const isTrueDesktop = useIsTrueDesktop();
   const members = useMembers();
 
   // Load saved per-card styles (re-load when editor closes)
@@ -105,7 +107,7 @@ export default function DesignMembersPage() {
               The creative pulse of Gravity, turning abstract ideas into visual realities.
             </p>
 
-            <div className="hidden md:block mt-8 mb-10 overflow-hidden">
+            {isTrueDesktop && (
               <div
                 className="w-full bg-[#0a0a0c] border border-white/5 rounded-2xl px-12 py-8 group relative overflow-hidden transition-all duration-1000"
               >
@@ -177,7 +179,7 @@ export default function DesignMembersPage() {
                 {/* Elegant Full Chromatic Sweep */}
                 <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-sky-400 via-fuchsia-400 via-rose-400 to-transparent w-full -translate-x-full group-hover:translate-x-full transition-all duration-[4s] pointer-events-none" />
               </div>
-            </div>
+            )}
           </div>
 
           {/* Coordinators */}

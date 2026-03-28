@@ -18,6 +18,7 @@ import { WebDHeroVisual } from "@/components/webd-hero-visual";
 import "@/components/webd-vintage-fun-mode.css";
 import "@/components/webd-hero-visual.css";
 import { Zap, X, AlertTriangle } from "lucide-react";
+import { useIsTrueDesktop } from "@/hooks/use-true-desktop";
 
 type Phase = "search" | "results" | "showcase";
 
@@ -1142,7 +1143,7 @@ function VintageFunOverlay({
 
 export function WebDMembersPage() {
   const [funModeOpen, setFunModeOpen] = useState(false);
-  const isDesktop = useDesktopMode();
+  const isDesktop = useIsTrueDesktop();
   const members = useMembers();
 
   const filtered = useMemo(

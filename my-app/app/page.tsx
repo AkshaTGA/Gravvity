@@ -17,6 +17,7 @@ import {
   INTRO_VIDEO_STORAGE_KEY,
 } from "@/lib/intro-video-config";
 import { prefetchMembers } from "@/lib/prefetch";
+import { MobileDisclaimer } from "@/components/mobile-disclaimer";
 
 export default function Home() {
   const [showIntro, setShowIntro] = useState<boolean>(() => {
@@ -94,6 +95,7 @@ export default function Home() {
 
   return (
     <>
+      <MobileDisclaimer />
       <Navigation />
       <main className="bg-background overflow-x-hidden pt-10">
         <HeroSection />
