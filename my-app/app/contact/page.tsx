@@ -116,13 +116,11 @@ export default function ContactPage() {
     }
   };
 
-
   return (
     <>
       <Navigation />
       <main className="min-h-screen mt-10 bg-background">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-
           {/* Header */}
           <div className="text-center mb-16 slide-in-up">
             <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase text-purple-400/80 mb-4">
@@ -132,15 +130,14 @@ export default function ContactPage() {
               Get In Touch
             </h1>
             <p className="text-lg text-foreground/60 max-w-md mx-auto">
-              Have a question, idea, or just want to say hi? We&apos;d love to hear from you.
+              Have a question, idea, or just want to say hi? We&apos;d love to
+              hear from you.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-10 items-start">
-
             {/* Left column */}
             <div className="flex flex-col gap-5 slide-in-up">
-
               {/* Email card */}
               <div
                 className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d14] p-5 flex items-center gap-4"
@@ -149,10 +146,14 @@ export default function ContactPage() {
                 <div className="w-11 h-11 rounded-xl bg-purple-500/15 border border-purple-500/25 flex items-center justify-center shrink-0">
                   <Mail size={18} className="text-purple-300" />
                 </div>
-                <div>
-                  <p className="text-xs font-semibold tracking-widest uppercase text-foreground/40 mb-0.5">Email</p>
-                  <p className="text-sm font-medium text-foreground/90">gravity@iiita.ac.in</p>
-                </div>
+                <a className="cursor-pointer"   href="mailto:gravity@iiita.ac.in">
+                  <p className="text-xs font-semibold tracking-widest uppercase text-foreground/40 mb-0.5">
+                    Email
+                  </p>
+                  <p className="text-sm font-medium text-foreground/90">
+                    gravity@iiita.ac.in
+                  </p>
+                </a>
               </div>
 
               {/* Discord card */}
@@ -164,8 +165,12 @@ export default function ContactPage() {
                   <MessageSquare size={18} className="text-indigo-300" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold tracking-widest uppercase text-foreground/40 mb-0.5">Discord</p>
-                  <p className="text-sm font-medium text-foreground/90">Join our community server</p>
+                  <p className="text-xs font-semibold tracking-widest uppercase text-foreground/40 mb-0.5">
+                    Discord
+                  </p>
+                  <p className="text-sm font-medium text-foreground/90">
+                    Join our community server
+                  </p>
                 </div>
               </div>
 
@@ -177,35 +182,49 @@ export default function ContactPage() {
                 {/* Floating orbs */}
                 <div
                   className="absolute w-44 h-44 rounded-full -top-10 -left-10 opacity-30 pointer-events-none"
-                  style={{ background: "radial-gradient(circle, rgba(139,92,246,0.55) 0%, transparent 70%)", filter: "blur(32px)" }}
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(139,92,246,0.55) 0%, transparent 70%)",
+                    filter: "blur(32px)",
+                  }}
                 />
                 <div
                   className="absolute w-36 h-36 rounded-full bottom-4 right-4 opacity-20 pointer-events-none"
-                  style={{ background: "radial-gradient(circle, rgba(99,102,241,0.65) 0%, transparent 70%)", filter: "blur(28px)" }}
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(99,102,241,0.65) 0%, transparent 70%)",
+                    filter: "blur(28px)",
+                  }}
                 />
                 <div
                   className="absolute w-24 h-24 rounded-full top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-15 pointer-events-none"
-                  style={{ background: "radial-gradient(circle, rgba(168,85,247,0.7) 0%, transparent 70%)", filter: "blur(20px)" }}
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(168,85,247,0.7) 0%, transparent 70%)",
+                    filter: "blur(20px)",
+                  }}
                 />
 
                 {/* Dot-grid */}
                 <div
                   className="absolute inset-0 opacity-[0.035] pointer-events-none"
                   style={{
-                    backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)",
+                    backgroundImage:
+                      "radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)",
                     backgroundSize: "22px 22px",
                   }}
                 />
 
                 {/* Content */}
                 <div className="relative z-10 flex flex-col items-center justify-center h-full gap-5 py-10 px-6 text-center">
-                  <p className="text-xs font-semibold tracking-[0.2em] uppercase text-purple-400/70">Find us on</p>
+                  <p className="text-xs font-semibold tracking-[0.2em] uppercase text-purple-400/70">
+                    Find us on
+                  </p>
                   <div className="flex items-center gap-3">
                     {[
                       { icon: Github, label: "GitHub", href: "#" },
-                      { icon: Linkedin, label: "LinkedIn", href: "#" },
-                      { icon: Instagram, label: "Instagram", href: "#" },
-                      { icon: Twitter, label: "Twitter", href: "#" },
+                      { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/company/gravity-iiit-allahabad/" },
+                      { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/gravityiiita/" },
                     ].map(({ icon: Icon, label, href }) => (
                       <a
                         key={label}
@@ -218,7 +237,8 @@ export default function ContactPage() {
                     ))}
                   </div>
                   <p className="text-xs text-foreground/30 max-w-xs leading-relaxed">
-                    Follow along for updates, events, and community highlights from Gravvity.
+                    Follow along for updates, events, and community highlights
+                    from Gravity.
                   </p>
                 </div>
               </div>
@@ -227,12 +247,19 @@ export default function ContactPage() {
             {/* Right column â€” Form */}
             <div
               className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d14] p-7 slide-in-up"
-              style={{ animationDelay: "0.1s", boxShadow: "0 0 60px rgba(139,92,246,0.10), 0 20px 40px rgba(0,0,0,0.5)" }}
+              style={{
+                animationDelay: "0.1s",
+                boxShadow:
+                  "0 0 60px rgba(139,92,246,0.10), 0 20px 40px rgba(0,0,0,0.5)",
+              }}
             >
               {/* Gradient wash */}
               <div
                 className="absolute top-0 left-0 right-0 h-32 opacity-30 pointer-events-none"
-                style={{ background: "linear-gradient(180deg, rgba(139,92,246,0.12) 0%, transparent 100%)" }}
+                style={{
+                  background:
+                    "linear-gradient(180deg, rgba(139,92,246,0.12) 0%, transparent 100%)",
+                }}
               />
 
               <div className="relative z-10">
@@ -241,13 +268,16 @@ export default function ContactPage() {
                     <Send size={15} className="text-purple-300" />
                   </div>
                   <div>
-                    <h2 className="font-semibold text-base text-white">Send a Message</h2>
-                    <p className="text-xs text-foreground/40 mt-0.5">We&apos;ll reply as soon as possible</p>
+                    <h2 className="font-semibold text-base text-white">
+                      Send a Message
+                    </h2>
+                    <p className="text-xs text-foreground/40 mt-0.5">
+                      We&apos;ll reply as soon as possible
+                    </p>
                   </div>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-
                   {/* Name */}
                   <div className="space-y-1.5">
                     <label className="flex items-center gap-1.5 text-sm font-medium text-foreground/70">
@@ -283,7 +313,8 @@ export default function ContactPage() {
                   {/* Message */}
                   <div className="space-y-1.5">
                     <label className="flex items-center gap-1.5 text-sm font-medium text-foreground/70">
-                      <AlignLeft size={12} className="text-purple-400" /> Message
+                      <AlignLeft size={12} className="text-purple-400" />{" "}
+                      Message
                     </label>
                     <textarea
                       name="message"
@@ -296,8 +327,16 @@ export default function ContactPage() {
                     />
                   </div>
 
-                  <MagicButton type="submit" className="w-full" heightClass="h-12">
-                    {sending ? "Sending\u2026" : submitted ? "Message Sent!" : "Send Message"}
+                  <MagicButton
+                    type="submit"
+                    className="w-full"
+                    heightClass="h-12"
+                  >
+                    {sending
+                      ? "Sending\u2026"
+                      : submitted
+                        ? "Message Sent!"
+                        : "Send Message"}
                   </MagicButton>
 
                   {/* Progress stages */}
@@ -305,17 +344,26 @@ export default function ContactPage() {
                     <div className="p-4 rounded-xl bg-white/4 border border-white/8 text-sm space-y-2">
                       <div className="flex items-center gap-2 text-foreground/60 text-xs">
                         <div className="w-3.5 h-3.5 border-2 border-foreground/20 border-t-purple-400 rounded-full animate-spin" />
-                        Processing your request\u2026
+                        Processing your request
                       </div>
                       <div className="space-y-1.5">
                         {stages.map((s) => {
                           const state = stageState(s.key);
                           return (
-                            <div key={s.key} className="flex items-center gap-2 text-xs">
+                            <div
+                              key={s.key}
+                              className="flex items-center gap-2 text-xs"
+                            >
                               {state === "done" ? (
-                                <CheckCircle size={13} className="text-green-400 shrink-0" />
+                                <CheckCircle
+                                  size={13}
+                                  className="text-green-400 shrink-0"
+                                />
                               ) : state === "active" ? (
-                                <Loader2 size={13} className="animate-spin text-purple-400 shrink-0" />
+                                <Loader2
+                                  size={13}
+                                  className="animate-spin text-purple-400 shrink-0"
+                                />
                               ) : (
                                 <div className="w-3.5 h-3.5 rounded-full border border-white/15 shrink-0" />
                               )}
@@ -324,8 +372,8 @@ export default function ContactPage() {
                                   state === "active"
                                     ? "text-foreground/90"
                                     : state === "done"
-                                    ? "text-foreground/50"
-                                    : "text-foreground/30"
+                                      ? "text-foreground/50"
+                                      : "text-foreground/30"
                                 }
                               >
                                 {s.label}
@@ -354,7 +402,6 @@ export default function ContactPage() {
                 </form>
               </div>
             </div>
-
           </div>
         </div>
       </main>

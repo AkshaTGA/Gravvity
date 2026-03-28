@@ -1,66 +1,81 @@
-# syntax=docker.io/docker/dockerfile:1
-
 FROM node:20-alpine AS base
 
-# Install dependencies only when needed
+# Stage 1: Install dependencies for both projects
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* .npmrc* ./
+# Copy lockfiles and package configs for both applications
+COPY model/package.json model/package-lock.json* model/yarn.lock* model/pnpm-lock.yaml* ./model/
+COPY my-app/package.json my-app/package-lock.json* my-app/yarn.lock* my-app/pnpm-lock.yaml* ./my-app/
+
+# Install dependencies for model
+WORKDIR /app/model
 RUN \
   if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
   elif [ -f package-lock.json ]; then npm ci; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
+  else npm install; \
   fi
 
+# Install dependencies for my-app
+WORKDIR /app/my-app
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
+  else npm install; \
+  fi
 
-# Rebuild the source code only when needed
+# Stage 2: Rebuild the source code
 FROM base AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED=1
+# Copy installed node_modules
+COPY --from=deps /app/model/node_modules ./model/node_modules
+COPY --from=deps /app/my-app/node_modules ./my-app/node_modules
 
+# Copy the entire workspace into the container so the prebuild hook succeeds
+COPY model ./model
+COPY my-app ./my-app
+
+# (Optional) If you have NEXT_PUBLIC_ variables needed during build time, declare them here:
+# ARG NEXT_PUBLIC_BACKEND_URL
+# ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+
+WORKDIR /app/my-app
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# This runs the prebuild hook (sync-metaverse.mjs), compiling the 3D metaverse 
+# and placing it correctly into /app/my-app/public before Next.js builds.
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
   elif [ -f package-lock.json ]; then npm run build; \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
+  else npm run build; \
   fi
 
-# Production image, copy all the files and run next
+# Stage 3: Production image (Next.js standalone)
 FROM base AS runner
-WORKDIR /app
+WORKDIR /app/my-app
 
 ENV NODE_ENV=production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
+# The public directory now contains the bundled metaverse-sim!
+COPY --from=builder /app/my-app/public ./public
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Your next.config.ts correctly uses output: "standalone", so this will work perfectly:
+COPY --from=builder --chown=nextjs:nodejs /app/my-app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/my-app/.next/static ./.next/static
 
 USER nextjs
 
 EXPOSE 3000
-
 ENV PORT=3000
-
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
 ENV HOSTNAME="0.0.0.0"
+
 CMD ["node", "server.js"]

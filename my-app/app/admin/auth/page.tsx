@@ -43,11 +43,11 @@ export default function AdminPage() {
         <div className="w-full max-w-md">
           <div className="card-glow p-8 space-y-6">
             <div className="text-center">
-              <h1 className="text-3xl font-bold gradient-text mb-2 flex items-center justify-center gap-2">
+              <h1 className="md:text-3xl text-2xl font-bold gradient-text mb-2 gap-2 flex items-center justify-center">
                 <img
                   src="/GRAVITY_Cover_No_BG(1).png"
                   alt="Gravity"
-                  className="h-8 w-auto object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.35)]"
+                  className="md:h-10 h-8 w-auto object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.35)]"
                 />
                 <span>Admin</span>
               </h1>

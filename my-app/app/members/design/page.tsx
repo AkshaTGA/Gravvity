@@ -16,6 +16,7 @@ import {
   type CardStyleOverride,
 } from "@/lib/design-card-styles";
 import { Paintbrush } from "lucide-react";
+import "@/components/wing-headings.css";
 
 export default function DesignMembersPage() {
   const [editorOpen, setEditorOpen] = useState(false);
@@ -94,23 +95,88 @@ export default function DesignMembersPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           {/* Header */}
           <div className="text-center mb-16 slide-in-up">
-            <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
+            <h1
+              className="text-4xl md:text-6xl font-bold design-super-heading mb-4"
+              data-text="Design Wing"
+            >
               Design Wing
             </h1>
-            <p className="text-md md:text-xl text-foreground/70">
-              Coordinators and members from the Design wing
+            <p className="text-md md:text-xl text-foreground/70 mb-8">
+              The creative pulse of Gravity, turning abstract ideas into visual realities.
             </p>
-            <div className="mt-6 flex justify-center">
-              <button
-                onClick={() => setEditorOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl
-                  bg-purple-600/20 text-purple-300 border border-purple-500/30
-                  hover:bg-purple-600/30 hover:border-purple-400/50 hover:scale-105
-                  active:scale-95 transition-all duration-200 text-sm font-medium"
+
+            <div className="hidden md:block mt-8 mb-10 overflow-hidden">
+              <div
+                className="w-full bg-[#0a0a0c] border border-white/5 rounded-2xl px-12 py-8 group relative overflow-hidden transition-all duration-1000"
               >
-                <Paintbrush size={16} />
-                Edit Cards
-              </button>
+                {/* Animated Prismatic Mesh Background (Subtle) */}
+                <div className="absolute inset-0 opacity-5 blur-[120px] pointer-events-none bg-[conic-gradient(from_0deg_at_50%_50%,#3b82f6,#a855f7,#ec4899,#eab308,#3b82f6)] animate-[spin_10s_linear_infinite]" />
+                
+                {/* Floating Glass Assets: Holographic Card Stack (Scaled Down) */}
+                <div className="absolute top-1/2 left-32 -translate-y-1/2 flex -space-x-16 opacity-10 group-hover:opacity-20 transition-all duration-1000 scale-[0.6] rotate-12 group-hover:rotate-0 group-hover:scale-[0.7] pointer-events-none select-none origin-center">
+                  {[0, 1, 2].map((i) => (
+                    <div 
+                      key={i} 
+                      className="w-40 h-56 bg-gradient-to-br from-white/20 to-transparent rounded-2xl border border-white/30 backdrop-blur-md shadow-2xl"
+                      style={{ transitionDelay: `${i * 100}ms` }}
+                    />
+                  ))}
+                </div>
+
+                <div className="flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+                  <div className="flex flex-col gap-6 text-left">
+                    <div className="flex items-center gap-4">
+                      <div className="flex gap-2 pointer-events-none">
+                        <div className="w-2 h-2 rounded-full bg-sky-500/40 shadow-[0_0_15px_rgba(14,165,233,0.4)]" />
+                        <div className="w-2 h-2 rounded-full bg-fuchsia-500/40 shadow-[0_0_15px_rgba(217,70,239,0.4)]" />
+                        <div className="w-2 h-2 rounded-full bg-rose-500/40 shadow-[0_0_15px_rgba(244,63,94,0.4)]" />
+                      </div>
+                      <div className="text-[10px] text-white/40 uppercase tracking-[0.5em] font-bold font-mono">
+                        Gravity Design Lab
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col gap-3">
+                      <div className="flex flex-col">
+                        <span className="text-3xl md:text-4xl font-light text-white tracking-tighter leading-none mb-1">
+                          Explore the <span className="italic font-serif text-white/30">Studio</span>
+                        </span>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-fuchsia-400 to-rose-400 font-medium text-lg tracking-tight opacity-70">
+                          Where art meets precision
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-white/30 max-w-sm border-l border-white/10 pl-3 py-0.5 uppercase tracking-widest font-bold">
+                        Crafting Gravity&apos;s visual identity
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="relative group/btn mt-4 md:mt-0">
+                    <button
+                      className="relative z-10 px-16 py-4 bg-white text-[11px] font-bold text-black uppercase tracking-[0.4em] transition-all duration-500 hover:scale-105 active:scale-95 cursor-pointer rounded-full shadow-[0_0_40px_rgba(255,255,255,0.15)] hover:shadow-[0_0_50px_rgba(255,255,255,0.25)]"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setEditorOpen(true);
+                      }}
+                    >
+                      Open Studio
+                    </button>
+                    
+                    {/* Collaborative Cursor (Clean) */}
+                    <div className="absolute -top-10 -right-10 pointer-events-none opacity-0 group-hover:opacity-100 group-hover:-translate-x-6 group-hover:translate-y-6 transition-all duration-[2.5s] ease-out flex flex-col items-center gap-2">
+                      <div className="flex items-center gap-2">
+                        <svg width="12" height="12" viewBox="0 0 14 14" className="text-sky-500 fill-current drop-shadow-xl">
+                          <path d="M0 0l14 4-6 2-2 6z" stroke="white" strokeWidth="1" />
+                        </svg>
+                        <div className="text-[8px] bg-sky-500 text-white px-2 py-0.5 rounded shadow-lg font-bold">Designer</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Elegant Full Chromatic Sweep */}
+                <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-sky-400 via-fuchsia-400 via-rose-400 to-transparent w-full -translate-x-full group-hover:translate-x-full transition-all duration-[4s] pointer-events-none" />
+              </div>
             </div>
           </div>
 

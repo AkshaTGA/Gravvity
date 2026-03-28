@@ -11,6 +11,15 @@ void main() {
 
     if(text.a < 0.05) discard;
 
+    // --- Global Image Rounded Corners ---
+    // Clip the 400x400 particle grid to a rounded rectangle with ~20px radius
+    vec2 centerPuv = puv - 0.5;
+    vec2 size = vec2(0.5);
+    float cornerRadius = 0.05; // 0.05 * 400px = 20px radius
+    vec2 d = abs(centerPuv) - size + vec2(cornerRadius);
+    float boxDist = length(max(d, 0.0)) + min(max(d.x, d.y), 0.0) - cornerRadius;
+    if (boxDist > 0.0) discard;
+
     // Sharp-edged circular disk — crisp photo when fully formed
     vec2 uv = vUv - 0.5;
     float dist = length(uv);

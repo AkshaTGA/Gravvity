@@ -17,6 +17,7 @@ import type { Member } from "@/lib/types";
 import { WebDHeroVisual } from "@/components/webd-hero-visual";
 import "@/components/webd-vintage-fun-mode.css";
 import "@/components/webd-hero-visual.css";
+import { Zap, X, AlertTriangle } from "lucide-react";
 
 type Phase = "search" | "results" | "showcase";
 
@@ -897,15 +898,15 @@ function VintageFunOverlay({
               ← Back
             </button>
             <span className="webd-gc-toolbar-title">
-              ★ WebD Wing &mdash; Center of Mass &mdash; Gravity Technical
-              Society ★
+              WebD Wing &mdash; Center of Mass &mdash; Gravity Technical
+              Society
             </span>
             <button
               className="webd-gc-btn webd-gc-btn-primary"
               onClick={startGravity}
               disabled={physicsEnabled}
             >
-              ⚡ INITIATE GRAVITY
+              <Zap className="inline mr-1" size={14}/> INITIATE GRAVITY
             </button>
             <button className="webd-gc-btn" onClick={resetGravity}>
               ↺ Reset Page
@@ -924,7 +925,7 @@ function VintageFunOverlay({
                 onClose();
               }}
             >
-              ✕ EXIT
+              <X className="inline mr-1" size={14}/> EXIT
             </button>
           </div>
 
@@ -1005,7 +1006,7 @@ function VintageFunOverlay({
                           createElement(
                             "span",
                             { className: "webd-gc-marquee-text" },
-                            "★ Welcome to the WebD Wing ★ Construction in Progress ★ Gravity Technical Society ★ Est. 2024 ★ Best viewed in 800x600 ★",
+                            "• Welcome to the WebD Wing • Construction in Progress • Gravity Technical Society • Est. 2024 • Best viewed in 800x600 •",
                           ),
                         )}
                       </div>
@@ -1015,7 +1016,7 @@ function VintageFunOverlay({
                     {item.kind === "heading" ? (
                       <div className={`webd-gc-uc-card ${snapCls}`}>
                         <span className="webd-gc-uc-title">
-                          ⚠️ UNDER CONSTRUCTION ⚠️
+                          <AlertTriangle className="inline mr-2" size={18}/> UNDER CONSTRUCTION <AlertTriangle className="inline ml-2" size={18}/>
                           <br />
                           WebD Wing &mdash; Center of Mass
                         </span>
@@ -1170,33 +1171,68 @@ export function WebDMembersPage() {
         wingFilter="Web Development"
         topBanner={
           isDesktop ? (
-            <div className="webd-hero-split hidden md:flex">
-              {/* Left: animated web development visual */}
-              <div className="webd-hero-split-left">
-                <WebDHeroVisual />
-              </div>
+            <div className="w-full mb-10 overflow-hidden">
+              <div
+                className="w-full bg-[#050505] border border-white/10 rounded-lg px-12 py-8 group relative overflow-hidden transition-all duration-700"
+              >
+                {/* Protocol Depth Background */}
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_20%_30%,#1e3a8a08_0%,transparent_50%)]" />
+                <div className="absolute top-2 left-10 text-[64px] font-mono text-white/[0.02] select-none pointer-events-none tracking-tighter">
+                  HTTP/1.1
+                </div>
 
-              {/* Right: fun mode banner */}
-              <div className="webd-hero-split-right">
-                <div className="webd-designer-banner flex">
-                  <div className="webd-scan-line"></div>
-                  <div className="webd-db-content">
-                    <div className="webd-db-title">
-                      <span>✨</span> SYSTEM OVERRIDE AVAILABLE
+                <div className="flex flex-col md:flex-row items-center justify-between gap-12 relative z-10">
+                  <div className="flex flex-col gap-4 font-mono text-left">
+                    <div className="flex items-center gap-4">
+                      <div className="relative">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.6)]" />
+                        <div className="absolute inset-0 w-2 h-2 bg-blue-500 rounded-full animate-ping opacity-30" />
+                      </div>
+                      <div className="text-[10px] text-white/50 uppercase tracking-[0.5em] font-medium italic">
+                        Handshake: established
+                      </div>
                     </div>
-                    <div className="webd-db-sub">
-                      gravity_module.exe found // click to initialize vintage
-                      mode
+
+                    <div className="flex flex-col gap-1">
+                      <div className="text-xl font-light text-white/90 tracking-tight">
+                        <span className="text-white/40 font-mono text-lg">GET </span>
+                        <span className="text-blue-400 font-medium">/wings/</span>web_development
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-[11px] text-white/30 uppercase tracking-[0.3em] font-bold border-l-2 border-blue-500/20 pl-4 py-0.5 mt-1">
+                          Status: 200 OK — Handshake Resolved
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <button
-                    className="webd-db-btn"
-                    onClick={() => setFunModeOpen(true)}
-                  >
-                    INITIALIZE
-                  </button>
+
+                  <div className="relative group/btn mt-4 md:mt-0">
+                    <button
+                      className="relative z-10 px-16 py-3.5 bg-transparent border border-white/20 text-[11px] font-bold text-white/60 uppercase tracking-[0.6em] transition-all duration-500 hover:text-white hover:border-white/50 hover:bg-white/[0.05] active:scale-[0.98] cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFunModeOpen(true);
+                      }}
+                    >
+                      Initialize
+                    </button>
+                    {/* Minimal decorative accents */}
+                    <div className="absolute -top-3 -left-3 w-4 h-4 border-t border-l border-white/10 group-hover/btn:border-white/30 transition-colors" />
+                    <div className="absolute -bottom-3 -right-3 w-4 h-4 border-b border-r border-white/10 group-hover/btn:border-white/30 transition-colors" />
+                  </div>
                 </div>
+
+                {/* Subtle horizontal data sweeps on hover */}
+                <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent w-full -translate-x-full group-hover:translate-x-full transition-all duration-[2.5s] pointer-events-none" />
+                <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent w-full translate-x-full group-hover:-translate-x-full transition-all duration-[2.5s] pointer-events-none delay-500" />
               </div>
+
+              <style jsx>{`
+                @keyframes blink {
+                  0%, 100% { opacity: 1; }
+                  50% { opacity: 0; }
+                }
+              `}</style>
             </div>
           ) : null
         }

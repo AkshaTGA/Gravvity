@@ -127,7 +127,7 @@ export const FONT_PRESETS = [
 
 /* ─── Persistence ─────────────────────────────── */
 
-const STORAGE_KEY = "gravvity_design_card_styles";
+const STORAGE_KEY = "gravity_design_card_styles";
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));

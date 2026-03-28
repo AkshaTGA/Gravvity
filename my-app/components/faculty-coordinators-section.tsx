@@ -24,7 +24,7 @@ export function FacultyCoordinatorsSection() {
           Faculty Coordinators
         </h2>
         <p className="text-foreground/60 mb-16 text-lg text-center">
-          Meet our faculty coordinators and advisors
+          Meet our faculty coordinators
         </p>
 
         <div className="flex flex-wrap gap-8 justify-center">

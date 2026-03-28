@@ -24,6 +24,11 @@ import {
   Zap,
   Activity,
   Shuffle,
+  Check,
+  Search,
+  RefreshCw,
+  MapPin,
+  PenTool,
 } from "lucide-react"
 import Link from "next/link"
 import { isSameWing } from "@/lib/wing-match"
@@ -32,10 +37,10 @@ function isCompetitiveCodingMember(member: Member): boolean {
   return isSameWing(member.wing, "Competitive Coding")
 }
 
-const algorithms: { value: SortAlgorithm; label: string; icon: string }[] = [
-  { value: "bubble", label: "Bubble", icon: "🫧" },
-  { value: "merge", label: "Merge", icon: "🔀" },
-  { value: "quick", label: "Quick", icon: "⚡" },
+const algorithms: { value: SortAlgorithm; label: string; icon: React.ReactNode }[] = [
+  { value: "bubble", label: "Bubble", icon: <Activity size={16} /> },
+  { value: "merge", label: "Merge", icon: <Shuffle size={16} /> },
+  { value: "quick", label: "Quick", icon: <Zap size={16} /> },
 ]
 
 export function CPVisualizePage() {
@@ -428,14 +433,14 @@ export function CPVisualizePage() {
                         <span className="flex items-center gap-1.5">
                           <Activity size={12} />
                           {currentOperation ? (
-                            <span className="capitalize">
-                              {currentOperation === "compare" && "🔍 Comparing..."}
-                              {currentOperation === "swap" && "🔄 Swapping..."}
-                              {currentOperation === "pivot" && "📌 Selecting Pivot..."}
-                              {currentOperation === "overwrite" && "✏️ Writing..."}
+                            <span className="capitalize flex items-center gap-1.5">
+                              {currentOperation === "compare" && <><Search size={14}/> Comparing...</>}
+                              {currentOperation === "swap" && <><RefreshCw size={14}/> Swapping...</>}
+                              {currentOperation === "pivot" && <><MapPin size={14}/> Selecting Pivot...</>}
+                              {currentOperation === "overwrite" && <><PenTool size={14}/> Writing...</>}
                             </span>
                           ) : isDone ? (
-                            "✅ Complete"
+                            <span className="flex items-center gap-1.5 text-emerald-400"><Check size={14}/> Complete</span>
                           ) : (
                             "Ready"
                           )}

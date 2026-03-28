@@ -2,6 +2,7 @@
 
 import { useMemo, useEffect, useState, useCallback } from "react";
 import { useMembers } from "@/hooks/use-members";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import ProfileCard from "@/components/profile-card";
@@ -13,6 +14,7 @@ import Link from "next/link";
 import { ArrowRight, Code2, Users, Play } from "lucide-react";
 import { DFSVisualizer } from "@/components/cp-dfs-visualizer";
 import { isSameWing } from "@/lib/wing-match";
+import "@/components/wing-headings.css";
 
 function isCompetitiveCodingMember(member: Member): boolean {
   return isSameWing(member.wing, "Competitive Coding");
@@ -274,6 +276,8 @@ export function CPMembersPageContent() {
     [cpMembers],
   );
 
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+
   return (
     <>
       <Navigation />
@@ -285,101 +289,104 @@ export function CPMembersPageContent() {
           <div className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-87.5 h-87.5 bg-cyan-600/4 rounded-full blur-[100px]" />
         </div>
 
-        <div className="relative z-10 max-w-350 mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="relative z-10 max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-20">
           {/* Hero Section – split layout */}
           <div className="mb-10">
             <div className="flex justify-center items-center mb-5">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
-                <span className="bg-linear-to-r from-cyan-400 via-purple-400 to-violet-500 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]">
-                  <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
-                    Competitive Coding Wing
-                  </h1>
-                </span>
+              <h1 
+                className="text-4xl text-center md:text-6xl font-bold cp-super-heading mb-4 leading-tight"
+                data-text="Competitive Coding Wing"
+              >
+                Competitive Coding Wing
               </h1>
             </div>
             <div className="flex flex-col lg:flex-row items-center gap-6 lg:gap-10">
-              {/* ── Left: DFS Background Visualizer ── */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.92 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, ease: "easeOut" }}
-                className="flex-1 flex items-center justify-center relative"
-              >
-                <DFSVisualizer className="w-full max-w-md" />
-              </motion.div>
+              {isDesktop && (
+                <>
+                  {/* ── Left: DFS Background Visualizer ── */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1, ease: "easeOut" }}
+                    className="flex-1 flex items-center justify-center relative"
+                  >
+                    <DFSVisualizer className="w-full max-w-md" />
+                  </motion.div>
 
-              {/* ── Right: Content (1:1 ratio) ── */}
-              <div className="flex-1 min-w-0">
-                <motion.div
-                  initial={{ opacity: 0, x: 40 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.7, delay: 0.15 }}
-                  className="flex flex-col gap-6"
-                >
-                  {/* Heading */}
-
-                  {/* ── Visual CTA: Mini sort + tree preview ── */}
-                  <Link href="/members/competitive-coding/visualize">
+                  {/* ── Right: Content (1:1 ratio) ── */}
+                  <div className="flex-1 min-w-0">
                     <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group relative overflow-hidden rounded-2xl border border-purple-500/20 bg-[#0a0a1a]/80 backdrop-blur-sm cursor-pointer hover:border-purple-400/40 transition-all duration-500 hover:shadow-xl hover:shadow-purple-500/15"
+                      initial={{ opacity: 0, x: 40 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.7, delay: 0.15 }}
+                      className="flex flex-col gap-6"
                     >
-                      {/* Animated shimmer sweep */}
-                      <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/4 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+                      {/* Heading */}
 
-                      {/* Content */}
-                      <div className="relative z-10 p-6">
-                        {/* Header row */}
-                        <div className="flex items-center justify-between mb-5">
-                          <div className="flex items-center gap-3">
-                            <div className="p-2.5 rounded-xl bg-purple-500/15 border border-purple-500/25">
-                              <Play className="w-5 h-5 text-purple-300 fill-purple-300/30" />
-                            </div>
-                            <div>
-                              <div className="text-white font-bold text-lg">
-                                Algorithm Visualizer
+                      {/* ── Visual CTA: Mini sort + tree preview ── */}
+                      <Link href="/members/competitive-coding/visualize">
+                        <motion.div
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="group relative overflow-hidden rounded-2xl border border-purple-500/20 bg-[#0a0a1a]/80 backdrop-blur-sm cursor-pointer hover:border-purple-400/40 transition-all duration-500 hover:shadow-xl hover:shadow-purple-500/15"
+                        >
+                          {/* Animated shimmer sweep */}
+                          <div className="absolute inset-0 bg-linear-to-r from-transparent via-white/4 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+
+                          {/* Content */}
+                          <div className="relative z-10 p-6">
+                            {/* Header row */}
+                            <div className="flex items-center justify-between mb-5">
+                              <div className="flex items-center gap-3">
+                                <div className="p-2.5 rounded-xl bg-purple-500/15 border border-purple-500/25">
+                                  <Play className="w-5 h-5 text-purple-300 fill-purple-300/30" />
+                                </div>
+                                <div>
+                                  <div className="text-white font-bold text-lg">
+                                    Algorithm Visualizer
+                                  </div>
+                                  <div className="text-white/35 text-xs">
+                                    Watch algorithms come alive
+                                  </div>
+                                </div>
                               </div>
-                              <div className="text-white/35 text-xs">
-                                Watch algorithms come alive
+                              <div className="flex items-center gap-1 text-purple-300/60 group-hover:text-purple-300 transition-colors">
+                                <span className="text-xs font-medium hidden sm:inline">
+                                  Enter
+                                </span>
+                                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                              </div>
+                            </div>
+
+                            {/* Two preview panels side by side */}
+                            <div className="flex gap-3">
+                              {/* Mini Sorting Preview */}
+                              <MiniSortPreview />
+
+                              {/* Mini Tree Preview */}
+                              <MiniTreePreview />
+                            </div>
+
+                            {/* Bottom labels */}
+                            <div className="flex gap-3 mt-3">
+                              <div className="flex-1 text-center">
+                                <span className="text-[10px] font-semibold uppercase tracking-wider text-purple-300/50">
+                                  Bubble &middot; Merge &middot; Quick Sort
+                                </span>
+                              </div>
+                              <div className="flex-1 text-center">
+                                <span className="text-[10px] font-semibold uppercase tracking-wider text-cyan-300/50">
+                                  BFS &middot; DFS Traversal
+                                </span>
                               </div>
                             </div>
                           </div>
-                          <div className="flex items-center gap-1 text-purple-300/60 group-hover:text-purple-300 transition-colors">
-                            <span className="text-xs font-medium hidden sm:inline">
-                              Enter
-                            </span>
-                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                          </div>
-                        </div>
-
-                        {/* Two preview panels side by side */}
-                        <div className="flex gap-3">
-                          {/* Mini Sorting Preview */}
-                          <MiniSortPreview />
-
-                          {/* Mini Tree Preview */}
-                          <MiniTreePreview />
-                        </div>
-
-                        {/* Bottom labels */}
-                        <div className="flex gap-3 mt-3">
-                          <div className="flex-1 text-center">
-                            <span className="text-[10px] font-semibold uppercase tracking-wider text-purple-300/50">
-                              Bubble &middot; Merge &middot; Quick Sort
-                            </span>
-                          </div>
-                          <div className="flex-1 text-center">
-                            <span className="text-[10px] font-semibold uppercase tracking-wider text-cyan-300/50">
-                              BFS &middot; DFS Traversal
-                            </span>
-                          </div>
-                        </div>
-                      </div>
+                        </motion.div>
+                      </Link>
                     </motion.div>
-                  </Link>
-                </motion.div>
-              </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -407,7 +414,7 @@ export function CPMembersPageContent() {
               <span>Coordinators</span>
             </h2>
             {coordinators.length > 0 ? (
-              <div className="flex flex-wrap gap-4 justify-center">
+              <div className="flex flex-wrap justify-center gap-8 max-w-[1100px] mx-auto">
                 {coordinators.map((member, index) => (
                   <motion.div
                     key={member.id}
@@ -464,7 +471,7 @@ export function CPMembersPageContent() {
               <span>Members</span>
             </h2>
             {regularMembers.length > 0 ? (
-              <div className="flex flex-wrap gap-4 justify-center">
+              <div className="flex flex-wrap justify-center gap-8 max-w-[1100px] mx-auto">
                 {regularMembers.map((member, index) => (
                   <motion.div
                     key={member.id}

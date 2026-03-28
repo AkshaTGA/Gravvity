@@ -11,20 +11,90 @@ import React, {
 import { useMembers } from "@/hooks/use-members";
 import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import type { Member } from "@/lib/types";
+import { isSameWing } from "@/lib/wing-match";
 import ProfileCard from "@/components/profile-card";
 import "@/components/ProfileCard.css";
-import type { Member } from "@/lib/types";
 
 const GRAVITY_LOGO_SRC = "/gravity-logo.png";
 const WING_FILTER = "Private AI";
 const PARTICLE_IMG_SIZE = 400;
+const MONO = "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace";
 
-// ─── Image preprocessor ─────────────────────────────────────────────────────
-// The react-particle-image library iterates EVERY pixel of the source image.
-// Large images (e.g. 4320×4320) will freeze the tab. This hook:
-//   1. Loads the image (with crossOrigin for Cloudinary URLs)
-//   2. Scales it down to ~250×250 on a hidden canvas
-//   3. Returns a data-URL that the library can process quickly
+// ─── Global CSS ─────────────────────────────────────────────────────────────
+const NEURAL_CSS = `
+@keyframes redacted-reveal {
+  0% { transform: scaleX(1); transform-origin: left; }
+  50% { transform: scaleX(0.2) skewX(-20deg); transform-origin: left; }
+  51% { transform: scaleX(0.2) skewX(20deg); transform-origin: right; }
+  100% { transform: scaleX(1); transform-origin: right; }
+}
+
+@keyframes text-flicker {
+  0% { opacity: 0.1; text-shadow: 2px 0 #22d3ee, -2px 0 #8b5cf6; }
+  2% { opacity: 1; text-shadow: 2px 0 #22d3ee, -2px 0 #8b5cf6; }
+  4% { opacity: 0.1; text-shadow: none; }
+  6% { opacity: 1; text-shadow: none; }
+  /* ... more flickers ... */
+  100% { opacity: 1; }
+}
+
+.stealth-heading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.stealth-title-wrapper {
+  position: relative;
+  overflow: hidden;
+  padding: 10px 20px;
+}
+
+.stealth-title-text {
+  font-size: clamp(42px, 8vw, 68px);
+  font-weight: 950;
+  letter-spacing: -0.05em;
+  color: #fff;
+  line-height: 0.9;
+  text-transform: uppercase;
+  font-family: ${MONO};
+  margin: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.redacted-reveal-bar {
+  position: absolute;
+  top: 15%;
+  left: 0;
+  width: 100%;
+  height: 70%;
+  background: #fff;
+  z-index: 3;
+  mix-blend-mode: difference;
+  animation: redacted-reveal 6s cubic-bezier(0.8, 0, 0.2, 1) infinite;
+}
+
+.scanline-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(34, 211, 238, 0.05) 50%,
+    transparent 100%
+  );
+  height: 2px;
+  width: 100%;
+  z-index: 4;
+  animation: scanline 4s linear infinite;
+  pointer-events: none;
+}
+`;
+
+// ─── Image preprocessor (preserved) ─────────────────────────────────────────
 function useProcessedImage(src: string): string | null {
   const [dataUrl, setDataUrl] = useState<string | null>(null);
   const cacheRef = useRef<Map<string, string>>(new Map());
@@ -32,7 +102,6 @@ function useProcessedImage(src: string): string | null {
   useEffect(() => {
     if (!src) return;
 
-    // Cache hit
     if (cacheRef.current.has(src)) {
       setDataUrl(cacheRef.current.get(src)!);
       return;
@@ -52,7 +121,6 @@ function useProcessedImage(src: string): string | null {
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        // --- AUTO CROP ALGORITHM TO MAXIMIZE FACE SCALE ---
         const tempCanvas = document.createElement("canvas");
         tempCanvas.width = img.naturalWidth;
         tempCanvas.height = img.naturalHeight;
@@ -74,7 +142,6 @@ function useProcessedImage(src: string): string | null {
         for (let y = 0; y < img.naturalHeight; y++) {
           for (let x = 0; x < img.naturalWidth; x++) {
             const alpha = data[(y * img.naturalWidth + x) * 4 + 3];
-            // Detect non-fully-transparent pixels
             if (alpha > 10) {
               if (x < minX) minX = x;
               if (x > maxX) maxX = x;
@@ -84,7 +151,6 @@ function useProcessedImage(src: string): string | null {
           }
         }
 
-        // Fallback if empty image
         if (minX > maxX || minY > maxY) {
           minX = 0;
           minY = 0;
@@ -94,14 +160,8 @@ function useProcessedImage(src: string): string | null {
 
         const croppedW = maxX - minX;
         const croppedH = maxY - minY;
-
-        // Clear background as transparent
         ctx.clearRect(0, 0, size, size);
-
-        // Use 95% of the canvas size to add a tiny safety border
         const fitSize = size * 0.95;
-
-        // Calculate scale to fit inside the canvas
         const scale = Math.min(fitSize / croppedW, fitSize / croppedH);
         const drawW = croppedW * scale;
         const drawH = croppedH * scale;
@@ -129,7 +189,6 @@ function useProcessedImage(src: string): string | null {
     };
 
     img.onerror = () => {
-      // Fallback: maybe local image, pass raw src
       if (!cancelled) setDataUrl(src);
     };
 
@@ -142,7 +201,226 @@ function useProcessedImage(src: string): string | null {
   return dataUrl;
 }
 
-// ─── Ambient floating particles (fills empty space) ─────────────────────────
+// ─── Typewriter text ────────────────────────────────────────────────────────
+function TypewriterText({
+  text,
+  speed = 30,
+  delay = 500,
+}: {
+  text: string;
+  speed?: number;
+  delay?: number;
+}) {
+  const [chars, setChars] = useState(0);
+  const [started, setStarted] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setStarted(true), delay);
+    return () => clearTimeout(t);
+  }, [delay]);
+
+  useEffect(() => {
+    if (!started || chars >= text.length) return;
+    const t = setTimeout(() => setChars((c) => c + 1), speed);
+    return () => clearTimeout(t);
+  }, [started, chars, text, speed]);
+
+  return (
+    <span
+      style={{
+        fontFamily: MONO,
+        fontSize: "11px",
+        color: "rgba(34,211,238,0.65)",
+        letterSpacing: "0.02em",
+      }}
+    >
+      {text.slice(0, chars)}
+      <span
+        style={{
+          animation: "cursorBlink 1s step-end infinite",
+          color: "rgba(34,211,238,0.9)",
+        }}
+      >
+        ▋
+      </span>
+    </span>
+  );
+}
+
+// ─── Neural Lattice Background (page-level canvas) ──────────────────────────
+function NeuralLatticeBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: -9999, y: -9999 });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const count = 70;
+    const nodes = Array.from({ length: count }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      r: Math.random() * 1.8 + 0.8,
+      baseAlpha: Math.random() * 0.3 + 0.06,
+      hue: 210 + Math.random() * 70,
+    }));
+
+    const pulses: Array<{
+      fi: number;
+      ti: number;
+      t: number;
+      spd: number;
+      hue: number;
+    }> = [];
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let frame = 0;
+    let animId: number;
+    const connDist = 180;
+
+    const animate = () => {
+      frame++;
+      const w = canvas.width,
+        h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      for (const n of nodes) {
+        n.x += n.vx;
+        n.y += n.vy;
+        if (n.x < -10) n.x = w + 10;
+        if (n.x > w + 10) n.x = -10;
+        if (n.y < -10) n.y = h + 10;
+        if (n.y > h + 10) n.y = -10;
+      }
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < connDist) {
+            const alpha = (1 - dist / connDist) * 0.1;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.strokeStyle = `rgba(139,92,246,${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+
+            if (
+              frame % 90 === 0 &&
+              Math.random() < 0.012 &&
+              pulses.length < 25
+            ) {
+              pulses.push({
+                fi: i,
+                ti: j,
+                t: 0,
+                spd: 0.005 + Math.random() * 0.008,
+                hue: Math.random() > 0.5 ? 188 : 270,
+              });
+            }
+          }
+        }
+      }
+
+      for (let p = pulses.length - 1; p >= 0; p--) {
+        const pulse = pulses[p];
+        pulse.t += pulse.spd;
+        if (pulse.t > 1) {
+          pulses.splice(p, 1);
+          continue;
+        }
+        const from = nodes[pulse.fi],
+          to = nodes[pulse.ti];
+        if (!from || !to) {
+          pulses.splice(p, 1);
+          continue;
+        }
+        const px = from.x + (to.x - from.x) * pulse.t;
+        const py = from.y + (to.y - from.y) * pulse.t;
+        const pa = Math.sin(pulse.t * Math.PI) * 0.65;
+        ctx.beginPath();
+        ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${pulse.hue},80%,65%,${pa})`;
+        ctx.fill();
+      }
+
+      const mx = mouseRef.current.x,
+        my = mouseRef.current.y;
+      for (const n of nodes) {
+        const md = Math.sqrt((n.x - mx) ** 2 + (n.y - my) ** 2);
+        const mouseBoost = md < 160 ? (1 - md / 160) * 0.45 : 0;
+        const alpha =
+          n.baseAlpha +
+          mouseBoost +
+          Math.sin(frame * 0.015 + n.x * 0.01) * 0.07;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = `hsla(${n.hue},70%,65%,${Math.min(alpha, 0.85)})`;
+        ctx.fill();
+
+        if (alpha > 0.2) {
+          const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 4);
+          grd.addColorStop(0, `hsla(${n.hue},70%,65%,${alpha * 0.22})`);
+          grd.addColorStop(1, `hsla(${n.hue},70%,65%,0)`);
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r * 4, 0, Math.PI * 2);
+          ctx.fillStyle = grd;
+          ctx.fill();
+        }
+      }
+
+      animId = requestAnimationFrame(animate);
+    };
+    animate();
+
+    const onMouse = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
+    window.addEventListener("mousemove", onMouse);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMouse);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        pointerEvents: "none",
+        zIndex: 0,
+        opacity: 0.1,
+      }}
+    />
+  );
+}
+
+// ─── Data Scroll Overlay (subtle hex/binary columns) ────────────────────────
+function DataScrollOverlay() {
+  return null;
+}
+
+// ─── Ambient floating particles (preserved, for particle viewport) ──────────
 function AmbientParticles({
   width,
   height,
@@ -171,8 +449,7 @@ function AmbientParticles({
     canvas.width = width;
     canvas.height = height;
 
-    // Create ambient particles
-    const count = Math.floor((width * height) / 2000); // ~density based on area
+    const count = Math.floor((width * height) / 1600);
     particlesRef.current = Array.from({ length: count }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
@@ -180,7 +457,7 @@ function AmbientParticles({
       vy: (Math.random() - 0.5) * 0.3,
       r: Math.random() * 1.5 + 0.5,
       opacity: Math.random() * 0.3 + 0.05,
-      hue: 250 + Math.random() * 40, // purple-blue range
+      hue: 210 + Math.random() * 70,
       pulse: Math.random() * Math.PI * 2,
       pulseSpeed: 0.01 + Math.random() * 0.02,
     }));
@@ -196,7 +473,6 @@ function AmbientParticles({
         p.y += p.vy;
         p.pulse += p.pulseSpeed;
 
-        // Wrap around edges
         if (p.x < 0) p.x = width;
         if (p.x > width) p.x = 0;
         if (p.y < 0) p.y = height;
@@ -205,7 +481,7 @@ function AmbientParticles({
         const currentOpacity = p.opacity * (0.5 + 0.5 * Math.sin(p.pulse));
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${p.hue}, 70%, 65%, ${currentOpacity})`;
+        ctx.fillStyle = `rgba(255,255,255, ${currentOpacity})`;
         ctx.fill();
       }
       animId = requestAnimationFrame(animate);
@@ -223,8 +499,8 @@ function AmbientParticles({
         position: "absolute",
         top: 0,
         left: 0,
-        width: "100%",
-        height: "100%",
+        width: width,
+        height: height,
         pointerEvents: "none",
         zIndex: 0,
       }}
@@ -233,15 +509,7 @@ function AmbientParticles({
 }
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import {
-  TextureLoader,
-  LinearFilter,
-  RGBAFormat,
-  Vector2,
-  Object3D,
-  MathUtils,
-} from "three";
+import { TextureLoader, LinearFilter, Vector2, Object3D } from "three";
 import { gsap } from "gsap";
 import { vertex, fragment } from "./particle-system/shaders";
 import {
@@ -280,8 +548,6 @@ function ParticleSystem({
   const { addTouch } = useInteractivity();
 
   // GSAP animations for transitions
-  // fast=true  → scatter out quickly (0.35 s)
-  // fast=false → reform smoothly (1.4 s)
   const showParticles = useCallback(
     (
       dValue: number,
@@ -295,7 +561,6 @@ function ParticleSystem({
       gsap.killTweensOf(uniformsData.uSize);
 
       if (fast) {
-        // Scatter out: smooth dissolve
         gsap
           .timeline({ onComplete: callback })
           .to(uniformsData.uDepth, {
@@ -314,7 +579,6 @@ function ParticleSystem({
             "<",
           );
       } else {
-        // Reform: all uniforms land together — smooth settle
         gsap
           .timeline({ onComplete: callback })
           .to(uniformsData.uDepth, {
@@ -348,15 +612,13 @@ function ParticleSystem({
       tex.magFilter = LinearFilter;
 
       if (!isFirstLoad.current) {
-        // Kill any running tweens first
         gsap.killTweensOf(uniformsData.uDepth);
         gsap.killTweensOf(uniformsData.uScatter);
         gsap.killTweensOf(uniformsData.uSize);
 
         const SCATTER_DUR = 0.65;
-        const SWAP_AT = SCATTER_DUR * 0.5; // swap when particles are ~70% dispersed
+        const SWAP_AT = SCATTER_DUR * 0.5;
 
-        // Scatter out
         gsap
           .timeline()
           .to(uniformsData.uDepth, {
@@ -374,7 +636,6 @@ function ParticleSystem({
             { duration: SCATTER_DUR, value: 0.3, ease: "sine.inOut" },
             "<",
           )
-          // Swap texture mid-scatter — particles are already tiny/dispersed so swap is invisible
           .call(
             () => {
               if (!instanceMeshRef.current) return;
@@ -384,14 +645,12 @@ function ParticleSystem({
                 PARTICLE_IMG_SIZE,
                 PARTICLE_IMG_SIZE,
               );
-              // Begin reform immediately — overlaps cleanly with scatter tail
               showParticles(0.0, 0.92, 0.0, undefined, false);
             },
             [],
             SWAP_AT,
           );
       } else {
-        // First load → spawn from scatter
         isFirstLoad.current = false;
         uniformsData.uTexture.value = tex;
         uniformsData.uTextureSize.value.set(
@@ -511,8 +770,8 @@ function ParticleCanvas({
           style={{
             width: 36,
             height: 36,
-            border: "3px solid rgba(139,92,246,0.12)",
-            borderTopColor: "rgba(139,92,246,0.5)",
+            border: "3px solid rgba(255,255,255,0.1)",
+            borderTopColor: "rgba(255,255,255,0.3)",
             borderRadius: "50%",
             animation: "particleSpin .75s linear infinite",
           }}
@@ -522,15 +781,12 @@ function ParticleCanvas({
     );
   }
 
-  // Compute camera Z so the 400×400 particle grid fills ~90% of canvas height.
-  // Correct perspective formula: z = (gridHalf) / tan(fov/2)
   const FOV = 75;
   const fovRad = (FOV * Math.PI) / 180;
   const aspect = width / Math.max(height, 1);
-  // height-fill distance; if canvas is portrait-shaped, also satisfy width
   const zForHeight = PARTICLE_IMG_SIZE / 2 / Math.tan(fovRad / 2);
   const zForWidth = PARTICLE_IMG_SIZE / 2 / (Math.tan(fovRad / 2) * aspect);
-  const cameraZ = Math.max(zForHeight, zForWidth) * 1.08; // 8% padding
+  const cameraZ = Math.max(zForHeight, zForWidth) * 1.08;
 
   const cameraProps = {
     fov: FOV,
@@ -547,6 +803,8 @@ function ParticleCanvas({
         display: "flex",
         position: "relative",
         flexShrink: 0,
+        borderRadius: 16,
+        overflow: "hidden",
       }}
     >
       <Canvas
@@ -593,76 +851,127 @@ function GitHubIcon() {
   );
 }
 
-// ─── Compact desktop card ───────────────────────────────────────────────────
-function CompactMemberCard({
+// ─── Frame Corner Decoration ────────────────────────────────────────────────
+function FrameCorner({ position }: { position: "tl" | "tr" | "bl" | "br" }) {
+  const size = 28;
+  const color = "rgba(255,255,255,0.1)";
+  const base: React.CSSProperties = {
+    position: "absolute",
+    width: size,
+    height: size,
+    pointerEvents: "none",
+    zIndex: 5,
+  };
+  const map: Record<string, React.CSSProperties> = {
+    tl: {
+      top: 0,
+      left: 0,
+      borderTop: `1px solid ${color}`,
+      borderLeft: `1px solid ${color}`,
+    },
+    tr: {
+      top: 0,
+      right: 0,
+      borderTop: `1px solid ${color}`,
+      borderRight: `1px solid ${color}`,
+    },
+    bl: {
+      bottom: 0,
+      left: 0,
+      borderBottom: `1px solid ${color}`,
+      borderLeft: `1px solid ${color}`,
+    },
+    br: {
+      bottom: 0,
+      right: 0,
+      borderBottom: `1px solid ${color}`,
+      borderRight: `1px solid ${color}`,
+    },
+  };
+  return <div className="corner-deco" style={{ ...base, ...map[position] }} />;
+}
+
+// ─── Data Sphere Card (redesigned member card) ──────────────────────────────
+function DataSphereCard({
   member,
   onHover,
   isActive,
+  index,
 }: {
   member: Member;
   onHover: (member: Member) => void;
   isActive: boolean;
+  index: number;
 }) {
-  const roleLabel = member.role === "coordinator" ? "Coordinator" : "Member";
-
   return (
     <div
+      className={`dsphere-card${isActive ? " dsphere-active" : ""}`}
       onMouseEnter={() => onHover(member)}
       style={{
+        position: "relative",
+        overflow: "hidden",
         background: isActive
-          ? "linear-gradient(135deg, rgba(139,92,246,0.2), rgba(59,130,246,0.12))"
-          : "rgba(255,255,255,0.03)",
-        border: isActive
-          ? "1px solid rgba(139,92,246,0.6)"
-          : "1px solid rgba(255,255,255,0.07)",
-        borderRadius: "14px",
-        padding: "14px 16px",
+          ? "rgba(255,255,255,0.04)"
+          : "rgba(255,255,255,0.015)",
+        border: `1px solid ${isActive ? "rgba(34,211,238,0.25)" : "rgba(255,255,255,0.04)"}`,
+        borderRadius: "12px",
+        padding: "18px 24px 18px 28px",
         cursor: "pointer",
-        transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
         display: "flex",
-        flexDirection: "column" as const,
-        gap: "6px",
-        backdropFilter: "blur(12px)",
-        boxShadow: isActive
-          ? "0 0 24px rgba(139,92,246,0.2), inset 0 1px 0 rgba(255,255,255,0.08)"
-          : "0 2px 12px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04)",
-        transform: isActive ? "scale(1.02)" : "scale(1)",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: "14px",
       }}
     >
-      <span
+      {/* Content */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div
+          style={{
+            fontSize: "15px",
+            fontWeight: 600,
+            color: isActive ? "#fff" : "rgba(255,255,255,0.75)",
+            transition: "color 0.3s",
+            lineHeight: 1.3,
+          }}
+        >
+          {member.name}
+        </div>
+        <div
+          style={{
+            fontSize: "12px",
+            color: isActive ? "rgba(34,211,238,0.7)" : "rgba(255,255,255,0.35)",
+            textTransform: "capitalize",
+            fontWeight: 400,
+            marginTop: 2,
+            transition: "color 0.3s",
+          }}
+        >
+          {member.role}
+        </div>
+      </div>
+
+      {/* Arrow indicator */}
+      <div
         style={{
-          fontSize: "9px",
-          fontWeight: 700,
-          letterSpacing: "0.1em",
-          textTransform: "uppercase" as const,
-          color: isActive
-            ? member.role === "coordinator"
-              ? "#fbbf24"
-              : "#c084fc"
-            : "rgba(255,255,255,0.35)",
-          transition: "color 0.3s",
-        }}
-      >
-        {roleLabel}
-      </span>
-      <span
-        style={{
+          opacity: isActive ? 0.6 : 0,
+          transition: "opacity 0.3s",
+          color: "#22d3ee",
           fontSize: "14px",
-          fontWeight: 700,
-          color: isActive ? "#fff" : "rgba(255,255,255,0.8)",
-          transition: "color 0.3s",
-          lineHeight: 1.3,
+          flexShrink: 0,
         }}
       >
-        {member.name}
-      </span>
+        →
+      </div>
+
+      {/* Social icons */}
       {member.socials && (
         <div
           style={{
             display: "flex",
             gap: "10px",
-            marginTop: "4px",
+            marginTop: "8px",
             alignItems: "center",
+            zIndex: 2,
           }}
         >
           {member.socials.linkedin && (
@@ -672,8 +981,10 @@ function CompactMemberCard({
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               style={{
-                color: isActive ? "#a78bfa" : "rgba(255,255,255,0.25)",
-                transition: "color 0.2s",
+                color: isActive
+                  ? "rgba(255,255,255,0.5)"
+                  : "rgba(255,255,255,0.2)",
+                transition: "all 0.3s",
                 display: "flex",
                 alignItems: "center",
               }}
@@ -688,8 +999,10 @@ function CompactMemberCard({
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               style={{
-                color: isActive ? "#a78bfa" : "rgba(255,255,255,0.25)",
-                transition: "color 0.2s",
+                color: isActive
+                  ? "rgba(255,255,255,0.5)"
+                  : "rgba(255,255,255,0.2)",
+                transition: "all 0.3s",
                 display: "flex",
                 alignItems: "center",
               }}
@@ -704,8 +1017,10 @@ function CompactMemberCard({
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               style={{
-                color: isActive ? "#a78bfa" : "rgba(255,255,255,0.25)",
-                transition: "color 0.2s",
+                color: isActive
+                  ? "rgba(255,255,255,0.5)"
+                  : "rgba(255,255,255,0.2)",
+                transition: "all 0.3s",
                 display: "flex",
                 alignItems: "center",
               }}
@@ -720,8 +1035,10 @@ function CompactMemberCard({
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
               style={{
-                color: isActive ? "#a78bfa" : "rgba(255,255,255,0.25)",
-                transition: "color 0.2s",
+                color: isActive
+                  ? "rgba(255,255,255,0.5)"
+                  : "rgba(255,255,255,0.2)",
+                transition: "all 0.3s",
                 display: "flex",
                 alignItems: "center",
               }}
@@ -735,400 +1052,175 @@ function CompactMemberCard({
   );
 }
 
-// ─── Desktop split-screen layout ────────────────────────────────────────────
-function DesktopSplitView({
-  coordinators,
-  members,
+// ─── Particle Viewport (Right Column) ───────────────────────────────────────
+function ParticleViewport({
+  activeSrc,
+  activeMember,
 }: {
-  coordinators: Member[];
-  members: Member[];
+  activeSrc: string;
+  activeMember?: Member | null;
 }) {
-  const [activeSrc, setActiveSrc] = useState<string>(GRAVITY_LOGO_SRC);
-  const [activeMemberId, setActiveMemberId] = useState<string | null>(null);
-  const canvasContainerRef = useRef<HTMLDivElement>(null);
-  const [canvasSize, setCanvasSize] = useState({ width: 500, height: 500 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState({ w: 500, h: 600 });
 
   useEffect(() => {
-    const el = canvasContainerRef.current;
+    const el = containerRef.current;
     if (!el) return;
+    let rafId: number | null = null;
     const update = () => {
-      const r = el.getBoundingClientRect();
-      setCanvasSize({
-        width: Math.max(460, Math.floor(r.width - 16)),
-        height: Math.max(460, Math.floor(r.height - 90)),
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const r = el.getBoundingClientRect();
+        const w = Math.floor(r.width);
+        const h = Math.floor(r.height);
+        setSize((prev) => (prev.w === w && prev.h === h ? prev : { w, h }));
       });
     };
     update();
     const ro = new ResizeObserver(update);
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => {
+      ro.disconnect();
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
-
-  const handleHover = useCallback((member: Member) => {
-    setActiveSrc(member.image || GRAVITY_LOGO_SRC);
-    setActiveMemberId(member.id);
-  }, []);
-
-  const allMembers = useMemo(
-    () => [...coordinators, ...members],
-    [coordinators, members],
-  );
-  const activeMember = useMemo(
-    () => allMembers.find((m) => m.id === activeMemberId),
-    [allMembers, activeMemberId],
-  );
 
   return (
-    <div style={{ display: "flex", minHeight: "calc(100vh - 80px)" }}>
-      {/* Left panel */}
+    <div
+      ref={containerRef}
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        borderRadius: 16,
+        overflow: "hidden",
+        border: "1px solid rgba(255,255,255,0.06)",
+        background: "rgba(0,0,0,0.35)",
+      }}
+    >
+      <AmbientParticles width={size.w} height={size.h} />
+
+      {/* Vignette overlay — draws focus to center */}
       <div
         style={{
-          width: "35%",
-          minWidth: "280px",
-          maxWidth: "420px",
-          overflowY: "auto",
-          padding: "28px 16px 40px 24px",
-          display: "flex",
-          flexDirection: "column",
-          borderRight: "1px solid rgba(255,255,255,0.06)",
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          background:
+            "radial-gradient(ellipse 70% 60% at 50% 50%, transparent 40%, rgba(4,4,12,0.6) 100%)",
+          zIndex: 3,
+        }}
+      />
+
+      {/* Subtle grid */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          backgroundImage:
+            "linear-gradient(to right, rgba(255,255,255,0.015) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.015) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+          zIndex: 2,
+        }}
+      />
+
+      {/* Frame corners */}
+      <FrameCorner position="tl" />
+      <FrameCorner position="tr" />
+      <FrameCorner position="bl" />
+      <FrameCorner position="br" />
+
+      {/* Member name overlay (bottom centre) */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: 36,
+          left: 0,
+          right: 0,
+          textAlign: "center",
+          pointerEvents: "none",
+          zIndex: 4,
         }}
       >
-        <div style={{ marginBottom: "24px" }}>
+        {activeMember ? (
           <div
             style={{
-              display: "flex",
+              display: "inline-flex",
+              flexDirection: "column",
               alignItems: "center",
-              gap: "10px",
-              marginBottom: "6px",
+              gap: 4,
+              padding: "14px 36px",
+              borderRadius: 14,
+              background: "rgba(8,8,20,0.88)",
+              backdropFilter: "blur(24px)",
+              border: "1px solid rgba(255,255,255,0.06)",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
             }}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#a78bfa"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
-              <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
-              <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
-            </svg>
-            <h2
+            <span
               style={{
-                fontSize: "13px",
-                fontWeight: 700,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                color: "#a78bfa",
-                margin: 0,
+                fontSize: "20px",
+                fontWeight: 600,
+                color: "#ffffff",
+                letterSpacing: "-0.01em",
               }}
             >
-              Private AI Wing
-            </h2>
+              {activeMember.name}
+            </span>
+            <span
+              style={{
+                fontSize: "11px",
+                color: "rgba(34,211,238,0.6)",
+                textTransform: "capitalize",
+                fontWeight: 400,
+              }}
+            >
+              {activeMember.role}
+            </span>
           </div>
-          <p
-            style={{
-              fontSize: "12px",
-              color: "rgba(255,255,255,0.3)",
-              margin: "0 0 0 28px",
-            }}
-          >
-            Hover a card to see the particle preview →
-          </p>
-        </div>
-
-        {coordinators.length > 0 && (
-          <>
-            <div
-              style={{
-                fontSize: "10px",
-                fontWeight: 700,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "rgba(251,191,36,0.7)",
-                marginBottom: "10px",
-                paddingLeft: "2px",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-            >
-              <span style={{ fontSize: "12px" }}>★</span> Coordinators
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "8px",
-                marginBottom: "24px",
-              }}
-            >
-              {coordinators.map((m) => (
-                <CompactMemberCard
-                  key={m.id}
-                  member={m}
-                  onHover={handleHover}
-                  isActive={activeMemberId === m.id}
-                />
-              ))}
-            </div>
-          </>
-        )}
-
-        {members.length > 0 && (
-          <>
-            <div
-              style={{
-                fontSize: "10px",
-                fontWeight: 700,
-                letterSpacing: "0.14em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.25)",
-                marginBottom: "10px",
-                paddingLeft: "2px",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-              }}
-            >
-              <span style={{ fontSize: "11px" }}>◆</span> Members
-            </div>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: "8px",
-              }}
-            >
-              {members.map((m) => (
-                <CompactMemberCard
-                  key={m.id}
-                  member={m}
-                  onHover={handleHover}
-                  isActive={activeMemberId === m.id}
-                />
-              ))}
-            </div>
-          </>
-        )}
-
-        {allMembers.length === 0 && (
+        ) : (
           <div
             style={{
-              color: "rgba(255,255,255,0.25)",
-              fontSize: "14px",
-              textAlign: "center",
-              marginTop: "80px",
+              fontSize: "13px",
+              color: "rgba(255,255,255,0.15)",
+              fontWeight: 400,
             }}
           >
-            No members found for this wing yet.
+            Hover a member to preview
           </div>
         )}
       </div>
 
-      {/* Right panel — particle canvas */}
       <div
-        ref={canvasContainerRef}
         style={{
-          flex: 1,
+          position: "absolute",
+          inset: 0,
+          top: 0,
+          zIndex: 1,
           display: "flex",
-          flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          padding: "30px",
-          position: "relative",
+          borderRadius: 16,
           overflow: "hidden",
         }}
       >
-        {/* Ambient floating particles background */}
-        <AmbientParticles
-          width={canvasSize.width + 60}
-          height={canvasSize.height + 120}
-        />
-
-        {/* Ambient glow */}
-        <div
-          style={{
-            position: "absolute",
-            width: "70%",
-            height: "70%",
-            borderRadius: "50%",
-            background:
-              "radial-gradient(ellipse at center, rgba(139,92,246,0.06) 0%, transparent 70%)",
-            pointerEvents: "none",
-            top: "15%",
-            left: "15%",
-            zIndex: 0,
-          }}
-        />
-
-        {/* Name label */}
-        <div
-          style={{
-            position: "absolute",
-            top: "28px",
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            pointerEvents: "none",
-            zIndex: 3,
-          }}
-        >
-          <span
-            style={{
-              fontSize: activeMember ? "16px" : "12px",
-              fontWeight: activeMember ? 700 : 500,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase" as const,
-              color: activeMember
-                ? "rgba(255,255,255,0.6)"
-                : "rgba(255,255,255,0.15)",
-              transition: "all 0.4s ease",
-            }}
-          >
-            {activeMember ? activeMember.name : "← hover a card to preview"}
-          </span>
-        </div>
-
-        {/* Particle canvas */}
-        <div
-          style={{
-            position: "relative",
-            zIndex: 1,
-            width: canvasSize.width,
-            height: canvasSize.height,
-          }}
-        >
-          <ParticleCanvas
-            src={activeSrc}
-            width={canvasSize.width}
-            height={canvasSize.height}
-          />
-        </div>
-
-        {/* Role badge */}
-        {activeMember && (
-          <div
-            style={{
-              position: "absolute",
-              bottom: "28px",
-              left: 0,
-              right: 0,
-              textAlign: "center",
-              fontSize: "11px",
-              letterSpacing: "0.12em",
-              textTransform: "uppercase" as const,
-              color:
-                activeMember.role === "coordinator"
-                  ? "rgba(251,191,36,0.6)"
-                  : "rgba(139,92,246,0.5)",
-              fontWeight: 600,
-              pointerEvents: "none",
-            }}
-          >
-            {activeMember.role === "coordinator" ? "★ Coordinator" : "◆ Member"}
-          </div>
+        {size.w > 0 && size.h > 36 && (
+          <ParticleCanvas src={activeSrc} width={size.w} height={size.h - 36} />
         )}
       </div>
     </div>
   );
 }
 
-// ─── Mobile standard grid ───────────────────────────────────────────────────
-function MobileGridView({
-  coordinators,
-  members,
-}: {
-  coordinators: Member[];
-  members: Member[];
-}) {
-  return (
-    <main className="min-h-screen bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-20">
-        <div className="text-center mb-16 slide-in-up">
-          <h1 className="text-4xl font-bold gradient-text mb-4">
-            Private AI Wing
-          </h1>
-          <p className="text-md text-foreground/70">
-            Coordinators and members from the Private AI wing
-          </p>
-        </div>
-        {coordinators.length > 0 && (
-          <div className="mb-20">
-            <h2 className="text-3xl font-bold mb-8 text-center">
-              Coordinators
-            </h2>
-            <div className="flex flex-wrap gap-4 justify-center">
-              {coordinators.map((member) => (
-                <div key={member.id} className="fade-in-up">
-                  <ProfileCard
-                    name={member.name}
-                    title={member.bio || member.wing}
-                    handle={
-                      member.name?.toLowerCase().replace(/\s+/g, "") ||
-                      "coordinator"
-                    }
-                    status={member.role}
-                    contactText="Contact"
-                    avatarUrl={member.image || "/gravity-logo.png"}
-                    socials={{
-                      linkedin: member.socials?.linkedin,
-                      x: member.socials?.twitter,
-                    }}
-                    showUserInfo
-                    enableTilt
-                    enableMobileTilt={false}
-                    onContactClick={() => console.log("Contact", member.name)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        {members.length > 0 && (
-          <div>
-            <h2 className="text-3xl font-bold mb-8 text-center">Members</h2>
-            <div className="flex flex-wrap gap-4 justify-center">
-              {members.map((member) => (
-                <div key={member.id} className="fade-in-up">
-                  <ProfileCard
-                    name={member.name}
-                    title={member.bio || member.wing}
-                    handle={
-                      member.name?.toLowerCase().replace(/\s+/g, "") || "member"
-                    }
-                    status={member.role}
-                    contactText="Contact"
-                    avatarUrl={member.image || "/placeholder-avatar.svg"}
-                    socials={{
-                      linkedin: member.socials?.linkedin,
-                      instagram: member.socials?.instagram,
-                      x: member.socials?.twitter,
-                    }}
-                    showUserInfo
-                    enableTilt
-                    enableMobileTilt={false}
-                    onContactClick={() => console.log("Contact", member.name)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </main>
-  );
-}
-
-// ─── Main export ────────────────────────────────────────────────────────────
+// ─── Main export ─────────────────────────────────────────────────────────────
 export function PrivateAIMembersPage() {
   const allMembers = useMembers();
   const [isDesktop, setIsDesktop] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [activeSrc, setActiveSrc] = useState<string>(GRAVITY_LOGO_SRC);
+  const [activeMemberId, setActiveMemberId] = useState<string | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -1139,40 +1231,379 @@ export function PrivateAIMembersPage() {
     return () => mq.removeEventListener("change", handler);
   }, []);
 
+  // Load JetBrains Mono font
+  useEffect(() => {
+    const href =
+      "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap";
+    if (!document.querySelector(`link[href="${href}"]`)) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = href;
+      document.head.appendChild(link);
+    }
+  }, []);
+
   const { coordinators, regularMembers } = useMemo(() => {
-    const wing = allMembers.filter(
+    const list = allMembers.filter(
       (m) =>
-        m.wing === WING_FILTER &&
+        isSameWing(m.wing, WING_FILTER) &&
         !m.isOverallCoordinator &&
         !m.isFacultyCoordinator,
     );
     return {
-      coordinators: wing.filter((m) => m.role === "coordinator"),
-      regularMembers: wing.filter((m) => m.role === "member"),
+      coordinators: list.filter((m) => m.role === "coordinator"),
+      regularMembers: list.filter((m) => m.role === "member"),
     };
   }, [allMembers]);
 
+  const activeMember = useMemo(
+    () => allMembers.find((m) => m.id === activeMemberId),
+    [allMembers, activeMemberId],
+  );
+
+  const handleHover = useCallback((member: Member | null) => {
+    if (member) {
+      setActiveSrc(member.image || GRAVITY_LOGO_SRC);
+      setActiveMemberId(member.id);
+    } else {
+      setActiveSrc(GRAVITY_LOGO_SRC);
+      setActiveMemberId(null);
+    }
+  }, []);
+
+  if (!mounted) return null;
+
+  // ── Mobile layout: standard scrollable page ──────────────────────────────
+  if (!isDesktop) {
+    return (
+      <div style={{ position: "relative", minHeight: "100vh" }}>
+        <style>{NEURAL_CSS}</style>
+        <Navigation />
+        <main style={{ padding: "80px 16px 40px" }}>
+          <div
+            className="stealth-heading-container"
+            style={{ marginBottom: 40, marginTop: 20 }}
+          >
+            <div
+              style={{
+                fontFamily: MONO,
+                fontSize: "10px",
+                letterSpacing: "0.5em",
+                color: "rgba(255,255,255,0.2)",
+                textTransform: "uppercase",
+                marginBottom: -10,
+                zIndex: 1,
+              }}
+            >
+              Confidential Protocol
+            </div>
+
+            <div className="stealth-title-wrapper" style={{ padding: "10px" }}>
+              <div className="scanline-overlay" />
+              <div className="redacted-reveal-bar" />
+              <h1
+                className="stealth-title-text"
+                style={{
+                  fontSize: "clamp(28px, 8vw, 42px)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                PRIVATE{" "}
+                <span
+                  style={{
+                    color: "transparent",
+                    WebkitTextStroke: "1px #fff",
+                    opacity: 0.8,
+                  }}
+                >
+                  AI
+                </span>{" "}
+                WING
+              </h1>
+            </div>
+          </div>
+          {coordinators.length > 0 && (
+            <div className="mb-10">
+              <h2 className="text-3xl font-bold mb-8 flex items-center justify-center gap-2 text-center text-white">
+                <span className="text-2xl">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="40"
+                    height="40"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      fill="#fff"
+                      d="M7.475 21Q5.2 21 3.6 19.4T2 15.525q0-2.15 1.438-3.713t3.587-1.737L3 2h7l2 4l2-4h7l-4 8.025q2.125.2 3.563 1.763T22 15.5q0 2.3-1.6 3.9T16.5 21q-.225 0-.462-.012t-.463-.063q1.375-.9 2.15-2.337T18.5 15.5q0-2.725-1.888-4.612T12 9t-4.612 1.888T5.5 15.5q0 1.7.7 3.2t2.2 2.225q-.225.05-.462.063T7.475 21M12 20q-1.875 0-3.187-1.312T7.5 15.5t1.313-3.187T12 11t3.188 1.313T16.5 15.5t-1.312 3.188T12 20m-1.85-1.75l1.85-1.4l1.85 1.4l-.7-2.275L15 14.65h-2.275L12 12.25l-.725 2.4H9l1.85 1.325z"
+                    />
+                  </svg>
+                </span>
+                <span>Coordinators</span>
+              </h2>
+              <div className="flex flex-wrap gap-4 justify-center">
+                {coordinators.map((m) => (
+                  <div key={m.id} className="fade-in-up">
+                    <ProfileCard
+                      name={m.name}
+                      title={m.bio || m.wing}
+                      handle={
+                        m.name?.toLowerCase().replace(/\s+/g, "") ||
+                        "coordinator"
+                      }
+                      status={m.role}
+                      contactText="Contact"
+                      avatarUrl={m.image || "/gravity-logo.png"}
+                      socials={{
+                        linkedin: m.socials?.linkedin,
+                        x: m.socials?.twitter,
+                      }}
+                      showUserInfo={true}
+                      enableTilt={true}
+                      enableMobileTilt={false}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {regularMembers.length > 0 && (
+            <div className="mb-10">
+              <h2 className="text-3xl font-bold mb-8 flex items-center justify-center gap-2 text-center text-white">
+                <span className="text-2xl">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="30"
+                    viewBox="0 0 448 512"
+                  >
+                    <path
+                      fill="#fff"
+                      d="M224.3 128L139.7-12.9c-6.5-10.8-20.1-14.7-31.3-9.1L21.8 21.3C9.9 27.2 5.1 41.6 11 53.5l69.6 139.1C50.5 226.5 32.3 271.1 32.3 320c0 106 86 192 192 192s192-86 192-192c0-48.9-18.3-93.5-48.3-127.4l69.6-139.1c5.9-11.9 1.1-26.3-10.7-32.2l-86.7-43.4c-11.2-5.6-24.9-1.6-31.3 9.1zm30.8 142.5c1.4 2.8 4 4.7 7 5.1l50.1 7.3c7.7 1.1 10.7 10.5 5.2 16l-36.3 35.4c-2.2 2.2-3.2 5.2-2.7 8.3l8.6 49.9c1.3 7.6-6.7 13.5-13.6 9.9l-44.8-23.6c-2.7-1.4-6-1.4-8.7 0l-44.8 23.6c-6.9 3.6-14.9-2.2-13.6-9.9l8.6-49.9c.5-3-.5-6.1-2.7-8.3l-36.3-35.4c-5.6-5.4-2.5-14.8 5.2-16l50.1-7.3c3-.4 5.7-2.4 7-5.1l22.4-45.4c3.4-7 13.3-7 16.8 0l22.4 45.4z"
+                    />
+                  </svg>
+                </span>
+                <span>Members</span>
+              </h2>
+              <div className="flex flex-wrap gap-4 justify-center">
+                {regularMembers.map((m) => (
+                  <div key={m.id} className="fade-in-up">
+                    <ProfileCard
+                      name={m.name}
+                      title={m.bio || m.wing}
+                      handle={
+                        m.name?.toLowerCase().replace(/\s+/g, "") || "member"
+                      }
+                      status={m.role}
+                      contactText="Contact"
+                      avatarUrl={m.image || "/placeholder-avatar.svg"}
+                      socials={{
+                        linkedin: m.socials?.linkedin,
+                        instagram: m.socials?.instagram,
+                        x: m.socials?.twitter,
+                      }}
+                      showUserInfo={true}
+                      enableTilt={true}
+                      enableMobileTilt={false}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // ── Desktop layout: full-viewport split pane, no page scroll ────────────
   return (
-    <>
+    <div
+      style={{
+        position: "relative",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        background: "rgba(4,4,12,0.97)",
+      }}
+    >
+      <style>{NEURAL_CSS}</style>
+
+      {/* Page-level neural lattice — behind everything */}
+      <NeuralLatticeBackground />
+
+      {/* Navigation renders itself as position:fixed — just render it */}
       <Navigation />
-      <div style={{ height: "80px" }} />
-      {mounted && isDesktop ? (
-        <>
-          <DesktopSplitView
-            coordinators={coordinators}
-            members={regularMembers}
-          />
-          <Footer />
-        </>
-      ) : (
-        <>
-          <MobileGridView
-            coordinators={coordinators}
-            members={regularMembers}
-          />
-          <Footer />
-        </>
-      )}
-    </>
+
+      <main
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          padding: "20px 0 0",
+          marginTop: 68,
+          height: "calc(100vh - 68px)",
+          overflow: "hidden",
+        }}
+      >
+        {/* Stealth Heading Section */}
+        <div
+          className="stealth-heading-container"
+          style={{ marginBottom: 60, flexShrink: 0 }}
+        >
+          <div
+            style={{
+              fontFamily: MONO,
+              fontSize: "12px",
+              letterSpacing: "0.8em",
+              color: "rgba(255,255,255,0.2)",
+              textTransform: "uppercase",
+              marginBottom: -20,
+              zIndex: 1,
+            }}
+          >
+            Confidential Protocol
+          </div>
+
+          <div className="stealth-title-wrapper">
+            <div className="scanline-overlay" />
+            <div className="redacted-reveal-bar" />
+            <h1 className="stealth-title-text">
+              PRIVATE{" "}
+              <span
+                style={{
+                  color: "transparent",
+                  WebkitTextStroke: "2px #fff",
+                  opacity: 0.8,
+                }}
+              >
+                AI
+              </span>{" "}
+              WING
+            </h1>
+          </div>
+        </div>
+
+        {/* Main split pane */}
+        <div
+          style={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "row",
+            overflow: "hidden",
+            padding: "0 24px 20px",
+            gap: 24,
+          }}
+        >
+          {/* ── LEFT COLUMN: Members list ─────────────────────────────── */}
+          <div
+            style={{
+              flex: "1 1 0",
+              minWidth: 0,
+              maxWidth: "50%",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+            }}
+          >
+            {/* Scrollable card list */}
+            <div
+              className="neural-scroll"
+              style={{
+                flex: 1,
+                overflowY: "auto",
+                overflowX: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                gap: 0,
+                paddingRight: 4,
+              }}
+            >
+              {coordinators.length > 0 && (
+                <div style={{ marginBottom: 6 }}>
+                  <div
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      color: "rgba(255,255,255,0.45)",
+                      padding: "4px 0 12px",
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    Coordinators
+                  </div>
+                  <div
+                    style={{ display: "flex", flexDirection: "column", gap: 6 }}
+                  >
+                    {coordinators.map((m, i) => (
+                      <DataSphereCard
+                        key={m.id}
+                        member={m}
+                        onHover={handleHover}
+                        isActive={activeMemberId === m.id}
+                        index={i}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {regularMembers.length > 0 && (
+                <div>
+                  <div
+                    style={{
+                      fontSize: "13px",
+                      fontWeight: 600,
+                      color: "rgba(255,255,255,0.45)",
+                      padding: "8px 0 12px",
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    Members
+                  </div>
+                  <div
+                    style={{ display: "flex", flexDirection: "column", gap: 6 }}
+                  >
+                    {regularMembers.map((m, i) => (
+                      <DataSphereCard
+                        key={m.id}
+                        member={m}
+                        onHover={handleHover}
+                        isActive={activeMemberId === m.id}
+                        index={coordinators.length + i}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {coordinators.length === 0 && regularMembers.length === 0 && (
+                <div
+                  style={{
+                    fontSize: "13px",
+                    color: "rgba(255,255,255,0.2)",
+                    textAlign: "center",
+                    paddingTop: 60,
+                    fontWeight: 400,
+                  }}
+                >
+                  Loading members…
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── RIGHT COLUMN: Focus Area ─────────────────────────────── */}
+          <div style={{ flex: 1, minWidth: 0, position: "relative" }}>
+            <ParticleViewport
+              activeSrc={activeSrc}
+              activeMember={activeMember}
+            />
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
   );
 }

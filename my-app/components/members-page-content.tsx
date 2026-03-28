@@ -8,12 +8,14 @@ import ProfileCard from "@/components/profile-card";
 import "@/components/ProfileCard.css";
 import MagicButton from "@/components/magic-button";
 import { isSameWing } from "@/lib/wing-match";
+import "@/components/wing-headings.css";
 
 type MembersPageContentProps = {
   wingFilter?: string;
   lightweight?: boolean;
   headerAction?: ReactNode;
   topBanner?: ReactNode;
+  onMemberHover?: (member: any) => void;
 };
 
 export function MembersPageContent({
@@ -21,6 +23,7 @@ export function MembersPageContent({
   lightweight = false,
   headerAction,
   topBanner,
+  onMemberHover,
 }: MembersPageContentProps) {
   const members = useMembers();
 
@@ -49,28 +52,57 @@ export function MembersPageContent({
     };
   }, [members, wingFilter]);
 
+  const headingClass = useMemo(() => {
+    switch (wingFilter) {
+      case "Metaverse":
+        return "metaverse-super-heading";
+      case "Web Development":
+        return "webd-super-heading";
+      case "Design":
+        return "design-super-heading";
+      case "FOSS":
+        return "foss-super-heading";
+      case "Competitive Coding":
+        return "cp-super-heading";
+      case "Blockchain":
+        return "blockchain-super-heading";
+      default:
+        return "gradient-text";
+    }
+  }, [wingFilter]);
+
   return (
     <>
       <Navigation />
 
-      <main className="min-h-screen m-10 bg-background">
+      <main
+        className={`min-h-screen m-10 ${
+          wingFilter === "Private AI" ? "bg-transparent" : "bg-background"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          {topBanner}
           <div
             className={`text-center mb-16 ${lightweight ? "" : "slide-in-up"}`}
           >
-            <h1 className="text-4xl md:text-6xl font-bold gradient-text mb-4">
+            <h1
+              className={`text-4xl md:text-6xl font-bold mb-4 ${headingClass}`}
+              data-text={heading}
+            >
               {heading}
             </h1>
             <p className="text-md md:text-xl text-foreground/70">
               {subheading}
             </p>
+
             {headerAction ? (
               <div className="mt-6 flex justify-center">{headerAction}</div>
             ) : null}
           </div>
 
           <div className="mb-20">
+            {topBanner && (
+              <div className="hidden md:block mb-10">{topBanner}</div>
+            )}
             <h2 className="text-3xl font-bold mb-8 flex items-center justify-center gap-2 text-center">
               <span className="text-2xl">
                 <svg
@@ -92,6 +124,8 @@ export function MembersPageContent({
                 <div
                   key={member.id}
                   className={lightweight ? "" : "fade-in-up"}
+                  onMouseEnter={() => onMemberHover?.(member)}
+                  onMouseLeave={() => onMemberHover?.(null)}
                 >
                   <ProfileCard
                     name={member.name}
@@ -139,6 +173,8 @@ export function MembersPageContent({
                 <div
                   key={member.id}
                   className={lightweight ? "" : "fade-in-up"}
+                  onMouseEnter={() => onMemberHover?.(member)}
+                  onMouseLeave={() => onMemberHover?.(null)}
                 >
                   <ProfileCard
                     name={member.name}

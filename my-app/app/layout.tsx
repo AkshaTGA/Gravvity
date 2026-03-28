@@ -11,7 +11,7 @@ const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gravity - Tech Society",
+  title: "Gravity | Technical Society of IIITA",
   description:
     "Gravity Technical Society - Competitive Coding, Web Dev, Design, FOSS, AI, Blockchain & Metaverse",
   generator: "v0.app",

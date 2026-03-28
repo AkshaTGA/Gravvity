@@ -283,11 +283,11 @@ export default function AboutPage() {
               <img
                 src="/GRAVITY_Cover_No_BG(1).png"
                 alt="Gravity"
-                className="h-8 md:h-10 w-auto object-contain drop-shadow-[0_0_10px_rgba(124,92,255,0.35)]"
+                className="h-8 md:h-18 w-auto object-contain drop-shadow-[0_0_10px_rgba(124,92,255,0.35)]"
               />
             </h1>
             <p className="text-lg text-foreground/60 max-w-xl mx-auto">
-              A student-run technical society uniting seven wings of innovation
+              A technical society uniting seven wings of innovation
               under one roof.
             </p>
           </div>

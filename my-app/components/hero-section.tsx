@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { ArrowRight, Grab } from "lucide-react";
+import { ArrowRight, Grab, Sparkles } from "lucide-react";
 const Galaxy = dynamic(() => import("./Galaxy"), {
   ssr: false,
   loading: () => <div className="absolute inset-0 z-0" />,
@@ -239,12 +239,10 @@ export function HeroSection() {
               } z-100 active:cursor-grabbing inline-flex mb-2 hero-g-hover`}
               drag={!isMobile}
               animate={isMobile ? { scale: [1, 1.008, 1] } : _controls}
-              initial={{ x: 0, y: 0 }}
-              transition={
-                isMobile
-                  ? { duration: 6, repeat: Infinity, ease: "easeInOut" }
-                  : undefined
-              }
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
               dragElastic={0.5}
               dragTransition={{ bounceStiffness: 500, bounceDamping: 10 }}
               dragConstraints={{
@@ -281,27 +279,34 @@ export function HeroSection() {
               <img
                 src="/gravity-logo.ico"
                 alt="Gravity G"
-                className="h-16 w-16 sm:h-20 sm:w-20 object-contain drop-shadow-[0_0_12px_rgba(124,92,255,0.35)] hero-g-float select-none opacity-100!"
+                className="h-12 sm:h-20 sm:w-20 object-contain drop-shadow-[0_0_12px_rgba(124,92,255,0.35)] hero-g-float select-none opacity-100!"
                 loading="lazy"
                 decoding="async"
                 draggable={false}
                 style={{ opacity: 1 }}
               />
             </motion.div>
-            <img
-              src="/GRAVITY_Cover_No_BG.png"
-              alt="Gravity"
-              className="h-12 sm:h-30 w-auto object-contain drop-shadow-[0_0_16px_rgba(124,92,255,0.35)] select-none pointer-events-none"
-              loading="lazy"
-              decoding="async"
-              draggable={false}
-            />
+            <motion.div
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
+            >
+              <img
+                src="/GRAVITY_Cover_No_BG.png"
+                alt="Gravity"
+                className="h-12 sm:h-30 w-auto object-contain drop-shadow-[0_0_16px_rgba(124,92,255,0.35)] select-none pointer-events-none"
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+              />
+            </motion.div>
           </div>
         </div>
 
         {/* Main Heading */}
         <div className={isMobile ? "animate-fade-in-up" : ""}>
-          <LettersPullUp text={`TECHNICAL SOCIETY`} className="select-none" />
+          <LettersPullUp text={`TECHNICAL SOCIETY`} className="select-none gradient-text" />
         </div>
 
         {/* Subheading */}
@@ -312,7 +317,7 @@ export function HeroSection() {
           style={isMobile ? { animationDelay: "0.2s" } : {}}
         >
           Seven wings of innovation: Competitive Coding, Web Development,
-          Design, FOSS, Private AI, Blockchain, and Metaverse
+          Metaverse, Private AI, Design, FOSS, and Blockchain
         </p>
 
         {/* CTA Buttons */}
@@ -353,8 +358,8 @@ const S1: React.FC = (): React.JSX.Element => (
     transition={{ duration: 1 }}
     className="fixed bottom-8 left-1/2 translate-x-1/2 z-50 px-6 py-3 rounded-full backdrop-blur-xs bg-white/10 border border-white/20 shadow-lg"
   >
-    <p className="text-white text-sm font-medium">
-      🎉 You found one of the secrets, Try saying the one-word secret. ;&gt;
+    <p className="flex items-center gap-2 text-white text-sm font-medium">
+      <Sparkles className="w-4 h-4 text-yellow-400" /> You found one of the secrets, Try saying the one-word secret. ;&gt;
     </p>
   </motion.div>
 );

@@ -59,6 +59,59 @@ export const wings: Wing[] = [
     animationComponent: WebDevelopmentAnimation,
   },
   {
+    id: "7",
+    name: "Metaverse",
+    description: "Create immersive virtual reality and metaverse experiences",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="40"
+        height="40"
+        viewBox="0 0 14 14"
+      >
+        <path
+          fill="#fff"
+          fillRule="evenodd"
+          d="M6.071 0A6.07 6.07 0 0 0 .097 4.982h4.709a3.46 3.46 0 0 1 3.4-2.83h2.502A6.06 6.06 0 0 0 6.07 0M2.786 11.178A6.07 6.07 0 0 1 .002 6.232h4.804a3.46 3.46 0 0 0 3.4 2.831h3.937v1.187a1.43 1.43 0 0 1-1.429 1.429H9.357V13.5a.5.5 0 0 1-.5.5H3.286a.5.5 0 0 1-.5-.5zm9.345-3.365h.369q.053 0 .102-.005a1 1 0 0 0 .898-.995V4.401a1 1 0 0 0-1-1H9.946v4.412zm-3.435 0V3.401h-.49a2.206 2.206 0 0 0 0 4.412z"
+          clipRule="evenodd"
+        />
+      </svg>
+    ),
+    color: "from-indigo-500 to-purple-500",
+    animationComponent: MetaverseAnimation,
+  },
+  {
+    id: "5",
+    name: "Private AI",
+    description: "Explore privacy-preserving AI and machine learning",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="60"
+        height="60"
+        viewBox="0 0 24 24"
+      >
+        <g fill="none">
+          <path
+            fill="#fff"
+            fillOpacity="0.16"
+            d="M6.6 10h10.8c.88 0 1.6.72 1.6 1.6v7c0 1.32-1.08 2.4-2.4 2.4H7.4C6.08 21 5 19.92 5 18.6v-7c0-.88.72-1.6 1.6-1.6"
+          />
+          <path
+            stroke="#fff"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeMiterlimit="10"
+            strokeWidth="1.2"
+            d="M8 10V7c0-2.21 1.79-4 4-4s4 1.79 4 4v3m-9.4 0h10.8c.88 0 1.6.72 1.6 1.6v7c0 1.32-1.08 2.4-2.4 2.4H7.4C6.08 21 5 19.92 5 18.6v-7c0-.88.72-1.6 1.6-1.6m5.206 3.276l-.377 1.508a.2.2 0 0 1-.145.145l-1.508.377c-.202.05-.202.338 0 .388l1.508.377a.2.2 0 0 1 .145.145l.377 1.508c.05.202.338.202.388 0l.377-1.508a.2.2 0 0 1 .145-.145l1.508-.377c.202-.05.202-.338 0-.368l-1.508-.377a.2.2 0 0 1-.145-.145l-.377-1.508c-.05-.202-.338-.202-.388 0"
+          />
+        </g>
+      </svg>
+    ),
+    color: "from-purple-500 to-violet-500",
+    animationComponent: AIAnimation,
+  },
+  {
     id: "3",
     name: "Design",
     description: "Create stunning visual experiences and UI/UX designs",
@@ -103,37 +156,6 @@ export const wings: Wing[] = [
     animationComponent: FossAnimation,
   },
   {
-    id: "5",
-    name: "Private AI",
-    description: "Explore privacy-preserving AI and machine learning",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="60"
-        height="60"
-        viewBox="0 0 24 24"
-      >
-        <g fill="none">
-          <path
-            fill="#fff"
-            fillOpacity="0.16"
-            d="M6.6 10h10.8c.88 0 1.6.72 1.6 1.6v7c0 1.32-1.08 2.4-2.4 2.4H7.4C6.08 21 5 19.92 5 18.6v-7c0-.88.72-1.6 1.6-1.6"
-          />
-          <path
-            stroke="#fff"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeMiterlimit="10"
-            strokeWidth="1.2"
-            d="M8 10V7c0-2.21 1.79-4 4-4s4 1.79 4 4v3m-9.4 0h10.8c.88 0 1.6.72 1.6 1.6v7c0 1.32-1.08 2.4-2.4 2.4H7.4C6.08 21 5 19.92 5 18.6v-7c0-.88.72-1.6 1.6-1.6m5.206 3.276l-.377 1.508a.2.2 0 0 1-.145.145l-1.508.377c-.202.05-.202.338 0 .388l1.508.377a.2.2 0 0 1 .145.145l.377 1.508c.05.202.338.202.388 0l.377-1.508a.2.2 0 0 1 .145-.145l1.508-.377c.202-.05.202-.338 0-.368l-1.508-.377a.2.2 0 0 1-.145-.145l-.377-1.508c-.05-.202-.338-.202-.388 0"
-          />
-        </g>
-      </svg>
-    ),
-    color: "from-purple-500 to-violet-500",
-    animationComponent: AIAnimation,
-  },
-  {
     id: "6",
     name: "Blockchain",
     description: "Build decentralized applications and smart contracts",
@@ -160,28 +182,6 @@ export const wings: Wing[] = [
     ),
     color: "from-orange-500 to-red-500",
     animationComponent: BlockchainAnimation,
-  },
-  {
-    id: "7",
-    name: "Metaverse",
-    description: "Create immersive virtual reality and metaverse experiences",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="40"
-        height="40"
-        viewBox="0 0 14 14"
-      >
-        <path
-          fill="#fff"
-          fillRule="evenodd"
-          d="M6.071 0A6.07 6.07 0 0 0 .097 4.982h4.709a3.46 3.46 0 0 1 3.4-2.83h2.502A6.06 6.06 0 0 0 6.07 0M2.786 11.178A6.07 6.07 0 0 1 .002 6.232h4.804a3.46 3.46 0 0 0 3.4 2.831h3.937v1.187a1.43 1.43 0 0 1-1.429 1.429H9.357V13.5a.5.5 0 0 1-.5.5H3.286a.5.5 0 0 1-.5-.5zm9.345-3.365h.369q.053 0 .102-.005a1 1 0 0 0 .898-.995V4.401a1 1 0 0 0-1-1H9.946v4.412zm-3.435 0V3.401h-.49a2.206 2.206 0 0 0 0 4.412z"
-          clipRule="evenodd"
-        />
-      </svg>
-    ),
-    color: "from-indigo-500 to-purple-500",
-    animationComponent: MetaverseAnimation,
   },
 ];
 

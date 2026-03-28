@@ -19,6 +19,11 @@ import {
   Calendar,
   BookOpen,
   X,
+  Crown,
+  GraduationCap,
+  Award,
+  User,
+  Pen,
 } from "lucide-react";
 // Replace localStorage blog store with server-backed API calls
 import { useMemo, useState as useReactState } from "react";
@@ -415,16 +420,18 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex-1">
                         <h3 className="font-bold text-lg">{member.name}</h3>
-                        <p className="text-sm text-foreground/60">
-                          {member.isOverallCoordinator
-                            ? "👑 Overall Coordinator"
-                            : member.isFacultyCoordinator
-                              ? "🎓 Faculty Coordinator"
-                              : member.role === "coordinator"
-                                ? "🎖️ Coordinator"
-                                : "👤 Member"}
+                        <div className="flex items-center gap-1.5 text-sm text-foreground/60">
+                          {member.isOverallCoordinator ? (
+                            <><Crown size={14} /> Overall Coordinator</>
+                          ) : member.isFacultyCoordinator ? (
+                            <><GraduationCap size={14} /> Faculty Coordinator</>
+                          ) : member.role === "coordinator" ? (
+                            <><Award size={14} /> Coordinator</>
+                          ) : (
+                            <><User size={14} /> Member</>
+                          )}
                           {member.wing ? ` • ${member.wing}` : ""}
-                        </p>
+                        </div>
                         <p className="text-sm text-foreground/70 mt-1">
                           {member.bio}
                         </p>
@@ -677,7 +684,7 @@ export default function AdminDashboard() {
                             </div>
                           ) : (
                             <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 wing-card-gradient flex items-center justify-center text-2xl">
-                              ✍️
+                              <Pen size={24} className="text-white/70" />
                             </div>
                           )}
                           <div className="flex-1 min-w-0">
@@ -816,7 +823,7 @@ export default function AdminDashboard() {
                               </div>
                             ) : (
                               <div className="w-20 h-20 rounded-lg overflow-hidden shrink-0 bg-linear-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center text-2xl">
-                                ✍️
+                                <Pen size={24} className="text-white/70" />
                               </div>
                             )}
                             <div className="flex-1 min-w-0">

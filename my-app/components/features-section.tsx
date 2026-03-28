@@ -3,6 +3,7 @@
 import { wings } from "@/lib/data"
 import Link from "next/link"
 import MagicBorderCard from "@/components/magic-border-card"
+import { Rocket } from "lucide-react"
 
 export function FeaturesSection() {
   return (
@@ -29,7 +30,9 @@ export function FeaturesSection() {
         <div className="mt-6">
           <Link href="/wings">
             <MagicBorderCard innerClassName="card-glow p-8 cursor-pointer group text-center rounded-2xl">
-              <div className="text-5xl mb-4 group-hover:scale-110 transition-transform duration-300">🚀</div>
+              <div className="mb-4 text-emerald-400 group-hover:scale-110 transition-transform duration-300">
+                <Rocket size={48} className="mx-auto" />
+              </div>
               <h3 className="text-xl font-bold mb-3">Learn More</h3>
               <p className="text-foreground/70 text-sm">Explore detailed information about each wing</p>
             </MagicBorderCard>

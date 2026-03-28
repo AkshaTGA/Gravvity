@@ -35,6 +35,10 @@ import {
   Zap,
   GitBranch,
   Layers,
+  Eye,
+  ArrowDownToLine,
+  ArrowUpFromLine,
+  Check,
 } from "lucide-react"
 
 /* ═══════════════ Helpers ═══════════════ */
@@ -770,19 +774,19 @@ export function CPTraversalPage() {
                       className="space-y-2"
                     >
                       <div className="flex justify-between text-[11px] text-white/40">
-                        <span>
-                          {currentStep?.type === "visit" && "👁 Visiting..."}
+                        <span className="flex items-center gap-1.5">
+                          {currentStep?.type === "visit" && <><Eye size={14}/> Visiting...</>}
                           {(currentStep?.type === "enqueue" ||
                             currentStep?.type === "push") &&
                             (algorithm === "bfs"
-                              ? "📥 Enqueueing..."
-                              : "📥 Pushing...")}
+                              ? <><ArrowDownToLine size={14}/> Enqueueing...</>
+                              : <><ArrowDownToLine size={14}/> Pushing...</>)}
                           {(currentStep?.type === "dequeue" ||
                             currentStep?.type === "pop") &&
                             (algorithm === "bfs"
-                              ? "📤 Dequeueing..."
-                              : "📤 Popping...")}
-                          {currentStep?.type === "complete" && "✅ Complete"}
+                              ? <><ArrowUpFromLine size={14}/> Dequeueing...</>
+                              : <><ArrowUpFromLine size={14}/> Popping...</>)}
+                          {currentStep?.type === "complete" && <span className="text-emerald-400 flex items-center gap-1.5"><Check size={14}/> Complete</span>}
                         </span>
                         <span className="font-mono">
                           Step {stepIndex + 1} / {steps.length}

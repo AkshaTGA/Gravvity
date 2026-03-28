@@ -519,7 +519,7 @@
 
   :root {
     --avatar-width: 86%;
-    --avatar-bottom: 88px;
+    --avatar-bottom: 84px;
   }
 
   .pc-details {
@@ -527,7 +527,11 @@
   }
 
   .pc-details h3 {
-    font-size: min(3.5svh, 2.2em);
+    font-size: min(3svh, 1.6em);
+    white-space: normal;
+    text-overflow: clip;
+    line-height: 1.1;
+    padding: 0 10px;
   }
 
   .pc-details p {
@@ -564,6 +568,10 @@
     width: 36px;
     height: 36px;
   }
+  
+  .avatar-hover-zone .avatar {
+    height: calc(58% / var(--avatar-zoom, 1));
+  }
 }
 
 @media (max-width: 480px) {
@@ -574,7 +582,7 @@
 
   :root {
     --avatar-width: 90%;
-    --avatar-bottom: 80px;
+    --avatar-bottom: 74px;
     --avatar-radius: 12px;
   }
 
@@ -583,7 +591,11 @@
   }
 
   .pc-details h3 {
-    font-size: min(3.2svh, 1.8em);
+    font-size: min(2.8svh, 1.4em);
+    white-space: normal;
+    text-overflow: clip;
+    line-height: 1.1;
+    padding: 0 10px;
   }
 
   .pc-details p {

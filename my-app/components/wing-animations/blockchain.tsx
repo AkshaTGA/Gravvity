@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { Link, Check, Clock } from "lucide-react";
 
 export function BlockchainAnimation() {
   const [blocks, setBlocks] = useState([
@@ -67,7 +68,7 @@ export function BlockchainAnimation() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 <div className="w-6 h-6 rounded-lg bg-linear-to-br from-orange-500 to-red-600 flex items-center justify-center text-sm">
-                  ⛓️
+                  <Link size={14} className="text-white" />
                 </div>
                 <div>
                   <div className="text-xs font-semibold text-slate-200">
@@ -113,11 +114,11 @@ export function BlockchainAnimation() {
                         </div>
                         {block.verified ? (
                           <span className="text-green-400 text-xs">
-                            ✓ Verified
+                            <Check size={12} className="inline mr-1" /> Verified
                           </span>
                         ) : (
                           <span className="text-orange-400 text-xs animate-pulse">
-                            ⏳ Pending
+                            <Clock size={12} className="inline mr-1" /> Pending
                           </span>
                         )}
                       </div>

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Mail, Github, Linkedin, Twitter, Instagram } from "lucide-react";
+import { Mail, Github, Linkedin, Twitter, Instagram, Sparkles } from "lucide-react";
 import { wings } from "@/lib/data";
 import { useMemo, useState } from "react";
 import { getWingMembersPath } from "@/lib/wing-routes";
@@ -30,16 +30,16 @@ export function Footer() {
           {/* Brand */}
           <div className="flex sm:block flex-col items-center">
             <div>
-              <Link href="/" className="flex items-center my-4 gap-2">
+              <Link href="/" className="flex items-center my-4 gap-0 transition-transform duration-200 ease-out hover:scale-102">
                 <img
                   src="/gravity-logo.ico"
                   alt="Gravity Logo"
-                  className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.3)] transition-transform duration-200 ease-out hover:scale-105"
+                  className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.3)] "
                 />
                 <img
                   src="/GRAVITY_Cover_No_BG.png"
                   alt="Gravity"
-                  className="h-8 w-auto object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.35)]"
+                  className="h-12 w-auto object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.35)]"
                 />
               </Link>
             </div>
@@ -221,8 +221,8 @@ function SecretPopup({ onClose }: { onClose: () => void }) {
           ))}
         </div>
         <div className="relative z-10 text-center">
-          <h2 className="text-3xl font-bold gradient-text mb-4">
-            🎉 Congratulations! 🎉
+          <h2 className="flex items-center justify-center text-3xl font-bold gradient-text mb-4">
+            <Sparkles className="w-6 h-6 mr-2 text-yellow-400" /> Congratulations! <Sparkles className="w-6 h-6 ml-2 text-yellow-400" />
           </h2>
           <p className="text-lg mb-6">You have found a secret!</p>
           <div className="text-sm text-foreground/70 border-t border-border pt-4">

@@ -1,5 +1,5 @@
-import { MembersPageContent } from "@/components/members-page-content";
+import { redirect } from "next/navigation";
 
 export default function MembersPage() {
-  return <MembersPageContent />;
+  redirect("/");
 }

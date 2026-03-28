@@ -4,6 +4,7 @@ import { useState, useCallback, useMemo, useRef, useEffect } from "react";
 import { useMembers } from "@/hooks/use-members";
 import { isSameWing } from "@/lib/wing-match";
 import type { Member } from "@/lib/types";
+import { Save, CornerDownLeft, Check } from "lucide-react";
 import "./FossUbuntu.css";
 
 /* ═══════════════════════════════════════════════
@@ -267,8 +268,8 @@ const WALLPAPERS: WallpaperDef[] = [
     thumb: "linear-gradient(to bottom, #001219, #0a9396, #001219)",
   },
   {
-    id: "gravvity-crown",
-    name: "Gravvity Dark",
+    id: "gravity-crown",
+    name: "Gravity Dark",
     css: "radial-gradient(ellipse at 50% 50%, #1a1a2e 0%, #0a0a0a 100%)",
     thumb: "radial-gradient(ellipse at 50% 50%, #1a1a2e, #0a0a0a)",
   },
@@ -443,8 +444,8 @@ function TerminalApp({ initialMember, fossMembers }: { initialMember?: Member; f
       { type: "ascii", content: "            .-/+oossssoo+/-." },
       { type: "ascii", content: "        `:+ssssssssssssssssss+:`" },
       { type: "ascii", content: "      -+ssssssssssssssssssyyssss+-      OS: Ubuntu 24.04 LTS (FOSS Wing)" },
-      { type: "ascii", content: "    .ossssssssssssssssss" + "dMMMNy" + "sssso.    Host: Gravvity — IIITA" },
-      { type: "ascii", content: "   /sssssssssss" + "hdmmNNmmyNMMMMh" + "ssssss/   Kernel: 6.8.0-gravvity" },
+      { type: "ascii", content: "    .ossssssssssssssssss" + "dMMMNy" + "sssso.    Host: Gravity — IIITA" },
+      { type: "ascii", content: "   /sssssssssss" + "hdmmNNmmyNMMMMh" + "ssssss/   Kernel: 6.8.0-gravity" },
       { type: "ascii", content: "  +sssssssss" + "hmydMMMMMMMNddddy" + "ssssssss+  Uptime: ∞" },
       { type: "ascii", content: " /ssssssss" + "hNMMMyhhyyy" + "hmmmho" + "ssssssssss/ Shell: bash 5.2.21" },
       { type: "ascii", content: ".ssssssss" + "dMMMNh" + "ssssssssss" + "mNMMMs" + "sssssss. Terminal: gnome-terminal" },
@@ -466,14 +467,14 @@ function TerminalApp({ initialMember, fossMembers }: { initialMember?: Member; f
   useEffect(() => {
     const initLines: TermLine[] = [
       { type: "output", content: "Welcome to Ubuntu 24.04 LTS (FOSS Wing Edition)" },
-      { type: "output", content: "Gravvity — Indian Institute of Information Technology, Allahabad" },
+      { type: "output", content: "Gravity — Indian Institute of Information Technology, Allahabad" },
       { type: "output", content: "─".repeat(56) },
       { type: "output", content: "" },
     ];
 
     if (initialMember) {
       initLines.push(
-        { type: "prompt", content: `cat /home/foss/members/${initialMember.name.toLowerCase().replace(/\s+/g, "_")}`, prompt: "foss@gravvity:~$ " },
+        { type: "prompt", content: `cat /home/foss/members/${initialMember.name.toLowerCase().replace(/\s+/g, "_")}`, prompt: "foss@gravity:~$ " },
         { type: "divider", content: "" },
       );
       if (initialMember.image) {
@@ -513,7 +514,7 @@ function TerminalApp({ initialMember, fossMembers }: { initialMember?: Member; f
   const processCommand = useCallback(
     (cmd: string) => {
       const trimmed = cmd.trim();
-      const promptLine: TermLine = { type: "prompt", content: trimmed, prompt: "foss@gravvity:~$ " };
+      const promptLine: TermLine = { type: "prompt", content: trimmed, prompt: "foss@gravity:~$ " };
       const newLines: TermLine[] = [promptLine];
 
       if (!trimmed) {
@@ -552,7 +553,7 @@ function TerminalApp({ initialMember, fossMembers }: { initialMember?: Member; f
           newLines.push({ type: "output", content: "" });
           fossMembers.forEach((m) => {
             const isCoord = m.role === "coordinator";
-            newLines.push({ type: "output", content: `  📁 ${m.name}${isCoord ? " [Coordinator]" : ""}` });
+            newLines.push({ type: "output", content: `  DIR  ${m.name}${isCoord ? " [Coordinator]" : ""}` });
           });
           newLines.push({ type: "output", content: `\n  Total: ${fossMembers.length} member(s)` }, { type: "output", content: "" });
           break;
@@ -598,7 +599,7 @@ function TerminalApp({ initialMember, fossMembers }: { initialMember?: Member; f
           break;
 
         case "uname":
-          newLines.push({ type: "output", content: "Linux gravvity-foss 6.8.0-gravvity #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux" });
+          newLines.push({ type: "output", content: "Linux gravity-foss 6.8.0-gravity #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux" });
           break;
 
         case "date":
@@ -664,11 +665,11 @@ function TerminalApp({ initialMember, fossMembers }: { initialMember?: Member; f
         }
 
         case "sudo":
-          newLines.push({ type: "error", content: "Nice try! But this is a simulated terminal 😄" });
+          newLines.push({ type: "error", content: "Nice try! But this is a simulated terminal :)" });
           break;
 
         case "exit":
-          newLines.push({ type: "output", content: "Can't exit — you're in the FOSS zone forever! 🐧" });
+          newLines.push({ type: "output", content: "Can't exit — you're in the FOSS zone forever!" });
           break;
 
         case "apt":
@@ -761,7 +762,7 @@ function TerminalApp({ initialMember, fossMembers }: { initialMember?: Member; f
           );
         })}
         <div className="term-input-line">
-          <span className="term-prompt-text">foss@gravvity:~$ </span>
+          <span className="term-prompt-text">foss@gravity:~$ </span>
           <input ref={inputRef} value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={handleKeyDown} className="term-input" spellCheck={false} />
         </div>
       </div>
@@ -859,7 +860,7 @@ function NotepadApp() {
     `#!/bin/bash
 # ──────────────────────────────────────
 # FOSS Wing — Welcome Script
-# Gravvity, IIITA
+# Gravity, IIITA
 # ──────────────────────────────────────
 
 echo "Welcome to the FOSS Wing!"
@@ -876,7 +877,7 @@ MEMBERS=$(ls /home/foss/members | wc -l)
 echo "Active members: $MEMBERS"
 
 # Start contributing today!
-echo "Happy hacking! 🐧"
+echo "Happy hacking!"
 `,
   );
   const [fileName, setFileName] = useState("welcome.sh");
@@ -927,10 +928,10 @@ echo "Happy hacking! 🐧"
         </div>
         <div className="notepad-header-actions">
           <button className="notepad-action-btn" onClick={handleSave} title="Save (Ctrl+S)">
-            💾
+            <Save className="w-3.5 h-3.5" />
           </button>
           <button className="notepad-action-btn" onClick={() => setWordWrap(!wordWrap)} title="Toggle word wrap">
-            ↩
+            <CornerDownLeft className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
@@ -1066,7 +1067,7 @@ function FirefoxApp() {
       <div className="ubuntu-firefox-body">
         {showWingResults ? (
           <div className="wing-search-results">
-            <div className="wing-search-title">Gravvity Wings</div>
+            <div className="wing-search-title">Gravity Wings</div>
             {wingResults.length > 0 ? (
               wingResults.map((wing) => (
                 <button key={wing.slug} className="wing-search-item" onClick={() => openWingLink(wing.path)}>
@@ -1083,7 +1084,7 @@ function FirefoxApp() {
         ) : (
           <div className="ubuntu-firefox-placeholder">
             <FirefoxIcon />
-            <span>Search Gravvity wings (example: foss, design, ai) or enter a URL</span>
+            <span>Search Gravity wings (example: foss, design, ai) or enter a URL</span>
           </div>
         )}
       </div>
@@ -1206,7 +1207,7 @@ function AppearanceSettings({
                   <GravvityCrown />
                 </div>
               )}
-              {selectedWallpaper === wp.id && !customWallpaper && <div className="bg-thumb-check">✓</div>}
+              {selectedWallpaper === wp.id && !customWallpaper && <div className="bg-thumb-check"><Check size={12} className="mx-auto my-auto" /></div>}
             </div>
           ))}
           {customWallpaper && (
@@ -1215,7 +1216,7 @@ function AppearanceSettings({
               style={{ backgroundImage: `url(${customWallpaper})`, backgroundSize: "cover", backgroundPosition: "center" }}
               title="Custom wallpaper"
             >
-              <div className="bg-thumb-check">✓</div>
+              <div className="bg-thumb-check"><Check size={12} className="mx-auto my-auto" /></div>
             </div>
           )}
         </div>
@@ -1310,12 +1311,12 @@ function ActivitiesOverlay({
               className="act-result-item"
               onClick={() => {
                 if (a.name === "GitHub") {
-                  window.open("https://github.com/Gravvity-IIITA", "_blank");
+                  window.open("https  ://gravity.iiita.ac.in", "_blank");
                   onClose();
-                  return;
+                  return;   
                 }
                 if (a.name === "LinkedIn") {
-                  window.open("https://www.linkedin.com/company/gravvity-iiita", "_blank");
+                  window.open('https://www.linkedin.com/company/gravity-iiit-allahabad', "_blank");
                   onClose();
                   return;
                 }
