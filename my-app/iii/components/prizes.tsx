@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Trophy, Medal, Award, Star } from 'lucide-react';
+import CardWebOverlay from './card-web-overlay';
 
 const prizes = [
   {
@@ -72,7 +73,7 @@ export default function PrizesSection() {
         <div
           className={`text-center mb-20 transition-all duration-1000 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'}`}
         >
-          <span className="text-purple-400 text-sm tracking-[0.4em] uppercase font-bold drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]">Prize Pool</span>
+          <span className="text-[#8AE8FF] text-sm tracking-[0.4em] uppercase font-bold drop-shadow-[0_0_15px_rgba(138,232,255,0.45)]">Prize Pool</span>
           <h2 className="mt-4 text-5xl md:text-7xl font-black text-white tracking-tight">
             Win{' '}
             <span
@@ -85,60 +86,26 @@ export default function PrizesSection() {
           <p className="mt-6 text-white/50 text-lg md:text-xl font-light tracking-wide">Total prize pool up for grabs</p>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-8 items-end justify-center perspective-1000">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {prizes.map((prize, i) => {
             const Icon = prize.icon;
-            const isFirst = prize.size === 'large';
             return (
               <div
                 key={prize.rank}
-                className={`group relative flex flex-col items-center justify-center p-10 rounded-3xl text-center cursor-default backdrop-blur-md overflow-hidden ${
-                  isFirst ? 'w-full md:w-80 h-96 z-10 shadow-2xl md:-translate-y-6' : 'w-full md:w-64 h-80'
-                }`}
+                className="card-glow group flex flex-col items-center justify-center text-center p-5 h-40 sm:h-44 md:h-48 rounded-2xl transition-all duration-300 hover:scale-[1.03] relative overflow-hidden"
                 style={{
-                  transition: 'all 0.8s cubic-bezier(0.23, 1, 0.32, 1)',
-                  transitionDelay: `${i * 150}ms`,
+                  transitionDelay: `${i * 120}ms`,
                   opacity: visible ? 1 : 0,
-                  transform: visible
-                    ? `translateY(${isFirst ? '-1.5rem' : '0'}) scale(1) translateZ(0)`
-                    : 'translateY(4rem) scale(0.9) translateZ(-50px)',
-                  background: `linear-gradient(135deg, rgba(255,255,255,0.03), ${prize.bg})`,
-                  border: `1px solid rgba(255,255,255,0.05)`,
-                  boxShadow: visible ? `0 20px 40px -10px ${prize.glow}, inset 0 1px 1px rgba(255,255,255,0.1)` : 'none',
+                  transform: visible ? 'translateY(0)' : 'translateY(20px)',
                 }}
               >
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                  style={{ background: `radial-gradient(circle at center, ${prize.glow}, transparent 70%)` }}
-                />
-                
-                <div
-                  className={`relative flex items-center justify-center rounded-2xl mb-6 shadow-inner ${isFirst ? 'w-24 h-24' : 'w-20 h-20'}`}
-                  style={{ 
-                    background: `linear-gradient(135deg, rgba(255,255,255,0.1), ${prize.bg})`, 
-                    border: `1px solid ${prize.border}`,
-                    boxShadow: `0 8px 32px ${prize.glow}, inset 0 2px 2px rgba(255,255,255,0.2)`
-                  }}
-                >
-                  <Icon 
-                    className={`${isFirst ? 'w-12 h-12' : 'w-10 h-10'} transition-transform duration-500 group-hover:scale-110`} 
-                    style={{ color: prize.color, filter: `drop-shadow(0 0 12px ${prize.color})` }} 
-                  />
+                <CardWebOverlay />
+                <Icon className="w-5 h-5 text-[#A68CFF] mb-2" style={{ color: prize.color }} />
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="h-px w-6 bg-purple-500/60" />
+                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#8AE8FF]">{prize.rank}</span>
                 </div>
-                
-                <div className="relative z-10 mt-auto">
-                  <p className="text-white/70 text-xs md:text-sm tracking-[0.2em] uppercase font-bold mb-2 group-hover:text-white transition-colors duration-500">{prize.rank}</p>
-                  <p
-                    className={`font-black tracking-tight ${isFirst ? 'text-5xl md:text-6xl' : 'text-4xl md:text-5xl'}`}
-                    style={{ 
-                      color: prize.color, 
-                      filter: `drop-shadow(0 4px 12px ${prize.glow})`,
-                      WebkitTextStroke: '1px rgba(255,255,255,0.1)',
-                    }}
-                  >
-                    {prize.amount}
-                  </p>
-                </div>
+                <span className="text-xl md:text-2xl font-bold leading-tight">{prize.amount}</span>
               </div>
             );
           })}

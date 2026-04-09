@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Zap, Globe, Code as Code2 } from 'lucide-react';
+import CardWebOverlay from './card-web-overlay';
 
 export default function AboutSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -22,12 +23,12 @@ export default function AboutSection() {
         <div
           className={`text-center mb-16 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
         >
-          <span className="text-purple-300 text-xs tracking-[0.3em] uppercase font-medium">About the Event</span>
+          <span className="text-[#A68CFF] text-xs tracking-[0.3em] uppercase font-medium">About the Event</span>
           <h2 className="mt-3 text-4xl md:text-5xl font-bold text-white">
             What is{' '}
             <span
               className="text-transparent bg-clip-text"
-              style={{ backgroundImage: 'linear-gradient(135deg, #c4b5fd, #a78bfa)' }}
+              style={{ backgroundImage: 'linear-gradient(135deg, #A68CFF, #8AE8FF)' }}
             >
               III 5.0?
             </span>
@@ -40,9 +41,9 @@ export default function AboutSection() {
           <div className="space-y-5">
             <p className="text-white/70 text-base leading-relaxed">
               <span className="text-white font-semibold">Innovate-Iterate-Interrupt (III) 5.0</span> is the flagship
-              hackathon of <span className="text-purple-300">Aproksha&apos;26</span> — IIIT Allahabad&apos;s annual
+              hackathon of <span className="text-[#A68CFF]">Aproksha&apos;26</span> — IIIT Allahabad&apos;s annual
               technical fest — hosted in collaboration with{' '}
-              <span className="text-purple-300">Gravity Technical Society</span>.
+              <span className="text-[#A68CFF]">Gravity Technical Society</span>.
             </p>
             <p className="text-white/60 text-base leading-relaxed">
               Over 24 non-stop hours, teams of 1–4 will build, break, and iterate their way to groundbreaking
@@ -63,21 +64,21 @@ export default function AboutSection() {
             ].map(({ icon: Icon, title, desc }) => (
               <div
                 key={title}
-                className="flex items-start gap-4 p-5 rounded-2xl transition-all duration-200 hover:scale-[1.02]"
-                style={{
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.07)',
-                }}
+                className="card-glow group flex items-center gap-4 p-5 h-32 rounded-2xl transition-all duration-300 hover:scale-[1.03] relative overflow-hidden"
               >
+                <CardWebOverlay />
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
-                  style={{ background: 'rgba(168,85,247,0.12)', border: '1px solid rgba(168,85,247,0.2)' }}
+                  style={{ background: 'rgba(166,140,255,0.14)', border: '1px solid rgba(166,140,255,0.28)' }}
                 >
-                  <Icon className="w-5 h-5 text-purple-300" />
+                  <Icon className="w-5 h-5 text-[#A68CFF]" />
                 </div>
-                <div>
-                  <p className="text-white font-semibold text-sm">{title}</p>
-                  <p className="text-white/50 text-sm mt-0.5">{desc}</p>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="h-px w-6 bg-purple-500/60" />
+                    <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#8AE8FF]">{title}</span>
+                  </div>
+                  <p className="text-foreground/70 text-sm leading-relaxed">{desc}</p>
                 </div>
               </div>
             ))}

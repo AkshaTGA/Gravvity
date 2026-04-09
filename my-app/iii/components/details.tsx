@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { CircleCheck as CheckCircle2, Circle as XCircle } from 'lucide-react';
+import CardWebOverlay from './card-web-overlay';
 
 const dos = [
   'Teams of 1 to 4 members',
@@ -48,34 +49,42 @@ export default function DetailsSection() {
           className={`transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
         >
           <div className="text-center mb-10">
-            <span className="text-purple-300 text-xs tracking-[0.3em] uppercase font-medium">Rules & Guidelines</span>
+            <span className="text-[#A68CFF] text-xs tracking-[0.3em] uppercase font-medium">Rules & Guidelines</span>
             <h2 className="mt-3 text-4xl font-bold text-white">What You Need to Know</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             <div
-              className="p-6 rounded-2xl"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}
+              className="card-glow group p-6 rounded-2xl relative overflow-hidden transition-all duration-300 hover:scale-[1.01]"
             >
-              <h3 className="text-violet-300 font-semibold text-sm tracking-widest uppercase mb-5">Guidelines</h3>
+              <CardWebOverlay />
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-px w-7 bg-purple-500/60" />
+                <span className="text-xs font-semibold tracking-widest uppercase text-[#8AE8FF]">Guidelines</span>
+              </div>
+              <h3 className="text-2xl font-bold mb-5">What You Can Do</h3>
               <ul className="space-y-3">
                 {dos.map((item) => (
                   <li key={item} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-violet-300 mt-0.5 flex-shrink-0" />
-                    <span className="text-white/70 text-sm">{item}</span>
+                    <CheckCircle2 className="w-4 h-4 text-[#A68CFF] mt-0.5 flex-shrink-0" />
+                    <span className="text-foreground/70 text-sm leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
             <div
-              className="p-6 rounded-2xl"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}
+              className="card-glow group p-6 rounded-2xl relative overflow-hidden transition-all duration-300 hover:scale-[1.01]"
             >
-              <h3 className="text-fuchsia-300 font-semibold text-sm tracking-widest uppercase mb-5">Not Allowed</h3>
+              <CardWebOverlay />
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-px w-7 bg-purple-500/60" />
+                <span className="text-xs font-semibold tracking-widest uppercase text-[#8AE8FF]">Not Allowed</span>
+              </div>
+              <h3 className="text-2xl font-bold mb-5">What To Avoid</h3>
               <ul className="space-y-3">
                 {donts.map((item) => (
                   <li key={item} className="flex items-start gap-3">
-                    <XCircle className="w-4 h-4 text-fuchsia-300 mt-0.5 flex-shrink-0" />
-                    <span className="text-white/70 text-sm">{item}</span>
+                    <XCircle className="w-4 h-4 text-[#A68CFF] mt-0.5 flex-shrink-0" />
+                    <span className="text-foreground/70 text-sm leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -91,7 +100,7 @@ export default function DetailsSection() {
               Frequently Asked{' '}
               <span
                 className="text-transparent bg-clip-text"
-                style={{ backgroundImage: 'linear-gradient(135deg, #c4b5fd, #a78bfa)' }}
+                style={{ backgroundImage: 'linear-gradient(135deg, #A68CFF, #8AE8FF)' }}
               >
                 Questions
               </span>
@@ -101,19 +110,19 @@ export default function DetailsSection() {
             {faqs.map((faq, i) => (
               <div
                 key={i}
-                className="rounded-2xl overflow-hidden transition-all duration-200"
-                style={{
-                  background: openFaq === i ? 'rgba(168,85,247,0.08)' : 'rgba(255,255,255,0.03)',
-                  border: `1px solid ${openFaq === i ? 'rgba(168,85,247,0.28)' : 'rgba(255,255,255,0.06)'}`,
-                }}
+                className="card-glow group rounded-2xl overflow-hidden transition-all duration-300 hover:scale-[1.01] relative"
               >
+                <CardWebOverlay />
                 <button
-                  className="w-full text-left px-6 py-4 flex items-center justify-between gap-4"
+                  className="w-full text-left px-6 py-5 flex items-center justify-between gap-4"
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 >
-                  <span className="text-white text-sm font-medium">{faq.q}</span>
+                  <div className="flex items-center gap-2">
+                    <div className="h-px w-6 bg-purple-500/60" />
+                    <span className="text-white text-sm font-medium">{faq.q}</span>
+                  </div>
                   <span
-                    className="text-purple-300 text-lg transition-transform duration-200 flex-shrink-0"
+                    className="text-[#A68CFF] text-lg transition-transform duration-200 flex-shrink-0"
                     style={{ transform: openFaq === i ? 'rotate(45deg)' : 'rotate(0)' }}
                   >
                     +

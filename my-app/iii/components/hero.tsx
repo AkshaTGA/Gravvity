@@ -4,8 +4,10 @@ import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { useMemo } from 'react';
 import Image from 'next/image';
-import { Calendar, Clock, MapPin, Users } from 'lucide-react';
+import { ArrowRight, Calendar, Clock, MapPin, Users } from 'lucide-react';
 import gravityWordmark from '../../app/gravity-logo.png';
+import MagicButton from '@/components/magic-button';
+import CardWebOverlay from './card-web-overlay';
 
 const Galaxy = dynamic(() => import('./Galaxy'), {
   ssr: false,
@@ -98,11 +100,14 @@ export default function HeroSection() {
         }`}
       >
         <div className="flex items-center gap-3">
-          <div className="h-px w-12 bg-gradient-to-r from-transparent to-purple-400" />
-          <span className="text-purple-300 text-xs tracking-[0.3em] uppercase font-medium">
+          <div className="h-px w-12 bg-gradient-to-r from-transparent to-[#8AE8FF]" />
+          <span
+            className="text-xs tracking-[0.3em] uppercase font-medium text-transparent bg-clip-text"
+            style={{ backgroundImage: 'linear-gradient(135deg, #A68CFF, #8AE8FF)' }}
+          >
             Aproksha&apos;26 × Gravity
           </span>
-          <div className="h-px w-12 bg-gradient-to-l from-transparent to-purple-400" />
+          <div className="h-px w-12 bg-gradient-to-l from-transparent to-[#8AE8FF]" />
         </div>
 
         <div className="w-full flex flex-col items-center gap-0">
@@ -120,18 +125,19 @@ export default function HeroSection() {
           </div>
 
           <h1
-            className="-mt-14 text-7xl md:text-[10rem] font-medium leading-[0.9] tracking-wide"
+            className="-mt-14 text-7xl md:text-[10rem] font-medium leading-[0.9] tracking-wide text-transparent bg-clip-text"
             style={{
-              color: '#b49bff', // Matches the solid light purple from the image
-              filter: 'drop-shadow(0 4px 20px rgba(168,85,247,0.4))',
+              backgroundImage: 'linear-gradient(135deg, #A68CFF, #8AE8FF)',
+              filter: 'drop-shadow(0 4px 20px rgba(138,232,255,0.28))',
             }}
           >
             III 5.0?
           </h1>
 
           <p
-            className="mt-3 text-purple-300/90 text-sm sm:text-base md:text-2xl tracking-[0.35em] uppercase"
+            className="mt-3 text-sm sm:text-base md:text-2xl tracking-[0.35em] uppercase text-transparent bg-clip-text"
             style={{
+              backgroundImage: 'linear-gradient(135deg, #A68CFF, #8AE8FF)',
               textShadow: '0 0 20px rgba(168,85,247,0.28)',
             }}
           >
@@ -147,55 +153,41 @@ export default function HeroSection() {
           Think fast. Build faster.
         </p>
 
-        <div className="flex flex-wrap gap-4 mt-4 justify-center">
-          <a
-            href="https://innovateiterateinterrupt-iii-5.devfolio.co/overview"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-8 py-3 rounded-full font-semibold text-white text-sm transition-all duration-200 hover:scale-105 hover:shadow-lg"
-            style={{
-              background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
-              boxShadow: '0 0 30px rgba(168,85,247,0.35)',
-            }}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-4">
+          <MagicButton
+            onClick={() => window.open('https://innovateiterateinterrupt-iii-5.devfolio.co/overview', '_blank', 'noopener,noreferrer')}
+            className="font-bold w-60 sm:w-auto self-center"
           >
-            Register Now
-          </a>
-          <a
+            <span>Register Now</span>
+            <ArrowRight size={20} />
+          </MagicButton>
+          <MagicButton
             href="#about"
-            onClick={(e) => {
-              e.preventDefault();
-              document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-            }}
-            className="px-8 py-3 rounded-full font-semibold text-sm transition-all duration-200 hover:scale-105"
-            style={{
-              border: '1px solid rgba(255,255,255,0.15)',
-              color: 'rgba(255,255,255,0.8)',
-              background: 'rgba(255,255,255,0.04)',
-            }}
+            className="font-bold w-56 sm:w-auto self-center"
+            heightClass="h-12"
           >
-            Learn More
-          </a>
+            Explore III
+          </MagicButton>
         </div>
       </div>
 
       <div
-        className={`relative z-10 mt-16 w-full max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-4 transition-all duration-1000 delay-300 ${
+        className={`relative z-10 mt-16 w-full max-w-6xl grid grid-cols-2 md:grid-cols-4 gap-5 transition-all duration-1000 delay-300 ${
           visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`}
       >
         {stats.map(({ icon: Icon, label, value }) => (
           <div
             key={label}
-            className="flex flex-col items-center gap-2 p-5 rounded-2xl transition-all duration-200 hover:scale-105"
-            style={{
-              background: 'rgba(255,255,255,0.04)',
-              border: '1px solid rgba(255,255,255,0.07)',
-              backdropFilter: 'blur(12px)',
-            }}
+            className="card-glow group flex flex-col items-center justify-center text-center p-4 h-32 sm:h-34 md:h-36 rounded-2xl transition-all duration-300 hover:scale-[1.03] relative overflow-hidden"
           >
-            <Icon className="w-5 h-5 text-purple-300" />
-            <span className="text-white/40 text-xs tracking-widest uppercase">{label}</span>
-            <span className="text-white font-semibold text-sm text-center">{value}</span>
+            <CardWebOverlay />
+            <Icon className="w-5 h-5 text-[#A68CFF] mb-2" />
+            <div className="flex items-center gap-2 mb-2">
+              <div className="h-px w-6 bg-purple-500/60" />
+              <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#8AE8FF]">{label}</span>
+            </div>
+            <span className="text-xl md:text-2xl font-bold leading-tight">{value}</span>
           </div>
         ))}
       </div>

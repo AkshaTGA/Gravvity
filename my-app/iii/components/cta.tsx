@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { ArrowRight } from 'lucide-react';
 import MagicButton from '@/components/magic-button';
 
 function useWebEffect() {
@@ -283,7 +284,7 @@ export default function CTASection() {
               <div className="md:w-[70%] w-full p-8 flex flex-col items-center md:items-start justify-center text-center md:text-left">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="h-px w-8 bg-purple-500/60" />
-                  <span className="text-xs font-semibold tracking-widest uppercase text-purple-400">
+                  <span className="text-xs font-semibold tracking-widest uppercase text-[#8AE8FF]">
                     Register Now
                   </span>
                 </div>
@@ -293,12 +294,22 @@ export default function CTASection() {
                   iterate, and ship in 24 hours. Bring your idea and compete with the best at
                   Aproksha&apos;26.
                 </p>
-                <MagicButton
-                  heightClass="h-11"
-                  onClick={() => window.open('https://innovateiterateinterrupt-iii-5.devfolio.co/overview', '_blank', 'noopener,noreferrer')}
-                >
-                  Register for III 5.0
-                </MagicButton>
+                <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                  <MagicButton
+                    onClick={() => window.open('https://innovateiterateinterrupt-iii-5.devfolio.co/overview', '_blank', 'noopener,noreferrer')}
+                    className="font-bold w-60 sm:w-auto self-center"
+                  >
+                    <span>Register for III</span>
+                    <ArrowRight size={20} />
+                  </MagicButton>
+                  <MagicButton
+                    href="mailto:team@aproksha.iiita.ac.in"
+                    className="font-bold w-56 sm:w-auto self-center"
+                    heightClass="h-12"
+                  >
+                    Contact Team
+                  </MagicButton>
+                </div>
               </div>
             </div>
           </div>

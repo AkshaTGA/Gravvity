@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Trophy, Medal, Award, Star } from 'lucide-react';
+import CardWebOverlay from './card-web-overlay';
 
 const prizes = [
   {
@@ -72,12 +73,12 @@ export default function PrizesSection() {
         <div
           className={`text-center mb-16 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
         >
-          <span className="text-purple-300 text-xs tracking-[0.3em] uppercase font-medium">Prize Pool</span>
+          <span className="text-[#A68CFF] text-xs tracking-[0.3em] uppercase font-medium">Prize Pool</span>
           <h2 className="mt-3 text-4xl md:text-5xl font-bold text-white">
             Win{' '}
             <span
               className="text-transparent bg-clip-text"
-              style={{ backgroundImage: 'linear-gradient(135deg, #ddd6fe, #a78bfa)' }}
+              style={{ backgroundImage: 'linear-gradient(135deg, #A68CFF, #8AE8FF)' }}
             >
               ₹60,000+
             </span>
@@ -85,42 +86,26 @@ export default function PrizesSection() {
           <p className="mt-3 text-white/50 text-base">Total prize pool up for grabs</p>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6 items-end justify-center">
+        <div className="w-full max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4">
           {prizes.map((prize, i) => {
             const Icon = prize.icon;
-            const isFirst = prize.size === 'large';
             return (
               <div
                 key={prize.rank}
-                className={`flex-1 flex flex-col items-center gap-4 p-8 rounded-3xl text-center transition-all duration-700 hover:scale-105 cursor-default ${
-                  isFirst ? 'md:-translate-y-4' : ''
-                }`}
+                className="card-glow group flex flex-col items-center justify-center text-center p-5 h-40 sm:h-44 md:h-48 rounded-2xl transition-all duration-300 hover:scale-[1.03] relative overflow-hidden"
                 style={{
-                  transitionDelay: `${i * 100}ms`,
+                  transitionDelay: `${i * 120}ms`,
                   opacity: visible ? 1 : 0,
-                  transform: visible
-                    ? `translateY(${isFirst ? '-1rem' : '0'}) scale(1)`
-                    : 'translateY(2rem) scale(0.95)',
-                  background: prize.bg,
-                  border: `1px solid ${prize.border}`,
-                  boxShadow: visible ? `0 0 40px ${prize.glow}` : 'none',
+                  transform: visible ? 'translateY(0)' : 'translateY(20px)',
                 }}
               >
-                <div
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center"
-                  style={{ background: `${prize.glow}`, border: `1px solid ${prize.border}` }}
-                >
-                  <Icon className="w-8 h-8" style={{ color: prize.color }} />
+                <CardWebOverlay />
+                <Icon className="w-5 h-5 text-[#A68CFF] mb-2" />
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="h-px w-6 bg-purple-500/60" />
+                  <span className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#8AE8FF]">{prize.rank}</span>
                 </div>
-                <div>
-                  <p className="text-white/60 text-xs tracking-widest uppercase">{prize.rank}</p>
-                  <p
-                    className="text-3xl font-black mt-1"
-                    style={{ color: prize.color, filter: `drop-shadow(0 0 8px ${prize.glow})` }}
-                  >
-                    {prize.amount}
-                  </p>
-                </div>
+                <span className="text-xl md:text-2xl font-bold leading-tight">{prize.amount}</span>
               </div>
             );
           })}

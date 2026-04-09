@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { ClipboardList, Rocket, Code, Coffee, Presentation, Trophy } from 'lucide-react';
+import CardWebOverlay from './card-web-overlay';
 
 const timeline = [
   { time: 'Apr 11 · 6:00 PM', label: 'Registration & Check-in', desc: 'Arrive at IIITA, complete on-site registration', icon: ClipboardList },
@@ -19,9 +20,12 @@ export default function TimelineSection() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      ([entry]) => {
+        if (entry.isIntersecting) setVisible(true);
+      },
       { threshold: 0.1 }
     );
+
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
@@ -32,12 +36,12 @@ export default function TimelineSection() {
         <div
           className={`text-center mb-16 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
         >
-          <span className="text-purple-300 text-xs tracking-[0.3em] uppercase font-medium">Schedule</span>
+          <span className="text-[#A68CFF] text-xs tracking-[0.3em] uppercase font-medium">Schedule</span>
           <h2 className="mt-3 text-4xl md:text-5xl font-bold text-white">
             Event{' '}
             <span
               className="text-transparent bg-clip-text"
-              style={{ backgroundImage: 'linear-gradient(135deg, #ddd6fe, #a78bfa)' }}
+              style={{ backgroundImage: 'linear-gradient(135deg, #A68CFF, #8AE8FF)' }}
             >
               Timeline
             </span>
@@ -52,6 +56,7 @@ export default function TimelineSection() {
             {timeline.map((item, i) => {
               const Icon = item.icon;
               const isLeft = i % 2 === 0;
+
               return (
                 <div
                   key={i}
@@ -70,14 +75,14 @@ export default function TimelineSection() {
                         border: '1px solid rgba(168,85,247,0.2)',
                       }}
                     >
-                      <Icon className="w-5 h-5 text-purple-300" />
+                      <Icon className="w-5 h-5 text-[#A68CFF]" />
                     </div>
-                    <div
-                      className="flex-1 card-glow p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] relative overflow-hidden"
-                    >
+
+                    <div className="flex-1 card-glow group p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] relative overflow-hidden">
+                      <CardWebOverlay />
                       <div className="flex items-center gap-2 mb-3">
                         <div className="h-px w-7 bg-purple-500/60" />
-                        <span className="text-xs font-semibold tracking-widest uppercase text-purple-400">{item.time}</span>
+                        <span className="text-xs font-semibold tracking-widest uppercase text-[#8AE8FF]">{item.time}</span>
                       </div>
                       <h3 className="text-2xl font-bold mb-3">{item.label}</h3>
                       <p className="text-foreground/70 leading-relaxed text-sm">{item.desc}</p>
@@ -86,17 +91,14 @@ export default function TimelineSection() {
 
                   <div className="hidden md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-8 transition-all duration-500">
                     <div className={`${isLeft ? 'block' : 'invisible'} flex justify-end`}>
-                      <div
-                        className="w-full max-w-md p-5 rounded-2xl transition-all duration-300 hover:scale-[1.01]"
-                        style={{
-                          background: 'linear-gradient(135deg, rgba(168,85,247,0.12), rgba(139,92,246,0.05))',
-                          border: '1px solid rgba(167,139,250,0.24)',
-                          boxShadow: '0 10px 30px rgba(88,28,135,0.15)',
-                        }}
-                      >
-                        <p className="text-purple-300/90 text-xs tracking-widest font-medium uppercase mb-1">{item.time}</p>
-                        <p className="text-white font-semibold text-sm">{item.label}</p>
-                        <p className="text-white/60 text-xs mt-1 leading-relaxed">{item.desc}</p>
+                      <div className="w-full max-w-md card-glow group p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] relative overflow-hidden">
+                        <CardWebOverlay />
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="h-px w-7 bg-purple-500/60" />
+                          <span className="text-xs font-semibold tracking-widest uppercase text-[#8AE8FF]">{item.time}</span>
+                        </div>
+                        <h3 className="text-2xl font-bold mb-3">{item.label}</h3>
+                        <p className="text-foreground/70 leading-relaxed text-sm">{item.desc}</p>
                       </div>
                     </div>
 
@@ -107,16 +109,15 @@ export default function TimelineSection() {
                         border: '1px solid rgba(168,85,247,0.2)',
                       }}
                     >
-                      <Icon className="w-5 h-5 text-purple-300" />
+                      <Icon className="w-5 h-5 text-[#A68CFF]" />
                     </div>
 
                     <div className={`${!isLeft ? 'block' : 'invisible'} flex justify-start`}>
-                      <div
-                        className="w-full max-w-md card-glow p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] relative overflow-hidden"
-                      >
+                      <div className="w-full max-w-md card-glow group p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] relative overflow-hidden">
+                        <CardWebOverlay />
                         <div className="flex items-center gap-2 mb-3">
                           <div className="h-px w-7 bg-purple-500/60" />
-                          <span className="text-xs font-semibold tracking-widest uppercase text-purple-400">{item.time}</span>
+                          <span className="text-xs font-semibold tracking-widest uppercase text-[#8AE8FF]">{item.time}</span>
                         </div>
                         <h3 className="text-2xl font-bold mb-3">{item.label}</h3>
                         <p className="text-foreground/70 leading-relaxed text-sm">{item.desc}</p>
@@ -125,12 +126,10 @@ export default function TimelineSection() {
                   </div>
                 </div>
               );
-                        className="w-full max-w-md card-glow p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] relative overflow-hidden"
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
   );
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="h-px w-7 bg-purple-500/60" />
-                          <span className="text-xs font-semibold tracking-widest uppercase text-purple-400">{item.time}</span>
-                        </div>
-                        <h3 className="text-2xl font-bold mb-3">{item.label}</h3>
-                        <p className="text-foreground/70 leading-relaxed text-sm">{item.desc}</p>
 }

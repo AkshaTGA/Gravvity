@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Brain, Globe, Link, Layers, Cpu, Rocket } from 'lucide-react';
+import CardWebOverlay from './card-web-overlay';
 
 const tracks = [
   {
@@ -73,12 +74,12 @@ export default function TracksSection() {
         <div
           className={`text-center mb-16 transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
         >
-          <span className="text-purple-300 text-xs tracking-[0.3em] uppercase font-medium">Domains</span>
+          <span className="text-[#A68CFF] text-xs tracking-[0.3em] uppercase font-medium">Domains</span>
           <h2 className="mt-3 text-4xl md:text-5xl font-bold text-white">
             Choose Your{' '}
             <span
               className="text-transparent bg-clip-text"
-              style={{ backgroundImage: 'linear-gradient(135deg, #c4b5fd, #a78bfa)' }}
+              style={{ backgroundImage: 'linear-gradient(135deg, #A68CFF, #8AE8FF)' }}
             >
               Track
             </span>
@@ -94,7 +95,7 @@ export default function TracksSection() {
             return (
               <div
                 key={track.title}
-                className="p-6 rounded-2xl transition-all duration-500 hover:scale-[1.03] cursor-default group"
+                className="p-6 rounded-2xl transition-all duration-500 hover:scale-[1.03] cursor-default group relative overflow-hidden"
                 style={{
                   transitionDelay: `${i * 80}ms`,
                   opacity: visible ? 1 : 0,
@@ -103,6 +104,7 @@ export default function TracksSection() {
                   border: `1px solid ${track.border}`,
                 }}
               >
+                <CardWebOverlay className="opacity-70" />
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-transform duration-200 group-hover:scale-110"
                   style={{ background: `${track.bg}`, border: `1px solid ${track.border}` }}
