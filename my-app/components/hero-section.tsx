@@ -227,6 +227,24 @@ export function HeroSection() {
       )}
 
       <div className="relative z-10 max-w-5xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
+        <motion.div
+          initial={{ opacity: 0, y: -14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+          className="mt-2 mb-6 flex justify-center"
+        >
+          <Link
+            href="/iii"
+            className="group inline-flex items-center gap-2 rounded-full border border-cyan-300/45 bg-linear-to-r from-[#2b155c]/95 via-[#132039]/95 to-[#10314f]/95 px-5 py-2.5 text-sm font-bold tracking-wide text-white shadow-[0_0_34px_rgba(138,232,255,0.28)] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-cyan-200/80 hover:shadow-[0_0_42px_rgba(166,140,255,0.45)]"
+          >
+            <Sparkles className="h-4 w-4 text-cyan-300" />
+            <span className="text-cyan-200">HOT</span>
+            <span className="text-white">III 5.0 is live</span>
+            <ArrowRight className="h-4 w-4 text-cyan-200 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </Link>
+        </motion.div>
+
         <div className="pt-8 flex justify-center">
           <div
             className="flex items-center gap-1"

@@ -104,7 +104,7 @@ export default function TracksSection() {
                   border: `1px solid ${track.border}`,
                 }}
               >
-                <CardWebOverlay className="opacity-70" />
+                <CardWebOverlay />
                 <div
                   className="w-11 h-11 rounded-xl flex items-center justify-center mb-4 transition-transform duration-200 group-hover:scale-110"
                   style={{ background: `${track.bg}`, border: `1px solid ${track.border}` }}

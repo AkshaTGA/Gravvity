@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import gravityWordmark from '../../app/gravity-logo.png';
 
 interface LoadingScreenProps {
   onComplete: () => void;
@@ -28,32 +27,49 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
   return (
     <div
       className={`fixed inset-0 z-50 flex flex-col items-center justify-center transition-opacity duration-700 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}
-      style={{ background: 'radial-gradient(ellipse at center, #0d1224 0%, #050510 70%)' }}
+      style={{ background: '#000000' }}
     >
-      <div className="relative z-10">
+      <div className="intro-loader relative z-10" role="status" aria-live="polite">
         <div className="loader-logo" aria-hidden="true">
           <Image
-            src={gravityWordmark}
+            src="/gravity-logo.ico"
             alt="Gravity Logo"
-            width={124}
-            height={124}
+            width={72}
+            height={72}
             className="object-contain"
             priority
           />
         </div>
+        <p className="loader-text">Loading...</p>
       </div>
 
       <style jsx>{`
+        .intro-loader {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 1.5rem;
+        }
+
         .loader-logo {
-          width: 124px;
-          height: 124px;
+          width: 72px;
+          height: 72px;
           animation: spin-pause 2.4s ease-in-out infinite;
+          filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.35));
+        }
+
+        .loader-text {
+          color: #ffffff;
+          font-size: 1rem;
+          font-weight: 500;
+          margin: 0;
         }
 
         @keyframes spin-pause {
-          from { transform: rotate(0deg); }
+          0% { transform: rotate(0deg); }
           60% { transform: rotate(360deg); }
-          to { transform: rotate(360deg); }
+          100% { transform: rotate(360deg); }
         }
       `}</style>
     </div>

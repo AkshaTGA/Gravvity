@@ -37,7 +37,7 @@ export function Navigation() {
 
   const scrollTo = (id: string) => {
     if (id === "top") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.location.href = "/";
       return;
     }
     const el = document.getElementById(id);
