@@ -235,7 +235,7 @@ export function HeroSection() {
           className="mt-2 mb-6 flex justify-center"
         >
           <Link
-            href="/iii"
+            href="/events/iii"
             className="group inline-flex items-center gap-2 rounded-full border border-cyan-300/45 bg-linear-to-r from-[#2b155c]/95 via-[#132039]/95 to-[#10314f]/95 px-5 py-2.5 text-sm font-bold tracking-wide text-white shadow-[0_0_34px_rgba(138,232,255,0.28)] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-cyan-200/80 hover:shadow-[0_0_42px_rgba(166,140,255,0.45)]"
           >
             <Sparkles className="h-4 w-4 text-cyan-300" />
@@ -324,7 +324,10 @@ export function HeroSection() {
 
         {/* Main Heading */}
         <div className={isMobile ? "animate-fade-in-up" : ""}>
-          <LettersPullUp text={`TECHNICAL SOCIETY`} className="select-none gradient-text" />
+          <LettersPullUp
+            text={`TECHNICAL SOCIETY`}
+            className="select-none gradient-text"
+          />
         </div>
 
         {/* Subheading */}
@@ -377,7 +380,8 @@ const S1: React.FC = (): React.JSX.Element => (
     className="fixed bottom-8 left-1/2 translate-x-1/2 z-50 px-6 py-3 rounded-full backdrop-blur-xs bg-white/10 border border-white/20 shadow-lg"
   >
     <p className="flex items-center gap-2 text-white text-sm font-medium">
-      <Sparkles className="w-4 h-4 text-yellow-400" /> You found one of the secrets, Try saying the one-word secret. ;&gt;
+      <Sparkles className="w-4 h-4 text-yellow-400" /> You found one of the
+      secrets, Try saying the one-word secret. ;&gt;
     </p>
   </motion.div>
 );

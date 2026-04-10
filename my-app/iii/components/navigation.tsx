@@ -31,7 +31,6 @@ export function Navigation() {
     { id: "about", label: "About" },
     { id: "details", label: "Details" },
     { id: "prizes", label: "Prizes" },
-    { id: "tracks", label: "Tracks" },
     { id: "timeline", label: "Timeline" },
   ];
 
