@@ -9,9 +9,9 @@ const timeline = [
   { time: 'Apr 11 · 7:00 PM', label: 'Hackathon Kickoff', desc: 'Opening ceremony, problem statements revealed, teams set', icon: Rocket },
   { time: 'Apr 11 · 9:00 PM', label: 'Hacking Begins', desc: '24 hours of non-stop building, mentors available', icon: Code },
   { time: 'Apr 12 · 3:00 AM', label: 'Midnight Snacks', desc: 'Fuel up — snacks and refreshments provided', icon: Coffee },
-  { time: 'Apr 12 · 5:00 PM', label: 'Submission Deadline', desc: 'Final code freeze — submit your project', icon: ClipboardList },
-  { time: 'Apr 12 · 6:00 PM', label: 'Presentations & Judging', desc: 'Demo your hack to the judges panel', icon: Presentation },
-  { time: 'Apr 12 · 7:00 PM', label: 'Closing Ceremony & Results', desc: 'Winners announced, prizes awarded', icon: Trophy },
+  { time: 'Apr 12 · 7:00 PM', label: 'Submission Deadline', desc: 'Final code freeze — submit your project', icon: ClipboardList },
+  { time: 'Apr 17', label: 'Presentations & Judging', desc: 'Demo your hack to the judges panel', icon: Presentation },
+  { time: 'Apr 17', label: 'Closing Ceremony & Results', desc: 'Winners announced, prizes awarded', icon: Trophy },
 ];
 
 export default function TimelineSection() {
