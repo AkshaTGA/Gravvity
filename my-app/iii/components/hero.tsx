@@ -111,7 +111,7 @@ export default function HeroSection() {
         </div>
 
         <div className="w-full flex flex-col items-center gap-0">
-          <div className="relative w-[340px] sm:w-[440px] md:w-[560px] lg:w-[680px] aspect-[10/3] opacity-95 -mb-2">
+          <div className="relative w-[260px] sm:w-[440px] md:w-[560px] lg:w-[680px] aspect-[10/3] opacity-95 mb-1 sm:-mb-2">
             <Image
               src={gravityWordmark}
               alt="Gravity"
@@ -125,7 +125,7 @@ export default function HeroSection() {
           </div>
 
           <h1
-            className="-mt-14 text-7xl md:text-[10rem] font-medium leading-[0.9] tracking-wide text-transparent bg-clip-text"
+            className="-mt-4 sm:-mt-14 text-6xl sm:text-7xl md:text-[10rem] font-medium leading-[0.9] tracking-wide text-transparent bg-clip-text"
             style={{
               backgroundImage: 'linear-gradient(135deg, #A68CFF, #8AE8FF)',
               filter: 'drop-shadow(0 4px 20px rgba(138,232,255,0.28))',
@@ -135,7 +135,7 @@ export default function HeroSection() {
           </h1>
 
           <p
-            className="mt-3 text-sm sm:text-base md:text-2xl tracking-[0.35em] uppercase text-transparent bg-clip-text"
+            className="mt-3 text-sm sm:text-base md:text-2xl tracking-[0.22em] sm:tracking-[0.35em] uppercase text-transparent bg-clip-text"
             style={{
               backgroundImage: 'linear-gradient(135deg, #A68CFF, #8AE8FF)',
               textShadow: '0 0 20px rgba(168,85,247,0.28)',
