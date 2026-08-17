@@ -4,7 +4,7 @@ import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { HeroSection } from "@/components/hero-section";
 import { AboutSection } from "@/components/about-section";
-import WingsPage from "./wings/page";
+import WingsPage from "../components/wings/page";
 import { OverallCoordinatorsSection } from "@/components/overall-coordinators-section";
 import { FacultyCoordinatorsSection } from "@/components/faculty-coordinators-section";
 import dynamic from "next/dynamic";
@@ -71,7 +71,7 @@ export default function Home() {
       if (introParam === "reset") {
         localStorage.removeItem(INTRO_VIDEO_STORAGE_KEY);
       }
-    } catch {}
+    } catch { }
   }, []);
 
   function handleIntroFinish() {

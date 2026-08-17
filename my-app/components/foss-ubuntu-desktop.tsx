@@ -988,8 +988,10 @@ echo "Happy hacking!"
 const GRAVVITY_WING_RESULTS = [
   { slug: "foss", name: "FOSS Wing", path: "/members/foss", keywords: ["open source", "linux", "oss"] },
   { slug: "design", name: "Design Wing", path: "/members/design", keywords: ["ui", "ux", "graphics", "creative"] },
+  // { slug: "metaverse", name: "Metaverse Wing", path: "/members/metaverse", keywords: ["ar", "vr", "3d", "xr"] },
   { slug: "private-ai", name: "Private AI Wing", path: "/members/private-ai", keywords: ["ai", "ml", "llm", "agents"] },
   { slug: "web-development", name: "Web Development Wing", path: "/members/web-development", keywords: ["frontend", "backend", "web"] },
+  // { slug: "blockchain", name: "Blockchain Wing", path: "/members/blockchain", keywords: ["web3", "smart contract", "crypto"] },
   { slug: "competitive-coding", name: "Competitive Coding Wing", path: "/members/competitive-coding", keywords: ["cp", "dsa", "algorithms"] },
 ];
 
@@ -1074,7 +1076,7 @@ function FirefoxApp() {
                 </button>
               ))
             ) : (
-              <div className="wing-search-empty">No matching wing found. Try: foss, design, ai, web, or cp.</div>
+              <div className="wing-search-empty">No matching wing found. Try: foss, design, ai, web, cp.</div>
             )}
           </div>
         ) : url ? (

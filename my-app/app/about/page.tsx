@@ -323,8 +323,7 @@ export default function AboutPage() {
                 </p>
                 <p className="text-foreground/70 leading-relaxed">
                   Whether you&apos;re into competitive programming, web
-                  development, design, open-source, or private AI. Gravity
-                  provides the platform and community to
+                  development, design, open-source or AI — Gravity provides the platform and community to
                   achieve your goals.
                 </p>
               </div>

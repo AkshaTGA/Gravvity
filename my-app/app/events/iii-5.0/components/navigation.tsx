@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
-import gravityWordmark from "../../app/gravity-logo.png";
+import gravityWordmark from "../../../gravity-logo.png";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);

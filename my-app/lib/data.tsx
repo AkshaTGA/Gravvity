@@ -57,6 +57,37 @@ export const wings: Wing[] = [
     animationComponent: WebDevelopmentAnimation,
   },
   {
+    id: "5",
+    name: "Private AI",
+    description: "Explore privacy-preserving AI and machine learning",
+    icon: (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="60"
+        height="60"
+        viewBox="0 0 24 24"
+      >
+        <g fill="none">
+          <path
+            fill="#fff"
+            fillOpacity="0.16"
+            d="M6.6 10h10.8c.88 0 1.6.72 1.6 1.6v7c0 1.32-1.08 2.4-2.4 2.4H7.4C6.08 21 5 19.92 5 18.6v-7c0-.88.72-1.6 1.6-1.6"
+          />
+          <path
+            stroke="#fff"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeMiterlimit="10"
+            strokeWidth="1.2"
+            d="M8 10V7c0-2.21 1.79-4 4-4s4 1.79 4 4v3m-9.4 0h10.8c.88 0 1.6.72 1.6 1.6v7c0 1.32-1.08 2.4-2.4 2.4H7.4C6.08 21 5 19.92 5 18.6v-7c0-.88.72-1.6 1.6-1.6m5.206 3.276l-.377 1.508a.2.2 0 0 1-.145.145l-1.508.377c-.202.05-.202.338 0 .388l1.508.377a.2.2 0 0 1 .145.145l.377 1.508c.05.202.338.202.388 0l.377-1.508a.2.2 0 0 1 .145-.145l1.508-.377c.202-.05.202-.338 0-.368l-1.508-.377a.2.2 0 0 1-.145-.145l-.377-1.508c-.05-.202-.338-.202-.388 0"
+          />
+        </g>
+      </svg>
+    ),
+    color: "from-purple-500 to-violet-500",
+    animationComponent: AIAnimation,
+  },
+  {
     id: "3",
     name: "Design",
     description: "Create stunning visual experiences and UI/UX designs",
@@ -99,37 +130,148 @@ export const wings: Wing[] = [
     ),
     color: "from-yellow-500 to-orange-500",
     animationComponent: FossAnimation,
+  }
+];
+
+export const defaultMembers: Member[] = [
+  {
+    id: "1",
+    name: "Dr. Rajendra Singh",
+    role: "coordinator",
+    wing: "Overall",
+    bio: "Faculty Advisor & Society Head",
+    // Use absolute path so Next.js resolves the asset from /public correctly.
+    // Relative "./public/..." caused requests like /admin/public/placeholder-avatar.svg (404) and repeated fetch attempts.
+    image: "/placeholder-avatar.svg",
+    isOverallCoordinator: true,
+    socials: {
+      github: "#",
+      linkedin: "#",
+      twitter: "#",
+    },
+  },
+  {
+    id: "9",
+    name: "Dr. Meera Nair",
+    role: "coordinator",
+    wing: "Overall",
+    bio: "Faculty Coordinator",
+    image: "/placeholder-avatar.svg",
+    isFacultyCoordinator: true,
+    socials: {
+      github: "#",
+      linkedin: "#",
+      twitter: "#",
+    },
+  },
+  {
+    id: "10",
+    name: "Dr. Arvind Menon",
+    role: "coordinator",
+    wing: "Overall",
+    bio: "Faculty Coordinator",
+    image: "/placeholder-avatar.svg",
+    isFacultyCoordinator: true,
+    socials: {
+      github: "#",
+      linkedin: "#",
+      twitter: "#",
+    },
+  },
+  {
+    id: "2",
+    name: "Aditya Sharma",
+    role: "coordinator",
+    wing: "Competitive Coding",
+    bio: "Passionate about algorithms and problem-solving",
+    // Missing asset; fallback to existing placeholder to stop repeated 404 fetch attempts.
+    image: "/placeholder-avatar.svg",
+    isOverallCoordinator: true,
+    socials: {
+      github: "#",
+      linkedin: "#",
+      twitter: "#",
+    },
+  },
+  {
+    id: "3",
+    name: "Priya Verma",
+    role: "coordinator",
+    wing: "Web Development",
+    bio: "Full-stack developer with 3 years experience",
+    image: "/placeholder-avatar.svg",
+    isOverallCoordinator: true,
+    socials: {
+      github: "#",
+      linkedin: "#",
+      twitter: "#",
+    },
+  },
+  {
+    id: "4",
+    name: "Vikram Patel",
+    role: "coordinator",
+    wing: "Design",
+    bio: "UI/UX designer and creative thinker",
+    image: "/placeholder-avatar.svg",
+
+    socials: {
+      github: "#",
+      linkedin: "#",
+      twitter: "#",
+    },
   },
   {
     id: "5",
-    name: "Private AI",
-    description: "Explore privacy-preserving AI and machine learning",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="60"
-        height="60"
-        viewBox="0 0 24 24"
-      >
-        <g fill="none">
-          <path
-            fill="#fff"
-            fillOpacity="0.16"
-            d="M6.6 10h10.8c.88 0 1.6.72 1.6 1.6v7c0 1.32-1.08 2.4-2.4 2.4H7.4C6.08 21 5 19.92 5 18.6v-7c0-.88.72-1.6 1.6-1.6"
-          />
-          <path
-            stroke="#fff"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeMiterlimit="10"
-            strokeWidth="1.2"
-            d="M8 10V7c0-2.21 1.79-4 4-4s4 1.79 4 4v3m-9.4 0h10.8c.88 0 1.6.72 1.6 1.6v7c0 1.32-1.08 2.4-2.4 2.4H7.4C6.08 21 5 19.92 5 18.6v-7c0-.88.72-1.6 1.6-1.6m5.206 3.276l-.377 1.508a.2.2 0 0 1-.145.145l-1.508.377c-.202.05-.202.338 0 .388l1.508.377a.2.2 0 0 1 .145.145l.377 1.508c.05.202.338.202.388 0l.377-1.508a.2.2 0 0 1 .145-.145l1.508-.377c.202-.05.202-.338 0-.368l-1.508-.377a.2.2 0 0 1-.145-.145l-.377-1.508c-.05-.202-.338-.202-.388 0"
-          />
-        </g>
-      </svg>
-    ),
-    color: "from-purple-500 to-violet-500",
-    animationComponent: AIAnimation,
+    name: "Ananya Singh",
+    role: "coordinator",
+    wing: "Private AI",
+    bio: "AI researcher and machine learning enthusiast",
+    image: "/placeholder-avatar.svg",
+    socials: {
+      github: "#",
+      linkedin: "#",
+      twitter: "#",
+    },
+  },
+  {
+    id: "6",
+    name: "Rohit Kumar",
+    role: "member",
+    wing: "Competitive Coding",
+    bio: "Enthusiastic coder",
+    image: "/placeholder-avatar.svg",
+    socials: {
+      github: "#",
+      linkedin: "#",
+      twitter: "#",
+    },
+  },
+  {
+    id: "7",
+    name: "Sarah Chen",
+    role: "member",
+    wing: "Web Development",
+    bio: "React specialist",
+    image: "/placeholder-avatar.svg",
+    socials: {
+      github: "#",
+      linkedin: "#",
+      twitter: "#",
+    },
+  },
+  {
+    id: "8",
+    name: "Neha Gupta",
+    role: "member",
+    wing: "Design",
+    bio: "Creative designer",
+    image: "/placeholder-avatar.svg",
+    socials: {
+      github: "#",
+      linkedin: "#",
+      twitter: "#",
+    },
   },
 ];
 

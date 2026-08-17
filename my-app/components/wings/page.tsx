@@ -68,7 +68,7 @@ const wingMeta: Record<
       "NLP, computer vision & gen-AI exploration",
       "Paper reading groups & research discussions",
     ],
-  },
+  }
 };
 
 export default function WingsPage() {
@@ -128,11 +128,11 @@ export default function WingsPage() {
         {/* Header */}
         <div className="text-center mb-20">
           <GradualSpacing
-            text="Our Seven Wings"
+            text="Our Five Wings"
             className="text-5xl md:text-6xl font-bold gradient-text mb-4 select-none"
           />
           <p className="text-xl text-foreground/60 max-w-xl mx-auto">
-            Seven specialised squads — one shared mission of technical
+            Five specialised squads — one shared mission of technical
             excellence.
           </p>
         </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import gravityWordmark from '../../app/gravity-logo.png';
+import gravityWordmark from '../../../gravity-logo.png';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);

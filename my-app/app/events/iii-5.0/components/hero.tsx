@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { ArrowRight, Calendar, Clock, MapPin, Users } from 'lucide-react';
-import gravityWordmark from '../../app/gravity-logo.png';
+import gravityWordmark from '../../../gravity-logo.png';
 import MagicButton from '@/components/magic-button';
 import CardWebOverlay from './card-web-overlay';
 

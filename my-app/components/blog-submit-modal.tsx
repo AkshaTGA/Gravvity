@@ -287,6 +287,8 @@ export default function BlogSubmitModal({
                     <option>Web Development</option>
                     <option>Design</option>
                     <option>Private AI</option>
+                    {/* <option>Blockchain</option> */}
+                    {/* <option>Metaverse</option> */}
                     <option>FOSS</option>
                     <option>General</option>
                   </select>
