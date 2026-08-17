@@ -28,7 +28,8 @@ export default function IntroVideo({ onFinish }: { onFinish?: () => void }) {
     updateVideoSrc();
     window.addEventListener("resize", updateVideoSrc);
 
-    // Prefetch members, events, blogs in parallel while video is loading
+    // Prefetch non-member content while the video is loading. Member cards are
+    // deliberately database-first so stale profiles are never shown.
     prefetchAll();
 
     return () => window.removeEventListener("resize", updateVideoSrc);

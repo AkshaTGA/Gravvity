@@ -9,36 +9,33 @@ export function useMembers() {
     let cancelled = false
     const KEY = 'gravity_members'
 
-    // 1. Instant load from cache
+    // Never render the legacy localStorage snapshot. It can outlive database
+    // changes (or even an entire deployment) when a public request fails.
     if (typeof window !== 'undefined') {
       try {
-        const raw = localStorage.getItem(KEY)
-        if (raw) {
-          const data = JSON.parse(raw) as Member[]
-          if (Array.isArray(data)) setMembers(data)
-        }
+        localStorage.removeItem(KEY)
       } catch {}
     }
 
-    // 2. Fetch fresh list
+    // Fetch the database-backed list. The timestamp also bypasses intermediary
+    // caches that do not correctly honor Cache-Control: no-store.
     const loadMembers = async () => {
       try {
-        const res = await fetch(`/api/public/members`, { cache: 'no-store' })
-        if (!res.ok) return
+        const res = await fetch(`/api/public/members?ts=${Date.now()}`, {
+          cache: 'no-store',
+        })
+        if (!res.ok) throw new Error(`Members request failed: ${res.status}`)
         const data = (await res.json()) as Member[]
-        if (!cancelled) {
-          setMembers(data)
-          try {
-            localStorage.setItem(KEY, JSON.stringify(data))
-          } catch {}
-        }
+        if (!Array.isArray(data)) throw new Error('Invalid members response')
+        if (!cancelled) setMembers(data)
       } catch (e) {
         console.error('Failed to load members', e)
       }
     }
     void loadMembers()
 
-    // 3. Listen for admin updates via storage event
+    // Admin mutations publish the newly confirmed server response here. This is
+    // used only as a live update signal, never as a persisted page-load source.
     const onStorage = (e: StorageEvent) => {
       if (e.key === KEY && e.newValue) {
         try {

@@ -1,24 +1,4 @@
 /**
- * Prefetch members data and cache it in localStorage
- * This runs during initial page load to have data ready before user needs it
- */
-export async function prefetchMembers() {
-  const KEY = "gravity_members";
-  try {
-    const res = await fetch(`/api/public/members`, {
-      headers: { "Content-Type": "application/json" },
-    });
-    if (!res.ok) return;
-    const data = await res.json();
-    if (Array.isArray(data)) {
-      localStorage.setItem(KEY, JSON.stringify(data));
-    }
-  } catch (e) {
-    console.error("Failed to prefetch members", e);
-  }
-}
-
-/**
  * Prefetch events data and cache it in localStorage under the same key used by hooks
  */
 export async function prefetchEvents() {
@@ -62,7 +42,6 @@ export async function prefetchBlogs() {
 export function prefetchAll() {
   // Fire-and-forget; ignore errors here
   void Promise.allSettled([
-    prefetchMembers(),
     prefetchEvents(),
     prefetchBlogs(),
   ]);
