@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Space+Grotesk:wght@700;900&display=swap');
+
+/* Web Development - Emerald / Matrix Pulse */
+.webd-super-heading {
+  position: relative;
+  display: inline-block;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 
+    0 0 8px rgba(16, 185, 129, 0.7),
+    0 0 20px rgba(16, 185, 129, 0.4),
+    3px 3px 0px #047857;
+  animation: webd-shift 10s linear infinite;
+}
+@keyframes webd-shift {
+  0% { filter: hue-rotate(0deg); }
+  50% { filter: hue-rotate(45deg) brightness(1.2); }
+  100% { filter: hue-rotate(0deg); }
+}
+.webd-super-heading::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  color: transparent;
+  -webkit-text-stroke: 1.5px rgba(52, 211, 153, 0.9);
+  filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.8));
+  animation: webd-pulse 2.5s ease-in-out infinite alternate;
+  pointer-events: none; z-index: 5;
+}
+@keyframes webd-pulse {
+  0% { opacity: 0.15; }
+  100% { opacity: 0.9; }
+}
+
+/* Design - Rose Shimmer + Self-Drawing Underline */
+.design-super-heading {
+  position: relative;
+  display: inline-block;
+  font-weight: 900;
+  text-transform: uppercase;
+
+  /* Solid bright white base — same as other wings */
+  color: #ffffff;
+
+  /* Subtle rose shadow for depth, not a glow */
+  filter: drop-shadow(0 2px 4px rgba(244, 63, 94, 0.25));
+}
+
+/* Hot-pink shimmer sheen sweeping left-to-right */
+.design-super-heading::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+
+  background: linear-gradient(
+    100deg,
+    transparent 20%,
+    rgba(255, 200, 210, 0.9) 45%,
+    rgba(244, 63, 94, 1) 50%,
+    rgba(255, 200, 210, 0.9) 55%,
+    transparent 80%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: design-sheen 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 5;
+}
+
+@keyframes design-sheen {
+  0%   { background-position: 160% center; }
+  45%  { background-position: -60% center; }
+  100% { background-position: -60% center; }
+}
+
+/* Brush stroke underline — thick, tapered, bristle-soft */
+.design-super-heading::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: -2%;
+  width: 104%;
+  height: 12px;
+
+  /* Paint: bright centre, feathered dark edges like loaded bristles */
+  background:
+    /* Bristle texture overlay — subtle alternating opacity bands */
+    repeating-linear-gradient(
+      100deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(255,255,255,0.06) 3px,
+      rgba(255,255,255,0.06) 4px
+    ),
+    /* Core paint: dark at start, vivid rose in the middle, soft pink tail */
+    linear-gradient(
+      100deg,
+      #be123c 0%,
+      #f43f5e 20%,
+      #fb7185 55%,
+      #fda4af 80%,
+      rgba(253,164,175,0.3) 100%
+    );
+
+  /* Organic brush-stroke shape: tapered thin at left tip, full-bodied in middle, thin at right tail */
+  clip-path: polygon(
+    0% 55%,
+    0.5% 20%,
+    2% 5%,
+    5% 0%,
+    92% 8%,
+    97% 30%,
+    100% 45%,
+    100% 65%,
+    97% 85%,
+    92% 100%,
+    6% 95%,
+    2% 85%,
+    0.5% 75%
+  );
+
+  /* Slight downward angle to feel like a real brush pass */
+  transform: scaleX(0) rotate(-0.5deg);
+  transform-origin: left center;
+
+  /* Brush-stroke easing: blazing fast at the start (like a flick),
+     decelerating as the bristles drag and lose pressure */
+  animation: design-brushstroke 5s cubic-bezier(0.05, 0.7, 0.3, 1) infinite;
+
+  /* Extra soft outer blur to simulate bristle spread */
+  filter: blur(0.4px);
+}
+
+@keyframes design-brushstroke {
+  /* Reset hidden */
+  0%   {
+    transform: scaleX(0) rotate(-0.5deg);
+    transform-origin: left center;
+    opacity: 0;
+  }
+  /* Snap visible */
+  4%   { opacity: 1; }
+  /* Slash in — very fast, like a real flick stroke */
+  30%  {
+    transform: scaleX(1) rotate(-0.5deg);
+    transform-origin: left center;
+    opacity: 1;
+  }
+  /* Hold, fade slightly as paint dries */
+  70%  {
+    transform: scaleX(1) rotate(-0.5deg);
+    transform-origin: right center;
+    opacity: 0.7;
+  }
+  /* Wipe off from the right */
+  92%  {
+    transform: scaleX(0) rotate(-0.5deg);
+    transform-origin: right center;
+    opacity: 0;
+  }
+  100% {
+    transform: scaleX(0) rotate(-0.5deg);
+    transform-origin: right center;
+    opacity: 0;
+  }
+}
+
+/* FOSS - Ubuntu Orange / Solid Terminal */
+.foss-super-heading {
+  position: relative;
+  display: inline-block;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 
+    0 0 10px rgba(249, 115, 22, 0.8),
+    0 0 25px rgba(249, 115, 22, 0.5),
+    2px 2px 0px #ea580c;
+}
+.foss-super-heading::after {
+  content: " _";
+  position: absolute;
+  right: -0.7em;
+  color: #f97316;
+  text-shadow: 0 0 10px #f97316;
+  animation: foss-blink 1s step-end infinite;
+}
+@keyframes foss-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Competitive Coding - Crisp Architectural Logic */
+.cp-super-heading {
+  position: relative;
+  display: inline-block;
+  font-family: 'Space Grotesk', monospace, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  /* Completely stripped out all glows and heavy drop shadows */
+}
+
+/* Sharp Cyan Data Slice (Top Half) */
+.cp-super-heading::before {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  color: #22d3ee; /* cyan 400 */
+  z-index: -1;
+  clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);
+  /* Very slow, deliberate structural slide */
+  animation: cp-slide-cyan 8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  pointer-events: none;
+}
+
+/* Sharp Violet Logic Slice (Bottom Half) */
+.cp-super-heading::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  color: #a78bfa; /* violet 400 */
+  z-index: -2;
+  clip-path: polygon(0 50%, 100% 50%, 100% 100%, 0 100%);
+  /* Very slow, deliberate structural slide */
+  animation: cp-slide-violet 8s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes cp-slide-cyan {
+  0% { transform: translate(-1px, 0px); }
+  100% { transform: translate(3px, 0px); }
+}
+@keyframes cp-slide-violet {
+  0% { transform: translate(1px, 0px); }
+  100% { transform: translate(-3px, 0px); }
+}
+

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Unlock } from "lucide-react";
 
 export function FossAnimation() {
   const [commits, setCommits] = useState(0);
@@ -48,7 +49,7 @@ export function FossAnimation() {
           <div className="bg-slate-800/90 px-2 py-1.5 border-b border-slate-700 shrink-0">
             <div className="flex items-center gap-1.5">
               <div className="w-6 h-6 rounded-lg bg-linear-to-br from-orange-500 to-yellow-500 flex items-center justify-center text-sm">
-                🔓
+                <Unlock size={14} className="text-white" />
               </div>
               <div>
                 <div className="text-xs font-semibold text-slate-200">

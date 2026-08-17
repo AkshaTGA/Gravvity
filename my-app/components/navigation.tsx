@@ -43,18 +43,20 @@ export function Navigation() {
       >
         <div className="px-6 py-4 flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative">
+          <Link href="/" className="flex items-center gap-1 group">
+            <div className="relative ml-0">
               <div className="absolute inset-0 bg-purple-500/20 rounded-full blur-xl group-hover:bg-purple-500/50 transition-all duration-300 animate-pulse"></div>
               <img
                 src="/gravity-logo.ico"
                 alt="Gravity Logo"
-                className="relative w-11 h-11 object-contain drop-shadow-[0_0_15px_rgba(124,92,255,0.6)] transition-all duration-300 ease-out group-hover:scale-125 group-hover:rotate-6 group-hover:drop-shadow-[0_0_30px_rgba(124,92,255,1)]"
+                className="relative h-7 w-7 object-contain drop-shadow-[0_0_12px_rgba(124,92,255,0.6)] transition-all duration-300 ease-out group-hover:scale-125 group-hover:rotate-6 group-hover:drop-shadow-[0_0_24px_rgba(124,92,255,1)]"
               />
             </div>
-            <span className="font-bold text-2xl hidden sm:inline gradient-text bg-clip-text text-transparent group-hover:from-pink-400 group-hover:via-purple-400 group-hover:to-pink-400 transition-all duration-500 animate-[shimmer_3s_ease-in-out_infinite]">
-              GRAVITY
-            </span>
+            <img
+              src="/GRAVITY_Cover_No_BG.png"
+              alt="Gravity"
+              className="hidden sm:inline h-10 w-auto object-contain drop-shadow-[0_0_10px_rgba(124,92,255,0.35)]"
+            />
           </Link>
 
           {/* Desktop Navigation */}

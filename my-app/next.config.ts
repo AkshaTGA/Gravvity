@@ -1,20 +1,32 @@
 import type { NextConfig } from "next";
 
 const isNetlify = process.env.NETLIFY === "true";
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || (isNetlify ? "" : "http://localhost:4000");
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL ||
+  (isNetlify ? "" : "http://localhost:4000");
 
 const nextConfig: NextConfig = {
-  output: "standalone", 
+  output: "standalone",
+  turbopack: {
+    root: process.cwd(),
+  },
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "res.cloudinary.com" },
-    ],
+    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/iii",
+        destination: "/events/iii",
+        permanent: true,
+      },
+    ];
   },
   async rewrites() {
     // We migrated CRUD + public endpoints into Next.js API routes.
     // Preserve optional delegation only when an explicit external backend is desired.
     if (!BACKEND_URL) return [];
-    if (process.env.USE_EXTERNAL_BACKEND !== 'true') {
+    if (process.env.USE_EXTERNAL_BACKEND !== "true") {
       // Serve everything from internal API (no rewrites for members/events/projects/admin/public).
       return [];
     }

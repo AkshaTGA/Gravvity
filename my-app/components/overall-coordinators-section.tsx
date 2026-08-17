@@ -20,7 +20,7 @@ export function OverallCoordinatorsSection() {
     <section className="py-20 px-4 sm:px-6 lg:px-8 bg-card/50">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text text-center">Leadership</h2>
-        <p className="text-foreground/60 mb-16 text-lg text-center">Meet our overall coordinators and advisors</p>
+        <p className="text-foreground/60 mb-16 text-lg text-center">Meet our overall coordinators</p>
 
         <div className="flex flex-wrap gap-8 justify-center">
           {overallCoordinators.map((member, index) => (

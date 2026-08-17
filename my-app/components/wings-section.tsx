@@ -4,6 +4,7 @@ import Link from "next/link"
 import { wings } from "@/lib/data"
 import { ArrowRight } from "lucide-react"
 import MagicBorderCard from "@/components/magic-border-card"
+import { getWingMembersPath } from "@/lib/wing-routes"
 
 export function WingsSection() {
   return (
@@ -20,7 +21,7 @@ export function WingsSection() {
               <p className="text-foreground/60 mb-6">{wing.description}</p>
 
               <Link
-                href={{ pathname: '/members', query: { wing: wing.name } }}
+                href={getWingMembersPath(wing.name)}
                 className="inline-flex items-center gap-2 text-purple-400 hover:text-cyan-400 transition-colors group/link"
               >
                 View Members & Coordinators

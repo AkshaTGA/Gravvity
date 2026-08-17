@@ -1,0 +1,48 @@
+# Ignore root folders
+.git
+.gitignore
+
+# Ignore node_modules in all directories
+node_modules
+**/node_modules
+
+# Ignore Next.js build output
+my-app/.next
+my-app/out
+
+# Ignore Vite/Model build output
+model/dist
+
+# Ignore environment files to prevent leaking secrets into the image
+.env*
+**/.env*
+
+# Ignore Vercel / Netlify configs
+.vercel
+**/.vercel
+netlify.toml
+**/netlify.toml
+
+# Ignore documentation
+*.md
+**/*.md
+
+# Ignore OS-generated files
+.DS_Store
+**/.DS_Store
+
+# Ignore logs and test coverage
+*.log
+**/*.log
+coverage
+**/coverage
+.nyc_output
+**/.nyc_output
+
+# Ignore Docker-related files
+Dockerfile
+**/Dockerfile
+docker-compose.yml
+**/docker-compose.yml
+.dockerignore
+**/.dockerignore

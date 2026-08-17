@@ -11,6 +11,7 @@ interface ProfileCardProps {
   behindGlowColor?: string;
   behindGlowSize?: string;
   className?: string;
+  styleOverrides?: React.CSSProperties;
   enableTilt?: boolean;
   enableMobileTilt?: boolean;
   mobileTiltSensitivity?: number;
@@ -53,7 +54,7 @@ const adjust = (
   fMin: number,
   fMax: number,
   tMin: number,
-  tMax: number
+  tMax: number,
 ): number => round(tMin + ((tMax - tMin) * (v - fMin)) / (fMax - fMin));
 
 const PLACEHOLDER = "/placeholder-avatar.svg";
@@ -74,6 +75,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   behindGlowColor,
   behindGlowSize,
   className = "",
+  styleOverrides,
   enableTilt = true,
   enableMobileTilt = false,
   mobileTiltSensitivity = 5,
@@ -135,7 +137,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
         "--pointer-from-center": `${clamp(
           Math.hypot(percentY - 50, percentX - 50) / 50,
           0,
-          1
+          1,
         )}`,
         "--pointer-from-top": `${percentY / 100}`,
         "--pointer-from-left": `${percentX / 100}`,
@@ -235,7 +237,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
       const { x, y } = getOffsets(event, shell);
       tiltEngine.setTarget(x, y);
     },
-    [tiltEngine]
+    [tiltEngine],
   );
 
   const handlePointerEnter = useCallback(
@@ -253,7 +255,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
       const { x, y } = getOffsets(event, shell);
       tiltEngine.setTarget(x, y);
     },
-    [tiltEngine]
+    [tiltEngine],
   );
 
   const handlePointerLeave = useCallback(() => {
@@ -289,18 +291,18 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
       const x = clamp(
         centerX + gamma * mobileTiltSensitivity,
         0,
-        shell.clientWidth
+        shell.clientWidth,
       );
       const y = clamp(
         centerY +
           (beta - ANIMATION_CONFIG.DEVICE_BETA_OFFSET) * mobileTiltSensitivity,
         0,
-        shell.clientHeight
+        shell.clientHeight,
       );
 
       tiltEngine.setTarget(x, y);
     },
-    [tiltEngine, mobileTiltSensitivity]
+    [tiltEngine, mobileTiltSensitivity],
   );
 
   useEffect(() => {
@@ -328,7 +330,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             if (state === "granted") {
               window.addEventListener(
                 "deviceorientation",
-                deviceOrientationHandler
+                deviceOrientationHandler,
               );
             }
           })
@@ -369,7 +371,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             }
           }
         },
-        { threshold: 0.05, rootMargin: "100px" }
+        { threshold: 0.05, rootMargin: "100px" },
       );
       io.observe(shell);
     } else {
@@ -411,8 +413,16 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
         "--inner-gradient": innerGradient ?? DEFAULT_INNER_GRADIENT,
         "--behind-glow-color": behindGlowColor ?? "rgba(125, 190, 255, 0.35)",
         "--behind-glow-size": behindGlowSize ?? "50%",
-      } as React.CSSProperties),
-    [iconUrl, grainUrl, innerGradient, behindGlowColor, behindGlowSize]
+        ...(styleOverrides ?? {}),
+      }) as React.CSSProperties,
+    [
+      iconUrl,
+      grainUrl,
+      innerGradient,
+      behindGlowColor,
+      behindGlowSize,
+      styleOverrides,
+    ],
   );
 
   const handleContactClick = useCallback(() => {
@@ -436,9 +446,10 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
   }, []);
 
   useEffect(() => {
+    const cardElement = cardRef.current;
     return () => {
       if (hoverTimerRef.current) window.clearTimeout(hoverTimerRef.current);
-      cardRef.current?.classList.remove("avatar-expanded");
+      cardElement?.classList.remove("avatar-expanded");
     };
   }, []);
 
@@ -461,11 +472,7 @@ const ProfileCardComponent: React.FC<ProfileCardProps> = ({
             <div className="pc-content">
               <div className="pc-details">
                 <h3
-                  className={`px-5 md:p-3 ${
-                    name.length > 14
-                    ? "text-sm"
-                    : "text-2xl"
-                  } md:text-2xl mask-radial-from-sidebar-accent-foreground`}
+                  className="w-full px-2 md:px-3 text-lg md:text-2xl mask-radial-from-sidebar-accent-foreground"
                   title={name}
                 >
                   {name}

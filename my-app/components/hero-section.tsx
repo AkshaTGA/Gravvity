@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { ArrowRight, Grab } from "lucide-react";
+import { ArrowRight, Grab, Sparkles } from "lucide-react";
 const Galaxy = dynamic(() => import("./Galaxy"), {
   ssr: false,
   loading: () => <div className="absolute inset-0 z-0" />,
 });
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import MagicButton from "@/components/magic-button";
 import { LettersPullUp } from "@/components/Text-Effect";
 import { motion, useAnimation } from "framer-motion";
@@ -43,28 +43,45 @@ export function HeroSection() {
   const [_fm, _sfm] = useState(false);
   const _controls = useAnimation();
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mobileStars = useMemo(
+    () =>
+      Array.from({ length: 15 }, (_, index) => {
+        const seed = index + 1;
+        return {
+          id: index,
+          top: (seed * 23) % 100,
+          left: (seed * 47) % 100,
+          animationDelay: ((seed * 13) % 30) / 10,
+          animationDuration: 2 + ((seed * 19) % 20) / 10,
+          opacity: 0.3 + ((seed * 11) % 5) / 10,
+        };
+      }),
+    [],
+  );
 
-  const scheduleReset = (delay = 2000) => {
-    if (resetTimer.current) {
-      clearTimeout(resetTimer.current);
-    }
-    resetTimer.current = setTimeout(() => {
-      _controls.start({
-        x: 0,
-        y: 0,
-        transition: { duration: 0.2, ease: "easeOut" },
-      });
-      resetTimer.current = null;
-    }, delay);
-  };
-
+  const scheduleReset = useCallback(
+    (delay = 2000) => {
+      if (resetTimer.current) {
+        clearTimeout(resetTimer.current);
+      }
+      resetTimer.current = setTimeout(() => {
+        _controls.start({
+          x: 0,
+          y: 0,
+          transition: { duration: 0.2, ease: "easeOut" },
+        });
+        resetTimer.current = null;
+      }, delay);
+    },
+    [_controls],
+  );
 
   useEffect(() => {
     console.log(
       "%cCTRL+SPACE ^_^ ",
       "color: rgb(255,255,255); background: BLACK; font-size: 24px;border-radius:100px; font-weight: bold; padding: 10px;",
     );
-  }, []);
+  }, [_controls, scheduleReset]);
 
   useEffect(() => {
     const _h = (e: KeyboardEvent) => {
@@ -139,7 +156,7 @@ export function HeroSection() {
         window.removeEventListener("keydown", _togg);
       }
     };
-  }, []);
+  }, [_controls, scheduleReset]);
 
   useEffect(() => {
     return () => {
@@ -193,16 +210,16 @@ export function HeroSection() {
             style={{ animationDelay: "4s" }}
           />
           {/* Lightweight particle stars */}
-          {[...Array(15)].map((_, i) => (
+          {mobileStars.map((star) => (
             <div
-              key={i}
+              key={star.id}
               className="absolute w-1 h-1 bg-white rounded-full animate-twinkle"
               style={{
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
-                opacity: 0.3 + Math.random() * 0.4,
+                top: `${star.top}%`,
+                left: `${star.left}%`,
+                animationDelay: `${star.animationDelay}s`,
+                animationDuration: `${star.animationDuration}s`,
+                opacity: star.opacity,
               }}
             />
           ))}
@@ -210,47 +227,65 @@ export function HeroSection() {
       )}
 
       <div className="relative z-10 max-w-5xl px-4 sm:px-6 lg:px-8 mx-auto text-center">
-        <div className="pt-8 flex justify-center">
-          <motion.div
-            className={`${
-              !_fm ? "cursor-pointer" : "cursor-grab"
-            } z-100 active:cursor-grabbing inline-flex mb-2 `}
-            drag={!isMobile}
-            animate={isMobile ? { scale: [1, 1.008, 1] } : _controls}
-            initial={{ x: 0, y: 0 }}
-            transition={
-              isMobile
-                ? { duration: 6, repeat: Infinity, ease: "easeInOut" }
-                : undefined
-            }
-            dragElastic={0.5}
-            dragTransition={{ bounceStiffness: 500, bounceDamping: 10 }}
-            dragConstraints={{
-              top: -70,
-              left: -500,
-              right: 500,
-              bottom: 350,
-            }}
-            dragListener={isMobile ? false : _fm}
-            onDragStart={() => {
-              if (resetTimer.current) {
-                clearTimeout(resetTimer.current);
-                resetTimer.current = null;
-              }
-              _controls.stop();
-            }}
-            onDragEnd={() => {
-              scheduleReset(100);
-            }}
-            onPointerDown={() => {
-              if (resetTimer.current) {
-                clearTimeout(resetTimer.current);
-                resetTimer.current = null;
-              }
-            }}
+        <motion.div
+          initial={{ opacity: 0, y: -14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+          className="mt-2 mb-6 flex justify-center"
+        >
+          <Link
+            href="/events/iii"
+            className="group inline-flex items-center gap-2 rounded-full border border-cyan-300/45 bg-linear-to-r from-[#2b155c]/95 via-[#132039]/95 to-[#10314f]/95 px-5 py-2.5 text-sm font-bold tracking-wide text-white shadow-[0_0_34px_rgba(138,232,255,0.28)] backdrop-blur-md transition-all duration-300 hover:scale-105 hover:border-cyan-200/80 hover:shadow-[0_0_42px_rgba(166,140,255,0.45)]"
           >
-            <div
-              className={"inline-flex items-center justify-center ".trim()}
+            <Sparkles className="h-4 w-4 text-cyan-300" />
+            <span className="text-cyan-200">HOT</span>
+            <span className="text-white">III 5.0 is live</span>
+            <ArrowRight className="h-4 w-4 text-cyan-200 transition-transform duration-200 group-hover:translate-x-0.5" />
+          </Link>
+        </motion.div>
+
+        <div className="pt-8 flex justify-center">
+          <div
+            className="flex items-center gap-1"
+            role="img"
+            aria-label="Gravity Logo"
+          >
+            <motion.div
+              className={`${
+                !_fm ? "cursor-pointer" : "cursor-grab"
+              } z-100 active:cursor-grabbing inline-flex mb-2 hero-g-hover`}
+              drag={!isMobile}
+              animate={isMobile ? { scale: [1, 1.008, 1] } : _controls}
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              dragElastic={0.5}
+              dragTransition={{ bounceStiffness: 500, bounceDamping: 10 }}
+              dragConstraints={{
+                top: -70,
+                left: -500,
+                right: 500,
+                bottom: 350,
+              }}
+              dragListener={isMobile ? false : _fm}
+              onDragStart={() => {
+                if (resetTimer.current) {
+                  clearTimeout(resetTimer.current);
+                  resetTimer.current = null;
+                }
+                _controls.stop();
+              }}
+              onDragEnd={() => {
+                scheduleReset(100);
+              }}
+              onPointerDown={() => {
+                if (resetTimer.current) {
+                  clearTimeout(resetTimer.current);
+                  resetTimer.current = null;
+                }
+              }}
               onClick={handleLogoClick}
               ref={logoRef}
               onAnimationEnd={(e) => {
@@ -258,29 +293,41 @@ export function HeroSection() {
                   "logo-spin-once",
                 );
               }}
-              role="img"
-              aria-label="Gravity Logo"
             >
               <img
                 src="/gravity-logo.ico"
-                alt="Gravity Logo"
-                className="sm:w-25 sm:h-25 h-20 w-20 object-contain drop-shadow-[0_0_12px_rgba(124,92,255,0.35)] float-animation transition-all duration-300 ease-out hover:scale-105 hover:-rotate-2 hover:drop-shadow-[0_0_18px_rgba(124,92,255,0.6)] select-none pointer-events-none opacity-100!"
+                alt="Gravity G"
+                className="h-12 sm:h-20 sm:w-20 object-contain drop-shadow-[0_0_12px_rgba(124,92,255,0.35)] hero-g-float select-none opacity-100!"
                 loading="lazy"
                 decoding="async"
                 draggable={false}
                 style={{ opacity: 1 }}
               />
-            </div>
-          </motion.div>
+            </motion.div>
+            <motion.div
+              initial={{ y: 50, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, ease: "easeOut", delay: 0.2 }}
+            >
+              <img
+                src="/GRAVITY_Cover_No_BG.png"
+                alt="Gravity"
+                className="h-12 sm:h-30 w-auto object-contain drop-shadow-[0_0_16px_rgba(124,92,255,0.35)] select-none pointer-events-none"
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+              />
+            </motion.div>
+          </div>
         </div>
 
         {/* Main Heading */}
         <div className={isMobile ? "animate-fade-in-up" : ""}>
           <LettersPullUp
-            text={`GRAVITY`}
-            className="gradient-text  select-none"
+            text={`TECHNICAL SOCIETY`}
+            className="select-none gradient-text"
           />
-          <LettersPullUp text={`TECHNICAL SOCIETY`} className="select-none" />
         </div>
 
         {/* Subheading */}
@@ -291,7 +338,7 @@ export function HeroSection() {
           style={isMobile ? { animationDelay: "0.2s" } : {}}
         >
           Five wings of innovation: Competitive Coding, Web Development,
-          Design, FOSS, and Private AI
+          Private AI, Design, and FOSS
         </p>
 
         {/* CTA Buttons */}
@@ -332,8 +379,9 @@ const S1: React.FC = (): React.JSX.Element => (
     transition={{ duration: 1 }}
     className="fixed bottom-8 left-1/2 translate-x-1/2 z-50 px-6 py-3 rounded-full backdrop-blur-xs bg-white/10 border border-white/20 shadow-lg"
   >
-    <p className="text-white text-sm font-medium">
-      🎉 You found one of the secrets, Try saying the one-word secret. ;&gt;
+    <p className="flex items-center gap-2 text-white text-sm font-medium">
+      <Sparkles className="w-4 h-4 text-yellow-400" /> You found one of the
+      secrets, Try saying the one-word secret. ;&gt;
     </p>
   </motion.div>
 );

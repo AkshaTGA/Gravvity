@@ -69,7 +69,7 @@ export default function NotFound() {
             <span className="gradient-text font-bold">multiverse</span>.
           </p>
           <p className="text-xs md:text-sm lg:text-base text-foreground/60 mb-6 max-w-2xl mx-auto">
-            The page you're looking for doesn't exist, or it might have been
+            The page you’re looking for doesn’t exist, or it might have been
             moved to another dimension.
           </p>
 
@@ -92,8 +92,6 @@ export default function NotFound() {
           </div>
 
           {/* Helpful links section */}
-          
-
         </div>
       </section>
     </>

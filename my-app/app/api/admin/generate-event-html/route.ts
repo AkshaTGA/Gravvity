@@ -16,7 +16,6 @@ function requireAuth(request: Request) {
   if (!auth) return false;
   try {
     const token = auth.replace("Bearer ", "");
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const jwt = require("jsonwebtoken");
     jwt.verify(token, JWT_SECRET);
     return true;

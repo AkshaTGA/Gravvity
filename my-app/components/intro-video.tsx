@@ -9,7 +9,17 @@ import {
 import { prefetchAll } from "@/lib/prefetch";
 
 export default function IntroVideo({ onFinish }: { onFinish?: () => void }) {
-  const [shouldShow, setShouldShow] = useState<boolean>(false);
+  const [shouldShow, setShouldShow] = useState<boolean>(() => {
+    try {
+      if (typeof window === "undefined") return false;
+      const raw = localStorage.getItem(INTRO_VIDEO_STORAGE_KEY);
+      const ts = raw ? Number(raw) : 0;
+      const now = Date.now();
+      return !ts || Number.isNaN(ts) || now - ts > INTRO_VIDEO_EXPIRY_MS;
+    } catch {
+      return true;
+    }
+  });
   const [animating, setAnimating] = useState<boolean>(false);
   const [videoSrc, setVideoSrc] = useState<string>("/introvideonew.mp4");
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -33,19 +43,6 @@ export default function IntroVideo({ onFinish }: { onFinish?: () => void }) {
     prefetchAll();
 
     return () => window.removeEventListener("resize", updateVideoSrc);
-  }, []);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem(INTRO_VIDEO_STORAGE_KEY);
-      const ts = raw ? Number(raw) : 0;
-      const now = Date.now();
-      if (!ts || Number.isNaN(ts) || now - ts > INTRO_VIDEO_EXPIRY_MS) {
-        setShouldShow(true);
-      }
-    } catch (e) {
-      setShouldShow(true);
-    }
   }, []);
 
   useEffect(() => {

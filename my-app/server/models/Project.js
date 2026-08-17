@@ -4,10 +4,14 @@ const ProjectSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    wing: { type: String, required: true },
-    link: { type: String },
+
+    wing: { type: String, required: true }, // e.g. "Web Development"
+
+    devfolioLink: { type: String }, // renamed from generic `link`
     image: { type: String },
+
     technologies: { type: [String], default: [] },
+    tags: { type: [String], default: [] },
   },
   {
     timestamps: true,
@@ -29,4 +33,5 @@ ProjectSchema.virtual('id').get(function () {
   return this._id.toString()
 })
 
-module.exports = mongoose.models.Project || mongoose.model('Project', ProjectSchema);
+module.exports =
+  mongoose.models.Project || mongoose.model('Project', ProjectSchema);

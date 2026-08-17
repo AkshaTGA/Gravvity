@@ -247,7 +247,7 @@
   }
 
   .float-animation {
-    animation: float calc(10s * var(--anim-scale)) ease-in-out infinite;
+    animation: float calc(5s * var(--anim-scale)) ease-in-out infinite;
   }
 
   @keyframes float {
@@ -258,6 +258,30 @@
     50% {
       transform: translateY(-2px);
     }
+  }
+
+  .hero-g-float {
+    animation: hero-g-float calc(14s * var(--anim-scale)) ease-in-out infinite;
+  }
+
+  @keyframes hero-g-float {
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .hero-g-hover img {
+    transition: transform 300ms ease-out, filter 300ms ease-out;
+    will-change: transform, filter;
+  }
+
+  .hero-g-hover:hover img {
+    transform: scale(1.03) rotate(-1deg);
+    filter: drop-shadow(0 0 14px rgba(124, 92, 255, 0.45));
   }
 
   .pulse-glow {
@@ -425,6 +449,47 @@
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+/* ═══════════════════════════════════════════════════════
+ *  ALGORITHM LAB — Card Effects
+ * ═══════════════════════════════════════════════════════ */
+
+/* CRT scanline overlay */
+.algo-scanline {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.03) 2px,
+    rgba(255, 255, 255, 0.03) 4px
+  );
+  animation: algo-scanline-move 10s linear infinite;
+}
+
+@keyframes algo-scanline-move {
+  from { background-position: 0 0; }
+  to { background-position: 0 120px; }
+}
+
+/* Status LED blink */
+.algo-status-blink {
+  animation: algo-blink 2s ease-in-out infinite;
+}
+
+@keyframes algo-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* Cursor blink for terminal filter */
+.algo-cursor-blink {
+  animation: algo-cursor 1s step-end infinite;
+}
+
+@keyframes algo-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 @keyframes shimmer {
@@ -595,4 +660,14 @@
   .animate-float {
     animation-duration: 10s;
   }
+}
+
+/* Loading bar animation */
+@keyframes loading-bar {
+  0%   { width: 0%; margin-left: 0; }
+  50%  { width: 60%; margin-left: 20%; }
+  100% { width: 0%; margin-left: 100%; }
+}
+.animate-loading-bar {
+  animation: loading-bar 1.8s ease-in-out infinite;
 }

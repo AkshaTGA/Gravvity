@@ -1,23 +1,17 @@
 import Link from "next/link";
-import { Mail, Github, Linkedin, Twitter, Instagram } from "lucide-react";
+import { Mail, Github, Linkedin, Twitter, Instagram, Sparkles } from "lucide-react";
 import { wings } from "@/lib/data";
-import { useState, useEffect  } from "react";
-
-const slug = (s: string) =>
-s.toLowerCase()
-  .replace(/[^a-z0-9]+/g, "-")
-  .replace(/(^-|-$)/g, "");
-
+import { useMemo, useState } from "react";
+import { getWingMembersPath } from "@/lib/wing-routes";
 
 export function Footer() {
-  const [clickreq, setClickreq] = useState(10);
-  useEffect(() => {
+  const [clickreq] = useState(() => {
     try {
-      const isDesktop =
-        typeof window !== "undefined" && window.innerWidth > 1024;
-      setClickreq(isDesktop ? 5 : 10);
-    } catch {}
-  }, []);
+      return typeof window !== "undefined" && window.innerWidth > 1024 ? 5 : 10;
+    } catch {
+      return 10;
+    }
+  });
   const [counter, setcounter] = useState(0);
   const [data, setdata] = useState(false);
 
@@ -36,13 +30,17 @@ export function Footer() {
           {/* Brand */}
           <div className="flex sm:block flex-col items-center">
             <div>
-              <Link href="/" className="flex items-center my-4 gap-2">
+              <Link href="/" className="flex items-center my-4 gap-0 transition-transform duration-200 ease-out hover:scale-102">
                 <img
                   src="/gravity-logo.ico"
                   alt="Gravity Logo"
-                  className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.3)] transition-transform duration-200 ease-out hover:scale-105"
+                  className="w-9 h-9 object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.3)] "
                 />
-                <span className="font-bold text-xl gradient-text">GRAVITY</span>
+                <img
+                  src="/GRAVITY_Cover_No_BG.png"
+                  alt="Gravity"
+                  className="h-12 w-auto object-contain drop-shadow-[0_0_8px_rgba(124,92,255,0.35)]"
+                />
               </Link>
             </div>
             <p className="text-foreground/60 text-sm">
@@ -102,7 +100,7 @@ export function Footer() {
               {wings.map((w) => (
                 <Link
                   key={w.id}
-                  href={`/members?wing=${encodeURIComponent(w.name)}`}
+                  href={getWingMembersPath(w.name)}
                   className="block w-fit text-foreground/70 hover:text-foreground transition"
                 >
                   {w.name}
@@ -150,6 +148,20 @@ export function Footer() {
                 <Mail size={20} />
               </a>
             </div>
+
+            <div className="mt-6 border border-foreground/15 rounded-md px-3 py-2.5 max-w-[160px] mx-auto md:mx-0">
+              <p className="text-[11px] text-foreground/60 mb-1.5 tracking-wide uppercase text-center"></p>
+              <div className="flex flex-col gap-0.5 text-xs text-foreground/60 pl-3">
+                <span className="text-[11px] text-foreground/60 mb-1.5 tracking-wide uppercase ">
+                  {" "}
+                  Built by
+                </span>
+                <span>Akshat Parmar</span>
+                <span>Raghav Vohra</span>
+                <span>Kunal Khandelwal</span>
+                <span>Himanshu Grewal</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -168,6 +180,21 @@ export function Footer() {
 }
 
 function SecretPopup({ onClose }: { onClose: () => void }) {
+  const confettiPieces = useMemo(
+    () =>
+      Array.from({ length: 50 }, (_, index) => {
+        const seed = index + 1;
+        return {
+          id: index,
+          left: (seed * 37) % 100,
+          animationDelay: ((seed * 17) % 20) / 10,
+          animationDuration: 2 + ((seed * 29) % 20) / 10,
+          colorIndex: seed % 4,
+        };
+      }),
+    [],
+  );
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
@@ -178,24 +205,24 @@ function SecretPopup({ onClose }: { onClose: () => void }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="confetti-container absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(50)].map((_, i) => (
+          {confettiPieces.map((piece) => (
             <div
-              key={i}
+              key={piece.id}
               className="confetti"
               style={{
-                left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 2}s`,
-                animationDuration: `${2 + Math.random() * 2}s`,
+                left: `${piece.left}%`,
+                animationDelay: `${piece.animationDelay}s`,
+                animationDuration: `${piece.animationDuration}s`,
                 backgroundColor: ["#7c5cff", "#ff6b9d", "#ffd93d", "#6bcf7f"][
-                  Math.floor(Math.random() * 4)
+                  piece.colorIndex
                 ],
               }}
             />
           ))}
         </div>
         <div className="relative z-10 text-center">
-          <h2 className="text-3xl font-bold gradient-text mb-4">
-            🎉 Congratulations! 🎉
+          <h2 className="flex items-center justify-center text-3xl font-bold gradient-text mb-4">
+            <Sparkles className="w-6 h-6 mr-2 text-yellow-400" /> Congratulations! <Sparkles className="w-6 h-6 ml-2 text-yellow-400" />
           </h2>
           <p className="text-lg mb-6">You have found a secret!</p>
           <div className="text-sm text-foreground/70 border-t border-border pt-4">

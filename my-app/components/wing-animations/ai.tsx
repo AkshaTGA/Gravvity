@@ -1,6 +1,7 @@
 "use client";
 // hello
 import { useEffect, useState } from "react";
+import { Bot, Check, Lock } from "lucide-react";
 
 export function AIAnimation() {
   const [neurons, setNeurons] = useState<{ active: boolean }[]>(
@@ -47,7 +48,7 @@ export function AIAnimation() {
           <div className="flex items-center justify-between mb-3 flex-wrap gap-3">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-lg bg-linear-to-br from-purple-500 to-violet-600 flex items-center justify-center text-sm">
-                🤖
+                <Bot size={16} className="text-white" />
               </div>
               <div>
                 <div className="text-sm font-semibold text-slate-200">
@@ -121,7 +122,7 @@ export function AIAnimation() {
           {/* Status Messages */}
           <div className="space-y-1 mt-1 font-mono text-xs">
             <div className="flex items-center gap-1 text-green-400">
-              <span>✓</span>
+              <Check size={12} />
               <span>Data preprocessing complete</span>
             </div>
 
@@ -139,7 +140,7 @@ export function AIAnimation() {
           <div className="pt-3 border-t border-slate-700/50 mt-2">
             <div className="flex items-center gap-1 text-xs">
               <span className="px-1.5 py-0.5 bg-purple-500/20 text-purple-400 rounded-full border border-purple-500/30 flex items-center gap-0.5">
-                🔒 Private AI
+                <Lock size={12} /> Private AI
               </span>
               <span className="text-slate-400">Edge Computing</span>
             </div>

@@ -12,6 +12,7 @@ export interface Member {
   name: string;
   role: "coordinator" | "member";
   wing: string;
+  newWing?: string[];
   bio: string;
   image?: string;
   isOverallCoordinator?: boolean;

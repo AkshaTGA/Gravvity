@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getSubscribers, saveSubscribers } from "@/lib/subscribers";
+import { getSubscribers, addSubscriber, removeSubscriber } from "@/lib/subscribers";
 
 export const runtime = "nodejs";
 
@@ -19,7 +19,6 @@ function requireAuth(request: Request) {
   try {
     const token = auth.replace("Bearer ", "");
     // Lazy require to avoid ESM/CJS interop issues
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const jwt = require("jsonwebtoken");
     jwt.verify(token, JWT_SECRET);
     return true;
@@ -45,21 +44,17 @@ export async function POST(request: Request) {
         { status: 400 },
       );
     }
-    const list = await getSubscribers().catch((e) => {
-      console.error("getSubscribers failed", e);
-      throw new Error("Storage read failed");
-    });
-    if (!list.includes(email)) {
-      list.push(email);
-      try {
-        await saveSubscribers(list);
-      } catch (e) {
-        console.error("saveSubscribers failed", e);
-        return NextResponse.json(
-          { ok: false, error: "Could not persist subscription" },
-          { status: 500 },
-        );
+    try {
+      const added = await addSubscriber(email);
+      if (!added) {
+        return NextResponse.json({ ok: true }); // Already subscribed
       }
+    } catch (e) {
+      console.error("addSubscriber failed", e);
+      return NextResponse.json(
+        { ok: false, error: "Could not persist subscription" },
+        { status: 500 },
+      );
     }
     return NextResponse.json({ ok: true });
   } catch (err: any) {
@@ -96,26 +91,16 @@ export async function DELETE(request: Request) {
       );
     }
 
-    const list = await getSubscribers().catch((e) => {
-      console.error("getSubscribers failed", e);
-      throw new Error("Storage read failed");
-    });
-
-    const nextList = list.filter((e) => e !== email);
-    const removed = nextList.length !== list.length;
-    if (removed) {
-      try {
-        await saveSubscribers(nextList);
-      } catch (e) {
-        console.error("saveSubscribers failed", e);
-        return NextResponse.json(
-          { ok: false, error: "Could not persist deletion" },
-          { status: 500 },
-        );
-      }
+    try {
+      const removed = await removeSubscriber(email);
+      return NextResponse.json({ ok: true, removed });
+    } catch (e) {
+      console.error("removeSubscriber failed", e);
+      return NextResponse.json(
+        { ok: false, error: "Could not persist deletion" },
+        { status: 500 },
+      );
     }
-
-    return NextResponse.json({ ok: true, removed });
   } catch (err: any) {
     return NextResponse.json(
       { ok: false, error: err?.message || "Unexpected error" },
