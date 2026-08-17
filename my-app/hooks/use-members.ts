@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import type { Member } from "@/lib/types"
+import { isVisibleWing } from "@/lib/wing-visibility"
 
 export function useMembers() {
   const [members, setMembers] = useState<Member[]>([])
@@ -27,7 +28,7 @@ export function useMembers() {
         if (!res.ok) throw new Error(`Members request failed: ${res.status}`)
         const data = (await res.json()) as Member[]
         if (!Array.isArray(data)) throw new Error('Invalid members response')
-        if (!cancelled) setMembers(data)
+        if (!cancelled) setMembers(data.filter((member) => isVisibleWing(member.wing)))
       } catch (e) {
         console.error('Failed to load members', e)
       }
@@ -40,7 +41,9 @@ export function useMembers() {
       if (e.key === KEY && e.newValue) {
         try {
           const data = JSON.parse(e.newValue) as Member[]
-          if (!cancelled && Array.isArray(data)) setMembers(data)
+          if (!cancelled && Array.isArray(data)) {
+            setMembers(data.filter((member) => isVisibleWing(member.wing)))
+          }
         } catch {}
       }
     }

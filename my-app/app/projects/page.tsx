@@ -5,6 +5,7 @@ import { Footer } from "@/components/footer";
 import { Github, ExternalLink } from "lucide-react";
 import { useEffect, useState } from "react";
 import MagicButton from "@/components/magic-button";
+import { isVisibleWing } from "@/lib/wing-visibility";
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<any[]>([]);
@@ -21,7 +22,9 @@ export default function ProjectsPage() {
       if (raw) {
         const cached = JSON.parse(raw) as { ts: number; data: any[] };
         if (Array.isArray(cached?.data)) {
-          setProjects(cached.data);
+          setProjects(
+            cached.data.filter((project) => isVisibleWing(project?.wing)),
+          );
         }
       }
     } catch (e) {
@@ -56,11 +59,14 @@ export default function ProjectsPage() {
           const res = await fetch("/api/projects", { cache: "no-store" });
           if (!res.ok) return;
           const data = (await res.json()) as any[];
-          if (mounted) setProjects(data);
+          const visibleProjects = data.filter((project) =>
+            isVisibleWing(project?.wing),
+          );
+          if (mounted) setProjects(visibleProjects);
           try {
             localStorage.setItem(
               CACHE_KEY,
-              JSON.stringify({ ts: Date.now(), data })
+              JSON.stringify({ ts: Date.now(), data: visibleProjects })
             );
           } catch {
             /* ignore quota errors */

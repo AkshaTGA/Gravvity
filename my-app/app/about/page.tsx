@@ -28,12 +28,12 @@ export default function AboutPage() {
               <p className="text-foreground/70 leading-relaxed mb-4">
                 Gravity is a technical society dedicated to fostering
                 innovation, collaboration, and excellence in technology. We
-                bring together passionate individuals across seven distinct
+                bring together passionate individuals across five distinct
                 domains to create, learn, and grow together.
               </p>
               <p className="text-foreground/70 leading-relaxed">
                 Whether you're into competitive programming, web development,
-                design, open-source, AI, blockchain, or the metaverse, Gravity
+                design, open-source, or private AI, Gravity
                 provides the platform and community to achieve your goals.
               </p>
             </div>

@@ -13,7 +13,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Gravity - Tech Society",
   description:
-    "Gravity Technical Society - Competitive Coding, Web Dev, Design, FOSS, AI, Blockchain & Metaverse",
+    "Gravity Technical Society - Competitive Coding, Web Development, Design, FOSS, and Private AI",
   generator: "v0.app",
   icons: {
     icon: [

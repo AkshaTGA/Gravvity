@@ -290,8 +290,8 @@ export function HeroSection() {
           }`}
           style={isMobile ? { animationDelay: "0.2s" } : {}}
         >
-          Seven wings of innovation: Competitive Coding, Web Development,
-          Design, FOSS, Private AI, Blockchain, and Metaverse
+          Five wings of innovation: Competitive Coding, Web Development,
+          Design, FOSS, and Private AI
         </p>
 
         {/* CTA Buttons */}

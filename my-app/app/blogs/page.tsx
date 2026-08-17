@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import BlogSubmitModal from "@/components/blog-submit-modal";
 import { Search, X } from "lucide-react";
 import MagicButton from "@/components/magic-button";
+import { isVisibleWing } from "@/lib/wing-visibility";
 
 export default function BlogsPage() {
   const formatDate = (input: string | number | Date) =>
@@ -30,7 +31,11 @@ export default function BlogsPage() {
         typeof window !== "undefined" ? localStorage.getItem(KEY) : null;
       if (raw) {
         const cached = JSON.parse(raw);
-        if (Array.isArray(cached)) setApproved(cached);
+        if (Array.isArray(cached)) {
+          setApproved(
+            cached.filter((blog) => isVisibleWing(blog?.category)),
+          );
+        }
       }
     } catch {}
 
@@ -40,9 +45,12 @@ export default function BlogsPage() {
         const res = await fetch("/api/public/blogs", { cache: "no-store" });
         if (!res.ok) return;
         const data = await res.json();
-        if (mounted) setApproved(data);
+        const visibleBlogs = Array.isArray(data)
+          ? data.filter((blog) => isVisibleWing(blog?.category))
+          : [];
+        if (mounted) setApproved(visibleBlogs);
         try {
-          localStorage.setItem(KEY, JSON.stringify(data));
+          localStorage.setItem(KEY, JSON.stringify(visibleBlogs));
         } catch {}
       } catch (e) {
         console.error("Failed to fetch approved blogs", e);

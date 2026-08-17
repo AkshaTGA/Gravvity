@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import type { Event } from "@/lib/types"
+import { isVisibleWing } from "@/lib/wing-visibility"
 
 export function useEvents() {
   const [events, setEvents] = useState<Event[]>([])
@@ -16,7 +17,9 @@ export function useEvents() {
         const raw = localStorage.getItem(KEY)
         if (raw) {
           const data = JSON.parse(raw) as Event[]
-          if (Array.isArray(data)) setEvents(data)
+          if (Array.isArray(data)) {
+            setEvents(data.filter((event) => isVisibleWing(event.wing)))
+          }
         }
       } catch {}
     }
@@ -28,7 +31,7 @@ export function useEvents() {
         if (!res.ok) return
         const data = (await res.json()) as Event[]
         if (!cancelled) {
-          setEvents(data)
+          setEvents(data.filter((event) => isVisibleWing(event.wing)))
           try {
             localStorage.setItem(KEY, JSON.stringify(data))
           } catch {}
@@ -44,7 +47,9 @@ export function useEvents() {
       if (e.key === KEY && e.newValue) {
         try {
           const data = JSON.parse(e.newValue) as Event[]
-          if (!cancelled && Array.isArray(data)) setEvents(data)
+          if (!cancelled && Array.isArray(data)) {
+            setEvents(data.filter((event) => isVisibleWing(event.wing)))
+          }
         } catch {}
       }
     }

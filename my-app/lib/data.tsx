@@ -5,8 +5,6 @@ import {
   DesignAnimation,
   FossAnimation,
   AIAnimation,
-  BlockchainAnimation,
-  MetaverseAnimation,
 } from "@/components/wing-animations";
 
 export const wings: Wing[] = [
@@ -133,56 +131,6 @@ export const wings: Wing[] = [
     color: "from-purple-500 to-violet-500",
     animationComponent: AIAnimation,
   },
-  {
-    id: "6",
-    name: "Blockchain",
-    description: "Build decentralized applications and smart contracts",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="60"
-        height="60"
-        viewBox="0 0 48 48"
-      >
-        <g
-          fill="none"
-          stroke="#fff"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="3.9"
-        >
-          <path d="M40 30V15L27.5 7.969m-7 0L8 15v15m3 4.688L24 42l8-4.5l5-2.812M21 18.75l-3 1.75v7l3 1.75L24 31l3-1.75l3-1.75v-7l-3-1.75L24 17zM24 17v-7m6 17l7 4m-19-4l-7 4" />
-          <circle cx="24" cy="7" r="3" />
-          <circle cx="8" cy="33" r="3" />
-          <circle cx="40" cy="33" r="3" />
-        </g>
-      </svg>
-    ),
-    color: "from-orange-500 to-red-500",
-    animationComponent: BlockchainAnimation,
-  },
-  {
-    id: "7",
-    name: "Metaverse",
-    description: "Create immersive virtual reality and metaverse experiences",
-    icon: (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="40"
-        height="40"
-        viewBox="0 0 14 14"
-      >
-        <path
-          fill="#fff"
-          fillRule="evenodd"
-          d="M6.071 0A6.07 6.07 0 0 0 .097 4.982h4.709a3.46 3.46 0 0 1 3.4-2.83h2.502A6.06 6.06 0 0 0 6.07 0M2.786 11.178A6.07 6.07 0 0 1 .002 6.232h4.804a3.46 3.46 0 0 0 3.4 2.831h3.937v1.187a1.43 1.43 0 0 1-1.429 1.429H9.357V13.5a.5.5 0 0 1-.5.5H3.286a.5.5 0 0 1-.5-.5zm9.345-3.365h.369q.053 0 .102-.005a1 1 0 0 0 .898-.995V4.401a1 1 0 0 0-1-1H9.946v4.412zm-3.435 0V3.401h-.49a2.206 2.206 0 0 0 0 4.412z"
-          clipRule="evenodd"
-        />
-      </svg>
-    ),
-    color: "from-indigo-500 to-purple-500",
-    animationComponent: MetaverseAnimation,
-  },
 ];
 
 export const defaultEvents: Event[] = [
@@ -247,15 +195,6 @@ export const defaultProjects: Project[] = [
     link: "#",
     image: "/placeholder-avatar.svg",
   },
-  {
-    id: "3",
-    title: "Web3 DApp",
-    description: "Decentralized application on blockchain",
-    wing: "Blockchain",
-    technologies: ["Solidity", "React", "Web3.js"],
-    link: "#",
-    image: "/placeholder-avatar.svg",
-  },
 ];
 
 export const defaultBlogs: BlogPost[] = [
@@ -270,16 +209,5 @@ export const defaultBlogs: BlogPost[] = [
     image: "/placeholder-avatar.svg",
     rollNumber: "2023001",
     mediumUrl: "https://medium.com/@aditya/competitive-programming-guide",
-  },
-  {
-    id: "2",
-    title: "Web3 Development Essentials",
-    content: "Everything you need to know about building dApps...",
-    author: "Priya Verma",
-    date: "2024-11-28",
-    category: "Blockchain",
-    image: "/placeholder-avatar.svg",
-    rollNumber: "2023002",
-    mediumUrl: "https://medium.com/@priya/web3-development-guide",
   },
 ];
