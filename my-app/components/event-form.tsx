@@ -15,7 +15,7 @@ import {
 
 interface EventFormProps {
   event?: Event;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: any) => void | Promise<void>;
   onCancel: () => void;
 }
 
@@ -102,10 +102,10 @@ export function EventForm({ event, onSubmit, onCancel }: EventFormProps) {
       if (!payload.image) {
         payload.image = "/gravity-logo.png";
       }
-      onSubmit(payload);
+      await onSubmit(payload);
     } catch (err) {
       const message =
-        err instanceof Error ? err.message : "Image upload failed";
+        err instanceof Error ? err.message : "Failed to save event";
       setSubmitError(message);
     } finally {
       setIsSubmitting(false);

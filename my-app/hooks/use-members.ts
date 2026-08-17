@@ -23,7 +23,7 @@ export function useMembers() {
     // 2. Fetch fresh list
     const loadMembers = async () => {
       try {
-        const res = await fetch(`/api/public/members`, { headers: { 'Content-Type': 'application/json' } })
+        const res = await fetch(`/api/public/members`, { cache: 'no-store' })
         if (!res.ok) return
         const data = (await res.json()) as Member[]
         if (!cancelled) {

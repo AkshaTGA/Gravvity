@@ -3,6 +3,7 @@ import connectToDatabase from "../../../../lib/mongoose"
 import { Project } from "@/lib/models/project"
 
 export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
 
 export async function GET() {
   if (!process.env.MONGO_URI) {
@@ -11,7 +12,7 @@ export async function GET() {
   try {
     await connectToDatabase()
     const projects = await Project.find().sort({ createdAt: -1 })
-    return NextResponse.json(projects)
+    return NextResponse.json(projects, { headers: { "Cache-Control": "no-store" } })
   } catch (e: any) {
     console.error('[Public Projects] error', e?.message)
     return NextResponse.json({ error: 'Failed to load projects' }, { status: 500 })

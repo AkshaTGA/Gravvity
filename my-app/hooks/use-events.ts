@@ -24,7 +24,7 @@ export function useEvents() {
     // 2. Fetch fresh events (public endpoint)
     const load = async () => {
       try {
-        const res = await fetch(`/api/public/events`, { headers: { 'Content-Type': 'application/json' } })
+        const res = await fetch(`/api/public/events`, { cache: 'no-store' })
         if (!res.ok) return
         const data = (await res.json()) as Event[]
         if (!cancelled) {

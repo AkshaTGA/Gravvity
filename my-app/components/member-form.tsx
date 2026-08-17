@@ -11,7 +11,7 @@ import MagicButton from "@/components/magic-button"
 
 interface MemberFormProps {
   member?: Member
-  onSubmit: (data: any) => void
+  onSubmit: (data: any) => void | Promise<void>
   onCancel: () => void
 }
 
@@ -40,6 +40,8 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
   }
 
   const [uploading, setUploading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState("")
 
   // Cropping state
   const [cropping, setCropping] = useState(false)
@@ -171,13 +173,21 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
     reader.readAsDataURL(file)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitError("")
     const payload = { ...member, ...formData }
     if (!payload.image) {
       payload.image = '/gravity-logo.png'
     }
-    onSubmit(payload)
+    try {
+      await onSubmit(payload)
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : "Failed to save member")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -363,8 +373,8 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
       </div>
 
       <div className="flex gap-2 pt-4">
-        <MagicButton type="submit" className="flex-1" heightClass="h-11" disabled={uploading}>
-          {member ? "Update" : "Add"} Member
+        <MagicButton type="submit" className="flex-1" heightClass="h-11" disabled={uploading || isSubmitting}>
+          {isSubmitting ? "Saving..." : member ? "Update" : "Add"} Member
         </MagicButton>
         <button
           type="button"
@@ -374,6 +384,7 @@ export function MemberForm({ member, onSubmit, onCancel }: MemberFormProps) {
           Cancel
         </button>
       </div>
+      {submitError && <p className="text-sm text-red-500">{submitError}</p>}
     </form>
   )
 }

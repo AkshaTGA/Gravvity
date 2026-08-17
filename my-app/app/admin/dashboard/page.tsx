@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 // Replace localStorage blog store with server-backed API calls
 import { useMemo, useState as useReactState } from "react";
-import { useAdminStore as useStore } from "@/hooks/use-admin-store";
 import MagicButton from "@/components/magic-button";
 
 export default function AdminDashboard() {
@@ -55,6 +54,7 @@ export default function AdminDashboard() {
   const [subscribers, setSubscribers] = useState<string[]>([]);
   const [subscribersLoading, setSubscribersLoading] = useState(false);
   const [subscribersError, setSubscribersError] = useState<string | null>(null);
+  const [mutationError, setMutationError] = useState<string | null>(null);
   const [showHtmlSourceByEventId, setShowHtmlSourceByEventId] = useState<
     Record<string, boolean>
   >({});
@@ -133,23 +133,35 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleSave = (member: Member) => {
-    if (editingMember) {
-      saveMember(member);
-      setEditingMember(null);
-    } else {
-      addMember(member);
-      setIsAddingNew(false);
+  const handleSave = async (member: Member) => {
+    setMutationError(null);
+    try {
+      if (editingMember) {
+        await saveMember(member);
+        setEditingMember(null);
+      } else {
+        await addMember(member);
+        setIsAddingNew(false);
+      }
+    } catch (error) {
+      setMutationError(error instanceof Error ? error.message : "Failed to save member");
+      throw error;
     }
   };
 
-  const handleSaveEvent = (evt: Event) => {
-    if (editingEvent) {
-      saveEvent(evt);
-      setEditingEvent(null);
-    } else {
-      addEvent(evt);
-      setIsAddingEvent(false);
+  const handleSaveEvent = async (evt: Event) => {
+    setMutationError(null);
+    try {
+      if (editingEvent) {
+        await saveEvent(evt);
+        setEditingEvent(null);
+      } else {
+        await addEvent(evt);
+        setIsAddingEvent(false);
+      }
+    } catch (error) {
+      setMutationError(error instanceof Error ? error.message : "Failed to save event");
+      throw error;
     }
   };
 
@@ -227,6 +239,12 @@ export default function AdminDashboard() {
 
   if (!isLoggedIn) return null;
 
+  const mutationErrorBanner = mutationError ? (
+    <div className="mb-4 rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-500">
+      {mutationError}
+    </div>
+  ) : null;
+
   // Sort by creation timestamp descending (fallback to date for events if missing)
   const sortedMembers = [...members].sort(
     (a, b) => (b.createdAt ?? 0) - (a.createdAt ?? 0),
@@ -261,6 +279,8 @@ export default function AdminDashboard() {
               <span>Logout</span>
             </MagicButton>
           </div>
+
+          {mutationErrorBanner}
 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Left Column: Make whole stack sticky to avoid overlaps */}

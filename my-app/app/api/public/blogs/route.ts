@@ -3,6 +3,7 @@ import connectToDatabase from "../../../../lib/mongoose";
 import { Blog, migrateIfNeeded } from "@/lib/models/blog";
 
 export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   if (!process.env.MONGO_URI) {
@@ -15,7 +16,9 @@ export async function GET() {
     await connectToDatabase();
     await migrateIfNeeded();
     const blogs = await Blog.find({ approved: true }).sort({ date: -1 });
-    return NextResponse.json(blogs);
+    return NextResponse.json(blogs, {
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch (e: any) {
     console.error("[Public Blogs] error", e?.message);
     return NextResponse.json(

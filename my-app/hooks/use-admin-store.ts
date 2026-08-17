@@ -30,8 +30,8 @@ export function useAdminStore() {
         };
 
         const [membersRes, eventsRes] = await Promise.all([
-          fetch(`/api/members`, { headers }),
-          fetch(`/api/events`, { headers }),
+          fetch(`/api/members`, { headers, cache: "no-store" }),
+          fetch(`/api/events`, { headers, cache: "no-store" }),
         ]);
 
         if (membersRes.status === 401 || eventsRes.status === 401) {
@@ -127,8 +127,12 @@ export function useAdminStore() {
         headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify(member),
       });
-      if (!res.ok) return;
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(`Failed to update member: ${res.status} ${text}`);
+      }
       const updated = (await res.json()) as Member;
+      if (!updated?.id) throw new Error("The server returned an invalid member");
       setMembers((prev) => {
         const next = prev.map((m) => (m.id === updated.id ? updated : m));
         try {
@@ -142,8 +146,10 @@ export function useAdminStore() {
         } catch {}
         return next;
       });
+      return updated;
     } catch (e) {
       console.error("Failed to save member", e);
+      throw e;
     }
   }, []);
 
@@ -261,8 +267,12 @@ export function useAdminStore() {
         headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify(event),
       });
-      if (!res.ok) return;
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(`Failed to update event: ${res.status} ${text}`);
+      }
       const updated = (await res.json()) as Event;
+      if (!updated?.id) throw new Error("The server returned an invalid event");
       setEvents((prev) => {
         const next = prev.map((e) => (e.id === updated.id ? updated : e));
         try {
@@ -276,8 +286,10 @@ export function useAdminStore() {
         } catch {}
         return next;
       });
+      return updated;
     } catch (e) {
       console.error("Failed to save event", e);
+      throw e;
     }
   }, []);
 

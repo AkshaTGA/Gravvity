@@ -27,8 +27,15 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   const { id } = await params
   if (!requireAuth(request)) return unauthorized()
   const payload = await request.json().catch(() => ({}))
+  delete payload.id
+  delete payload._id
+  delete payload.createdAt
+  delete payload.updatedAt
   await connectToDatabase()
-  const updated = await Member.findByIdAndUpdate(id, payload, { new: true })
+  const updated = await Member.findById(id)
+  if (!updated) return NextResponse.json({ error: "Member not found" }, { status: 404 })
+  updated.set(payload)
+  await updated.save()
   return NextResponse.json(updated)
 }
 

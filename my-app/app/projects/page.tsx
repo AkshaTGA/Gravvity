@@ -53,7 +53,7 @@ export default function ProjectsPage() {
         }
 
         if (shouldFetch) {
-          const res = await fetch("/api/projects");
+          const res = await fetch("/api/projects", { cache: "no-store" });
           if (!res.ok) return;
           const data = (await res.json()) as any[];
           if (mounted) setProjects(data);

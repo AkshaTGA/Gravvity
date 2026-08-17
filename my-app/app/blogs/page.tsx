@@ -37,7 +37,7 @@ export default function BlogsPage() {
     // 2) Fetch fresh
     async function fetchApproved() {
       try {
-        const res = await fetch("/api/public/blogs");
+        const res = await fetch("/api/public/blogs", { cache: "no-store" });
         if (!res.ok) return;
         const data = await res.json();
         if (mounted) setApproved(data);

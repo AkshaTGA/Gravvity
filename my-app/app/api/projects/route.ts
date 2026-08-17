@@ -3,6 +3,7 @@ import connectToDatabase from "../../../lib/mongoose"
 import { Project } from "@/lib/models/project"
 
 export const runtime = "nodejs"
+export const dynamic = "force-dynamic"
 
 function unauthorized() {
   return NextResponse.json({ ok: false, error: 'Unauthorized' }, { status: 401 })
@@ -26,7 +27,7 @@ function requireAuth(request: Request) {
 export async function GET(_request: Request) {
   await connectToDatabase().catch((e) => console.error('DB connect failed', e))
   const projects = await Project.find().sort({ createdAt: -1 })
-  return NextResponse.json(projects)
+  return NextResponse.json(projects, { headers: { "Cache-Control": "no-store" } })
 }
 
 export async function POST(request: Request) {
